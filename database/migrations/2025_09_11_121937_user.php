@@ -20,6 +20,9 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        DB::table('user')->insert([
+            ['username' => 'admin', 'password' => bcrypt('Admin2025'), 'level' => 'admin', 'status' => '1' ],
+        ]);
     }
 
     /**

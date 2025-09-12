@@ -853,7 +853,7 @@
                   <span class="nav-link-title"> Home </span>
                 </a>
               </li>
-              <li class="nav-item dropdown">
+              <li class="nav-item dropdown @if ($activePage == 'master') active @endif">
                 <a
                   class="nav-link dropdown-toggle"
                   href="#navbar-base"
@@ -882,31 +882,29 @@
                       <path d="M12 12l-8 -4.5" />
                       <path d="M16 5.25l-8 4.5" /></svg
                   ></span>
-                  <span class="nav-link-title"> Data Sarjana</span>
+                  <span class="nav-link-title"> Data Master</span>
                 </a>
                 <div class="dropdown-menu">
                   <div class="dropdown-menu-columns">
                     <div class="dropdown-menu-column">
-                      <a class="dropdown-item" href="/admin/akademik">
+                      <!-- <a class="dropdown-item" href="/admin/akademik">
                         Bimbingan Akademik
-                        <!-- <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span> -->
-                      </a>
-                      <a class="dropdown-item" href="/admin/absensi"> Absensi </a>
-                      <a class="dropdown-item" href="/admin/ta"> Tugas Akhir </a>
-                      <!-- <a class="dropdown-item" href="/admin/akademik"> Surat Penelitian </a> -->
-                      <a class="dropdown-item" href="/admin/penguji"> Pengajuan Penguji </a>
-                      <a class="dropdown-item" href="/admin/proposal"> Seminar Proposal </a>
-                      <a class="dropdown-item" href="/admin/seminar"> Seminar Hasil </a>
-                      <a class="dropdown-item" href="/admin/yudisium"> Yudisium </a>
-                      <a class="dropdown-item" href="#"> Surat Aktif Kuliah </a>
-                      <a class="dropdown-item" href="#"> SAPS </a>
+                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                      </a> -->
+                      <a class="dropdown-item @if ($activeDrop == 'fakultas') active @endif" href="/admin/fakultas"> Fakultas </a>
+                      <a class="dropdown-item @if ($activeDrop == 'jurusan') active @endif" href="/admin/jurusan"> Jurusan </a>
+                      <a class="dropdown-item @if ($activeDrop == 'prodi') active @endif" href="/admin/prodi"> Prodi </a>
+                      <a class="dropdown-item @if ($activeDrop == 'kelas') active @endif" href="/admin/kelas"> Kelas </a>
+                      <a class="dropdown-item @if ($activeDrop == 'ruangan') active @endif" href="/admin/ruangan"> Ruangan </a>
+                      <a class="dropdown-item @if ($activeDrop == 'makul') active @endif" href="/admin/makul"> Mata Kuliah </a>
+                      <a class="dropdown-item @if ($activeDrop == 'tahun') active @endif" href="/admin/tahunajar"> Tahun Ajaran </a>
                     </div>
                   </div>
                 </div>
               </li>
               <li class="nav-item dropdown">
                 <a
-                  class="nav-link"
+                  class="nav-link dropdown-toggle"
                   href="#navbar-form"
                   data-bs-toggle="dropdown"
                   data-bs-auto-close="false"
@@ -930,12 +928,25 @@
                       <path d="M9 11l3 3l8 -8" />
                       <path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9" /></svg
                   ></span>
-                  <span class="nav-link-title"> Data Profesi </span>
+                  <span class="nav-link-title"> Data Jadwal </span>
                 </a>
+                <div class="dropdown-menu">
+                  <div class="dropdown-menu-columns">
+                    <div class="dropdown-menu-column">
+                      <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
+                        Bimbingan Akademik
+                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                      </a> -->
+                      <a class="dropdown-item" href="/mahasiswa/absensi"> Jadwal Mata Kuliah </a>
+                      <a class="dropdown-item" href="/mahasiswa/ta"> Jadwal Dosen </a>
+                      <a class="dropdown-item" href="/mahasiswa/peneltian"> Jadwal Mahasiswa </a>
+                    </div>
+                  </div>
+                </div>
               </li>
               <li class="nav-item dropdown">
                 <a
-                  class="nav-link"
+                  class="nav-link dropdown-toggle"
                   href="#navbar-extra"
                   data-bs-toggle="dropdown"
                   data-bs-auto-close="false"
@@ -958,12 +969,24 @@
                     >
                       <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" /></svg
                   ></span>
-                  <span class="nav-link-title"> Data Spesialis</span>
+                  <span class="nav-link-title"> Data Absensi</span>
                 </a>
+                <div class="dropdown-menu">
+                  <div class="dropdown-menu-columns">
+                    <div class="dropdown-menu-column">
+                      <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
+                        Bimbingan Akademik
+                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                      </a> -->
+                      <a class="dropdown-item" href="/mahasiswa/ta"> Absensi Dosen </a>
+                      <a class="dropdown-item" href="/mahasiswa/peneltian"> Absensi Mahasiswa </a>
+                    </div>
+                  </div>
+                </div>
               </li>
               <li class="nav-item dropdown">
                 <a
-                  class="nav-link"
+                  class="nav-link dropdown-toggle"
                   href="#navbar-layout"
                   data-bs-toggle="dropdown"
                   data-bs-auto-close="false"
@@ -991,6 +1014,18 @@
                   ></span>
                   <span class="nav-link-title"> Data Account </span>
                 </a>
+                <div class="dropdown-menu">
+                  <div class="dropdown-menu-columns">
+                    <div class="dropdown-menu-column">
+                      <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
+                        Bimbingan Akademik
+                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                      </a> -->
+                      <a class="dropdown-item" href="/mahasiswa/ta"> Mahasiswa </a>
+                      <a class="dropdown-item" href="/mahasiswa/peneltian"> Dosen </a>
+                    </div>
+                  </div>
+                </div>
               </li>
               <li class="nav-item dropdown">
                 <a
@@ -1023,7 +1058,10 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="../">
+                <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();
+                  document.getElementById('logout-form').submit();">
+                  @csrf
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
                     ><!-- Download SVG icon from http://tabler.io/icons/icon/home -->
                     <svg
@@ -1036,13 +1074,15 @@
                       stroke-width="2"
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      class="icon icon-1"
-                    >
-                      <path
-                        d="M4 7h3a1 1 0 0 0 1 -1v-1a2 2 0 0 1 4 0v1a1 1 0 0 0 1 1h3a1 1 0 0 1 1 1v3a1 1 0 0 0 1 1h1a2 2 0 0 1 0 4h-1a1 1 0 0 0 -1 1v3a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-1a2 2 0 0 0 -4 0v1a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h1a2 2 0 0 0 0 -4h-1a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1"
-                      /></svg
-                  ></span>
+                      class="icon icon-1">
+
+                       <path d="M10 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2" />
+                       <path d="M15 12h-12l3 -3" />
+                       <path d="M6 15l-3 -3" />
+                    </svg>
+                  </span>
                   <span class="nav-link-title"> Logout </span>
+                </form>
                 </a>
               </li>
             </ul>

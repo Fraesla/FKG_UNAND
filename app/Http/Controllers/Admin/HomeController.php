@@ -23,4 +23,12 @@ class HomeController extends Controller
     {
         return view('admin.dashboard.index');
     }
+
+    public function keluar()
+    {
+        Auth::logout();
+    
+        // Redirect user ke halaman login atau halaman lainnya
+        return redirect()->route('login')->with("error","Akun Anda Belum Diaktifkan !");
+    }
 }

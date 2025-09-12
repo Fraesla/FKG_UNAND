@@ -1,3 +1,4 @@
+@guest
 <!doctype html>
 <!--
 * Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
@@ -557,3 +558,7 @@
     <!-- END PAGE SCRIPTS -->
   </body>
 </html>
+@endguest
+@auth
+  <script>window.location = "/admin/home";</script>
+@endauth

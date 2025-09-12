@@ -1,5 +1,6 @@
 @extends('admin.layouts.app', [
 'activePage' => 'dashboard',
+'activeDrop' => '',
 ])
 @section('content')
  <!-- BEGIN PAGE HEADER -->

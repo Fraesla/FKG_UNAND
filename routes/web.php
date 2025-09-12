@@ -2,16 +2,38 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
-use App\Http\Controllers\Admin\AkadamikController;
 use App\Http\Controllers\Admin\AbsensiController;
 // use App\Http\Controllers\Mahasiswa\HomeController;
 // use App\Http\Controllers\Dosen\HomeController;
 // use App\Http\Controllers\Pimpinan\HomeController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Admin\Master\FakultasController;
+use App\Http\Controllers\Admin\Master\JurusanController;
+use App\Http\Controllers\Admin\Master\ProdiController;
+use App\Http\Controllers\Admin\Master\KelasController;
+use App\Http\Controllers\Admin\Master\RuanganController;
+use App\Http\Controllers\Admin\Master\MakulController;
+use App\Http\Controllers\Admin\Master\TahunAjaranController;
+
+//Clear All:
+Route::get('/clear', function() {
+    $exitCode = Artisan::call('cache:clear');
+    $exitCode = Artisan::call('optimize');
+    $exitCode = Artisan::call('route:cache');
+    $exitCode = Artisan::call('route:clear');
+    $exitCode = Artisan::call('view:clear');
+    $exitCode = Artisan::call('config:cache');
+    return '<h1>Berhasil dibersihkan</h1>';
+});
 
 Route::get('/', function () {
     return view('auth.login');
 });
+
+// Authentication
+Route::get('/login', [LoginController::class, 'index']);
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard.index');
@@ -29,9 +51,18 @@ Route::get('/pimpinan/dashboard', function () {
     return view('pimpinan.dashboard.index');
 });
 
-Route::get('/admin/akademik', function () {
-    return view('admin.akademik.index');
-});
+// Fakultas
+Route::prefix('admin/fakultas')
+    ->name('admin.master.fakultas.')
+    ->controller(FakultasController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
 
 Route::get('/mahasiswa/akademik', function () {
     return view('mahasiswa.akademik.index');
@@ -41,9 +72,18 @@ Route::get('/dosen/akademik', function () {
     return view('dosen.akademik.index');
 });
 
-Route::get('/admin/absensi', function () {
-    return view('admin.absensi.index');
-});
+// Jurusan
+Route::prefix('admin/jurusan')
+    ->name('admin.master.jurusan.')
+    ->controller(JurusanController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
 
 Route::get('/mahasiswa/absensi', function () {
     return view('mahasiswa.absensi.index');
@@ -73,9 +113,18 @@ Route::get('/dosen/absensi/addnilai', function () {
     return view('dosen.absensi.addnilai');
 });
 
-Route::get('/admin/penguji', function () {
-    return view('admin.penguji.index');
-});
+// Prodi
+Route::prefix('admin/prodi')
+    ->name('admin.master.prodi.')
+    ->controller(ProdiController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
 
 Route::get('/mahasiswa/penguji', function () {
     return view('mahasiswa.penguji.index');
@@ -93,9 +142,18 @@ Route::get('/pimpinan/penguji/add', function () {
     return view('pimpinan.penguji.add');
 });
 
-Route::get('/admin/proposal', function () {
-    return view('admin.proposal.index');
-});
+// Kelas
+Route::prefix('admin/kelas')
+    ->name('admin.master.kelas.')
+    ->controller(KelasController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
 
 Route::get('/mahasiswa/proposal', function () {
     return view('mahasiswa.proposal.index');
@@ -109,9 +167,18 @@ Route::get('/dosen/proposal', function () {
     return view('dosen.proposal.index');
 });
 
-Route::get('/admin/seminar', function () {
-    return view('admin.seminar.index');
-});
+// Ruangan
+Route::prefix('admin/ruangan')
+    ->name('admin.master.ruangan.')
+    ->controller(RuanganController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
 
 Route::get('/mahasiswa/seminar', function () {
     return view('mahasiswa.seminar.index');
@@ -125,9 +192,18 @@ Route::get('/dosen/seminar', function () {
     return view('dosen.seminar.index');
 });
 
-Route::get('/admin/ta', function () {
-    return view('admin.ta.index');
-});
+// Mata Kuliah
+Route::prefix('admin/makul')
+    ->name('admin.master.makul.')
+    ->controller(MakulController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
 
 Route::get('/mahasiswa/ta', function () {
     return view('mahasiswa.ta.index');
@@ -149,9 +225,18 @@ Route::get('/dosen/penelitian', function () {
     return view('dosen.penelitian.index');
 });
 
-Route::get('/admin/yudisium', function () {
-    return view('admin.yudisium.index');
-});
+// Tahun Ajaran
+Route::prefix('admin/tahunajar')
+    ->name('admin.master.tahunajar.')
+    ->controller(TahunAjaranController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
 
 Route::get('/mahasiswa/yudisium', function () {
     return view('mahasiswa.yudisium.index');

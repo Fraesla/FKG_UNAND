@@ -16,8 +16,8 @@ return new class extends Migration
             $table->date('tgl');
             $table->time('jam_masuk');
             $table->time('jam_pulang');
-            $table->string('id_mahasiswa');
-            $table->string('id_jadwal_mahasiswa');
+            $table->string('id_mahasiswa')->unique();
+            $table->string('id_jadwal_mahasiswa')->unique();
             $table->timestamps();
         });
     }

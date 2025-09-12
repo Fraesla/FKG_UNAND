@@ -1,26 +1,44 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use DatePeriod;
-use DateInterval;
-use DateTime;
-use Carbon\Carbon;
+use Auth;
 
 class LoginController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
+
+    public function index(){
+        return view('auth.login');
     }
     
-    public function index()
+    public function login(Request $request)
     {
-        return view('auth.login');
+        $credentials = $request->only('username', 'password', 'level');
+
+        if (Auth::attempt($credentials)) {
+            // Jika autentikasi berhasil
+            return redirect()->intended('/admin/dashboard');
+        } else {
+            return redirect()->route('login')->with("error","Username, Password atau Status Salah !");
+        }
+
+        // Jika autentikasi gagal
+        return back()->withErrors([
+            'username' => 'The provided credentials do not match our records.',
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/login')->with("success","Anda Berhasil Logout!");
     }
 }
