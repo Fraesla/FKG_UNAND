@@ -14,6 +14,9 @@ use App\Http\Controllers\Admin\Master\KelasController;
 use App\Http\Controllers\Admin\Master\RuanganController;
 use App\Http\Controllers\Admin\Master\MakulController;
 use App\Http\Controllers\Admin\Master\TahunAjaranController;
+use App\Http\Controllers\Admin\Jadwal\JadMakulController;
+use App\Http\Controllers\Admin\Jadwal\JadDosenController;
+use App\Http\Controllers\Admin\Jadwal\JadMahasiwaController;
 
 //Clear All:
 Route::get('/clear', function() {
@@ -245,3 +248,42 @@ Route::get('/mahasiswa/yudisium', function () {
 Route::get('/mahasiswa/yudisium/file', function () {
     return view('mahasiswa.yudisium.yudisium');
 });
+
+// Jadwal Mata Kuliah
+Route::prefix('admin/jadmakul')
+    ->name('admin.jadwal.makul.')
+    ->controller(JadMakulController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Jadwal Dosen
+Route::prefix('admin/jaddosen')
+    ->name('admin.jadwal.dosen.')
+    ->controller(JadDosenController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Jadwal Mahasiswa
+Route::prefix('admin/jadmahasiswa')
+    ->name('admin.jadwal.mahasiwswa.')
+    ->controller(JadMahasiwaController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });

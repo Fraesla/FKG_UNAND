@@ -902,7 +902,7 @@
                   </div>
                 </div>
               </li>
-              <li class="nav-item dropdown">
+              <li class="nav-item dropdown @if ($activePage == 'jadwal') active @endif">
                 <a
                   class="nav-link dropdown-toggle"
                   href="#navbar-form"
@@ -937,9 +937,9 @@
                         Bimbingan Akademik
                         <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
                       </a> -->
-                      <a class="dropdown-item" href="/mahasiswa/absensi"> Jadwal Mata Kuliah </a>
-                      <a class="dropdown-item" href="/mahasiswa/ta"> Jadwal Dosen </a>
-                      <a class="dropdown-item" href="/mahasiswa/peneltian"> Jadwal Mahasiswa </a>
+                      <a class="dropdown-item @if ($activeDrop == 'makul') active @endif" href="/admin/jadmakul"> Jadwal Mata Kuliah </a>
+                      <a class="dropdown-item @if ($activeDrop == 'dosen') active @endif" href="/admin/jaddosen"> Jadwal Dosen </a>
+                      <a class="dropdown-item @if ($activeDrop == 'mahasiswa') active @endif" href="/admin/jadmahasiswa"> Jadwal Mahasiswa </a>
                     </div>
                   </div>
                 </div>
@@ -1508,6 +1508,11 @@
     <script src="{{url('assets')}}/dist/libs/jsvectormap/dist/jsvectormap.min.js?1747674014" defer></script>
     <script src="{{url('assets')}}/dist/libs/jsvectormap/dist/maps/world.js?1747674014" defer></script>
     <script src="{{url('assets')}}/dist/libs/jsvectormap/dist/maps/world-merc.js?1747674014" defer></script>
+    <script src="{{url('assets')}}/dist/libs/imask/dist/imask.min.js?1747674014" defer></script>
+    <script src="{{url('assets')}}/dist/libs/autosize/dist/autosize.min.js?1747674014" defer></script>
+    <script src="{{url('assets')}}/dist/libs/nouislider/dist/nouislider.min.js?1747674014" defer></script>
+    <script src="{{url('assets')}}/dist/libs/litepicker/dist/litepicker.js?1747674014" defer></script>
+    <script src="{{url('assets')}}/dist/libs/tom-select/dist/js/tom-select.base.min.js?1747674014" defer></script>
     <!-- END PAGE LIBRARIES -->
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="{{url('assets')}}/dist/js/tabler.min.js?1747674014" defer></script>
@@ -2602,6 +2607,381 @@
               },
             ],
           }).render();
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var themeConfig = {
+          theme: "light",
+          "theme-base": "gray",
+          "theme-font": "sans-serif",
+          "theme-primary": "blue",
+          "theme-radius": "1",
+        };
+        var url = new URL(window.location);
+        var form = document.getElementById("offcanvasSettings");
+        var resetButton = document.getElementById("reset-changes");
+        var checkItems = function () {
+          for (var key in themeConfig) {
+            var value = window.localStorage["tabler-" + key] || themeConfig[key];
+            if (!!value) {
+              var radios = form.querySelectorAll(`[name="${key}"]`);
+              if (!!radios) {
+                radios.forEach((radio) => {
+                  radio.checked = radio.value === value;
+                });
+              }
+            }
+          }
+        };
+        form.addEventListener("change", function (event) {
+          var target = event.target,
+            name = target.name,
+            value = target.value;
+          for (var key in themeConfig) {
+            if (name === key) {
+              document.documentElement.setAttribute("data-bs-" + key, value);
+              window.localStorage.setItem("tabler-" + key, value);
+              url.searchParams.set(key, value);
+            }
+          }
+          window.history.pushState({}, "", url);
+        });
+        resetButton.addEventListener("click", function () {
+          for (var key in themeConfig) {
+            var value = themeConfig[key];
+            document.documentElement.removeAttribute("data-bs-" + key);
+            window.localStorage.removeItem("tabler-" + key);
+            url.searchParams.delete(key);
+          }
+          checkItems();
+          window.history.pushState({}, "", url);
+        });
+        checkItems();
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var el;
+        window.TomSelect &&
+          new TomSelect((el = document.getElementById("select-states")), {
+            copyClassesToDropdown: false,
+            dropdownParent: "body",
+            controlInput: "<input>",
+            render: {
+              item: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+              option: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+            },
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window.noUiSlider &&
+          noUiSlider.create(document.getElementById("range-simple"), {
+            start: 20,
+            connect: [true, false],
+            step: 10,
+            range: {
+              min: 0,
+              max: 100,
+            },
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window.noUiSlider &&
+          noUiSlider.create(document.getElementById("range-connect"), {
+            start: [60, 90],
+            connect: [false, true, false],
+            step: 10,
+            range: {
+              min: 0,
+              max: 100,
+            },
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window.noUiSlider &&
+          noUiSlider.create(document.getElementById("range-color"), {
+            start: 40,
+            connect: [true, false],
+            step: 10,
+            range: {
+              min: 0,
+              max: 100,
+            },
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window.Litepicker &&
+          new Litepicker({
+            element: document.getElementById("datepicker-default"),
+            buttonText: {
+              previousMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-left -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M15 6l-6 6l6 6" /></svg>`,
+              nextMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-right -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M9 6l6 6l-6 6" /></svg>`,
+            },
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window.Litepicker &&
+          new Litepicker({
+            element: document.getElementById("datepicker-icon"),
+            buttonText: {
+              previousMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-left -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M15 6l-6 6l6 6" /></svg>`,
+              nextMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-right -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M9 6l6 6l-6 6" /></svg>`,
+            },
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window.Litepicker &&
+          new Litepicker({
+            element: document.getElementById("datepicker-icon-prepend"),
+            buttonText: {
+              previousMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-left -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M15 6l-6 6l6 6" /></svg>`,
+              nextMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-right -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M9 6l6 6l-6 6" /></svg>`,
+            },
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window.Litepicker &&
+          new Litepicker({
+            element: document.getElementById("datepicker-inline"),
+            buttonText: {
+              previousMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-left -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M15 6l-6 6l6 6" /></svg>`,
+              nextMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-right -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M9 6l6 6l-6 6" /></svg>`,
+            },
+            inlineMode: true,
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var el;
+        window.TomSelect &&
+          new TomSelect((el = document.getElementById("select-tags")), {
+            copyClassesToDropdown: false,
+            dropdownParent: "body",
+            controlInput: "<input>",
+            render: {
+              item: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+              option: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+            },
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var el;
+        window.TomSelect &&
+          new TomSelect((el = document.getElementById("select-users")), {
+            copyClassesToDropdown: false,
+            dropdownParent: "body",
+            controlInput: "<input>",
+            render: {
+              item: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+              option: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+            },
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var el;
+        window.TomSelect &&
+          new TomSelect((el = document.getElementById("select-optgroups")), {
+            copyClassesToDropdown: false,
+            dropdownParent: "body",
+            controlInput: "<input>",
+            render: {
+              item: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+              option: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+            },
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var el;
+        window.TomSelect &&
+          new TomSelect((el = document.getElementById("select-people")), {
+            copyClassesToDropdown: false,
+            dropdownParent: "body",
+            controlInput: "<input>",
+            render: {
+              item: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+              option: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+            },
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var el;
+        window.TomSelect &&
+          new TomSelect((el = document.getElementById("select-countries")), {
+            copyClassesToDropdown: false,
+            dropdownParent: "body",
+            controlInput: "<input>",
+            render: {
+              item: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+              option: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+            },
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var el;
+        window.TomSelect &&
+          new TomSelect((el = document.getElementById("select-labels")), {
+            copyClassesToDropdown: false,
+            dropdownParent: "body",
+            controlInput: "<input>",
+            render: {
+              item: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+              option: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+            },
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var el;
+        window.TomSelect &&
+          new TomSelect((el = document.getElementById("select-countries-valid")), {
+            copyClassesToDropdown: false,
+            dropdownParent: "body",
+            controlInput: "<input>",
+            render: {
+              item: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+              option: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+            },
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var el;
+        window.TomSelect &&
+          new TomSelect((el = document.getElementById("select-countries-invalid")), {
+            copyClassesToDropdown: false,
+            dropdownParent: "body",
+            controlInput: "<input>",
+            render: {
+              item: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+              option: function (data, escape) {
+                if (data.customProperties) {
+                  return '<div><span class="dropdown-item-indicator">' + data.customProperties + "</span>" + escape(data.text) + "</div>";
+                }
+                return "<div>" + escape(data.text) + "</div>";
+              },
+            },
+          });
       });
     </script>
     <script>
