@@ -937,14 +937,14 @@
                         Bimbingan Akademik
                         <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
                       </a> -->
-                      <a class="dropdown-item @if ($activeDrop == 'makul') active @endif" href="/admin/jadmakul"> Jadwal Mata Kuliah </a>
-                      <a class="dropdown-item @if ($activeDrop == 'dosen') active @endif" href="/admin/jaddosen"> Jadwal Dosen </a>
-                      <a class="dropdown-item @if ($activeDrop == 'mahasiswa') active @endif" href="/admin/jadmahasiswa"> Jadwal Mahasiswa </a>
+                      <a class="dropdown-item @if ($activeDrop == 'jadmakul') active @endif" href="/admin/jadmakul"> Jadwal Mata Kuliah </a>
+                      <a class="dropdown-item @if ($activeDrop == 'jaddosen') active @endif" href="/admin/jaddosen"> Jadwal Dosen </a>
+                      <a class="dropdown-item @if ($activeDrop == 'jadmahasiswa') active @endif" href="/admin/jadmahasiswa"> Jadwal Mahasiswa </a>
                     </div>
                   </div>
                 </div>
               </li>
-              <li class="nav-item dropdown">
+              <li class="nav-item dropdown @if ($activePage == 'absensi') active @endif">
                 <a
                   class="nav-link dropdown-toggle"
                   href="#navbar-extra"
@@ -978,13 +978,13 @@
                         Bimbingan Akademik
                         <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
                       </a> -->
-                      <a class="dropdown-item" href="/mahasiswa/ta"> Absensi Dosen </a>
-                      <a class="dropdown-item" href="/mahasiswa/peneltian"> Absensi Mahasiswa </a>
+                      <a class="dropdown-item @if ($activeDrop == 'absdosen') active @endif" href="/admin/absdosen"> Absensi Dosen </a>
+                      <a class="dropdown-item @if ($activeDrop == 'absmahasiswa') active @endif" href="/admin/absmahasiswa"> Absensi Mahasiswa </a>
                     </div>
                   </div>
                 </div>
               </li>
-              <li class="nav-item dropdown">
+              <li class="nav-item dropdown @if ($activePage == 'akun') active @endif">
                 <a
                   class="nav-link dropdown-toggle"
                   href="#navbar-layout"
@@ -1021,8 +1021,8 @@
                         Bimbingan Akademik
                         <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
                       </a> -->
-                      <a class="dropdown-item" href="/mahasiswa/ta"> Mahasiswa </a>
-                      <a class="dropdown-item" href="/mahasiswa/peneltian"> Dosen </a>
+                      <a class="dropdown-item @if ($activeDrop == 'mahasiswa') active @endif" href="/admin/mahasiswa"> Mahasiswa </a>
+                      <a class="dropdown-item @if ($activeDrop == 'dosen') active @endif" href="/admin/dosen"> Dosen </a>
                     </div>
                   </div>
                 </div>

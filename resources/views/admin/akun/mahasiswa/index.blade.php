@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
-'activePage' => 'master',
-'activeDrop' => 'prodi',
+'activePage' => 'akun',
+'activeDrop' => 'mahasiswa',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -10,7 +10,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Prodi</h2>
+                  <h2 class="page-title">Data Mahasiswa</h2>
               </div>
               <!-- Page title actions -->
       </div>
@@ -23,9 +23,9 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Tabel Prodi</h3>
+                    <h3 class="card-title">Tabel Mahasiswa</h3>
                     <div class="ms-auto d-flex flex-wrap btn-list">
-                        <a href="/admin/prodi/add" class="btn btn-0 btn btn-primary"> ADD </a>
+                        <a href="/admin/mahasiswa/add" class="btn btn-0 btn btn-primary"> ADD </a>
                     </div>
                 </div>
                 <div class="card-body border-bottom py-3">
@@ -60,27 +60,41 @@
                                         <path d="M6 15l6 -6l6 6"></path>
                                     </svg>
                                 </th>
-                                <th>Nama Jurusan</th>
-                                <th>Nama Prodi</th>
+                                <th>Foto</th>
+                                <th>NIM</th>
+                                <th>Nama Mahasiswa</th>
+                                <th>Gender</th>
+                                <th>Tanggal Lahir</th>
+                                <th>Alamat</th>
+                                <th>No.HP</th>
                                 <th class="text-center" colspan="2">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php $no = 1; ?>
-                            @foreach($prodi as $data)
+                            @foreach($mahasiswa as $data)
                             <tr>
                                <!--  <td>
                                     <input class="form-check-input m-0 align-middle table-selectable-check"
                                     type="checkbox" aria-label="Select invoice">
                                 </td> -->
-                                <td><span class="text-secondary"> {{$no++}}</span></td>
-                                <td class="text-secondary">{{$data->nama_jurusan}}</td>
+                                <td>
+                                    <span class="text-secondary"> {{$no++}}</span>
+                                </td>
+                                <td class="text-secondary">
+                                    <img src="{{ asset('storage/'.$data->foto) }}" width="50" height="50" class="rounded-circle">
+                                </td>
+                                <td class="text-secondary">{{$data->nim}}</td>
                                 <td class="text-secondary">{{$data->nama}}</td>
+                                <td class="text-secondary">{{$data->gender}}</td>
+                                <td class="text-secondary">{{$data->tgl_lahir}}</td>
+                                <td class="text-secondary">{{$data->alamat}}</td>
+                                <td class="text-secondary">{{$data->no_hp}}</td>
                                 <td class="w-0">
-                                    <a href="/admin/prodi/edit/{{$data->id}}" class="btn btn-warning w-10">Edit</a>
+                                    <a href="/admin/mahasiswa/edit/{{$data->id}}" class="btn btn-warning w-10">Edit</a>
                                 </td>
                                 <td class="w-0">
-                                    <a href="/admin/prodi/delete/{{$data->id}}" class="btn btn-danger w-10">Delete</a>
+                                    <a href="/admin/mahasiswa/delete/{{$data->id}}" class="btn btn-danger w-10">Delete</a>
                                 </td>
                                 <!-- <td class="text-end">
                                     <span class="dropdown">

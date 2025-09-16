@@ -52,9 +52,10 @@
                             </svg>
                         </a>
                     </span>
+                    <input type="hidden" name="level" value="admin">
                 </div>
             </div>
-            <div class="mb-3">
+           <!--  <div class="mb-3">
                 <div class="form-label">
                     Status
                 </div>
@@ -75,7 +76,7 @@
                         Pimpinan
                     </option>
                 </select>
-            </div>
+            </div> -->
             <div class="form-footer">
                 <button type="submit" class="btn btn-primary w-100">Sign in</button>
             </div>

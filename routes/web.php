@@ -17,6 +17,10 @@ use App\Http\Controllers\Admin\Master\TahunAjaranController;
 use App\Http\Controllers\Admin\Jadwal\JadMakulController;
 use App\Http\Controllers\Admin\Jadwal\JadDosenController;
 use App\Http\Controllers\Admin\Jadwal\JadMahasiwaController;
+use App\Http\Controllers\Admin\Absensi\AbsMahasiswaController;
+use App\Http\Controllers\Admin\Absensi\AbsDosenController;
+use App\Http\Controllers\Admin\Akun\MahasiswaController;
+use App\Http\Controllers\Admin\Akun\DosenController;
 
 //Clear All:
 Route::get('/clear', function() {
@@ -262,10 +266,10 @@ Route::prefix('admin/jadmakul')
         Route::get('/delete/{id}', 'delete')->name('delete');
     });
 
-// Jadwal Dosen
-Route::prefix('admin/jaddosen')
-    ->name('admin.jadwal.dosen.')
-    ->controller(JadDosenController::class)
+// Mahasiswa
+Route::prefix('admin/mahasiswa')
+    ->name('admin.akun.mahasiwswa.')
+    ->controller(MahasiswaController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
@@ -279,6 +283,60 @@ Route::prefix('admin/jaddosen')
 Route::prefix('admin/jadmahasiswa')
     ->name('admin.jadwal.mahasiwswa.')
     ->controller(JadMahasiwaController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+
+// Absen Mahasiswa
+Route::prefix('admin/absmahasiswa')
+    ->name('admin.absensi.mahasiwswa.')
+    ->controller(AbsMahasiswaController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Dosen
+Route::prefix('admin/dosen')
+    ->name('admin.akun.dosen.')
+    ->controller(DosenController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Jadwal Dosen
+Route::prefix('admin/jaddosen')
+    ->name('admin.jadwal.dosen.')
+    ->controller(JadDosenController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+
+// Absen Dosen
+Route::prefix('admin/absdosen')
+    ->name('admin.absensi.dosen.')
+    ->controller(AbsDosenController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
