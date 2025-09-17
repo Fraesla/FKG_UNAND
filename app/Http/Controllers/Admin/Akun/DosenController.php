@@ -9,10 +9,42 @@ use Auth;
 
 class DosenController extends Controller
 {
-   public function read(){
-        $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
+   public function read(Request $request){
+        $entries = $request->input('entries', 5);
+
+        $dosen = DB::table('dosen')->orderBy('id','DESC')->paginate($entries);
+
+        $dosen->appends($request->all());
 
         return view('admin.akun.dosen.index',['dosen'=>$dosen]);
+    }
+
+    public function feature(Request $request)
+    {
+        $query = DB::table('dosen');
+
+        // Search berdasarkan ID/Nama
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('id', 'like', "%{$search}%")
+                  ->orWhere('nidm', 'like', "%{$search}%")
+                  ->orWhere('nama', 'like', "%{$search}%")
+                  ->orWhere('gender', 'like', "%{$search}%")
+                  ->orWhere('tgl_lahir', 'like', "%{$search}%")
+                  ->orWhere('alamat', 'like', "%{$search}%")
+                  ->orWhere('no_hp', 'like', "%{$search}%");
+        }
+
+        // Show entries (default 10)
+        $entries = $request->get('entries', 10);
+
+        // Ambil data
+        $dosen = $query->orderBy('id', 'DESC')->paginate($entries);
+
+        // Biar pagination tetap bawa query string
+        $dosen->appends($request->all());
+
+        return view('admin.akun.dosen.index', compact('dosen'));
     }
 
     public function add(){

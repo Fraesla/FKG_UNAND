@@ -9,8 +9,10 @@ use Auth;
 
 class AbsMahasiswaController extends Controller
 {
-    public function read(){
+    public function read(Request $request){
         // $absmahasiswa = DB::table('absen_mahasiswa')->orderBy('id','DESC')->get();
+        $entries = $request->input('entries', 5);
+
         $absmahasiswa = DB::table('absen_mahasiswa as ad')
             ->join('mahasiswa as d', 'ad.id_mahasiswa', '=', 'd.id')
             ->join('jadwal_makul as jm', 'ad.id_jadwal_mahasiswa', '=', 'jm.id')
@@ -26,10 +28,55 @@ class AbsMahasiswaController extends Controller
                 'r.nama as ruangan'
             )
             ->orderBy('ad.id', 'DESC')
-            ->get();
+            ->paginate($entries);
+
+         $absmahasiswa->appends($request->all());
 
         return view('admin.absensi.mahasiswa.index',['absmahasiswa'=>$absmahasiswa]);
     }
+
+    public function feature(Request $request)
+    {
+        $query = DB::table('absen_mahasiswa as ad')
+            ->join('mahasiswa as d', 'ad.id_mahasiswa', '=', 'd.id')
+            ->join('jadwal_makul as jm', 'ad.id_jadwal_mahasiswa', '=', 'jm.id')
+            ->join('makul as m', 'jm.id_makul', '=', 'm.id')
+            ->join('ruangan as r', 'jm.id_ruangan', '=', 'r.id')
+            ->select(
+                'ad.id',
+                'ad.tgl',
+                'ad.jam_masuk',
+                'ad.jam_pulang',
+                'd.nama as nama_mahasiswa',
+                'm.nama as makul',
+                'r.nama as ruangan'
+            );
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('ad.id', 'like', "%{$search}%")
+                  ->orWhere('ad.tgl', 'like', "%{$search}%")
+                  ->orWhere('ad.jam_masuk', 'like', "%{$search}%")
+                  ->orWhere('ad.jam_pulang', 'like', "%{$search}%")
+                  ->orWhere('d.nama', 'like', "%{$search}%")
+                  ->orWhere('m.nama', 'like', "%{$search}%")
+                  ->orWhere('r.nama', 'like', "%{$search}%");
+            });
+        }
+
+        // Show entries (default 10)
+        $entries = $request->get('entries', 10);
+
+        // Ambil data dengan pagination
+        $absmahasiswa = $query->orderBy('ad.id', 'DESC')->paginate($entries);
+
+        // Supaya pagination tetap bawa query string (search / entries)
+        $absmahasiswa->appends($request->all());
+
+        return view('admin.absensi.mahasiswa.index', compact('absmahasiswa'));
+    }
+
     public function add(){
         $jadmakul = DB::table('jadwal_makul')
             ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')

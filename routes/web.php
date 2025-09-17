@@ -65,6 +65,7 @@ Route::prefix('admin/fakultas')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -86,6 +87,7 @@ Route::prefix('admin/jurusan')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -127,6 +129,7 @@ Route::prefix('admin/prodi')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -156,6 +159,7 @@ Route::prefix('admin/kelas')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -181,6 +185,7 @@ Route::prefix('admin/ruangan')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -206,6 +211,7 @@ Route::prefix('admin/makul')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -239,6 +245,7 @@ Route::prefix('admin/tahunajar')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -260,6 +267,7 @@ Route::prefix('admin/jadmakul')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -273,6 +281,7 @@ Route::prefix('admin/mahasiswa')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -286,6 +295,7 @@ Route::prefix('admin/jadmahasiswa')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -300,6 +310,7 @@ Route::prefix('admin/absmahasiswa')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -313,6 +324,7 @@ Route::prefix('admin/dosen')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -326,6 +338,7 @@ Route::prefix('admin/jaddosen')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -340,6 +353,7 @@ Route::prefix('admin/absdosen')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');

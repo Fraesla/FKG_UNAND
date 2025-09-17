@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('jadwal_dosen', function (Blueprint $table) {
             $table->id();
-            $table->string('id_jadwal_makul')->unique();
-            $table->string('id_dosen')->unique();
+            $table->string('id_jadwal_makul');
+            $table->string('id_dosen');
             $table->timestamps();
         });
     }

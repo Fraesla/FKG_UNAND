@@ -9,17 +9,48 @@ use Auth;
 
 class KelasController extends Controller
 {
-    public function read(){
+    public function read(Request $request){
         // $kelas = DB::table('kelas')->orderBy('id','DESC')->get();
+        $entries = $request->input('entries', 5);
+
         $kelas = DB::table('kelas')
         ->join('prodi', 'kelas.id_prodi', '=', 'prodi.id')
         ->select('kelas.*', 'prodi.nama as nama_prodi')
         ->orderBy('kelas.id', 'DESC')
-        ->get();
+        ->paginate($entries);
+
+        $kelas->appends($request->all());
 
         return view('admin.master.kelas.index',['kelas'=>$kelas]);
     }
 
+    public function feature(Request $request)
+    {
+        $query = DB::table('kelas')
+        ->join('prodi', 'kelas.id_prodi', '=', 'prodi.id')
+        ->select('kelas.*', 'prodi.nama as nama_prodi');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('kelas.id', 'like', "%{$search}%")
+                  ->orWhere('kelas.nama', 'like', "%{$search}%")
+                  ->orWhere('prodi.nama', 'like', "%{$search}%");
+            });
+        }
+
+        // Show entries (default 10)
+        $entries = $request->get('entries', 10);
+
+        // Ambil data dengan pagination
+        $kelas = $query->orderBy('kelas.id', 'DESC')->paginate($entries);
+
+        // Supaya pagination tetap bawa query string (search / entries)
+        $kelas->appends($request->all());
+
+        return view('admin.master.kelas.index', compact('kelas'));
+    }
+    
     public function add(){
         $prodi = DB::table('prodi')->orderBy('id','DESC')->get();
         return view('admin.master.kelas.create',['prodi'=>$prodi]);

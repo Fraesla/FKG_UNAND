@@ -9,8 +9,11 @@ use Auth;
 
 class JadMakulController extends Controller
 {
-    public function read(){
+    public function read(Request $request){
+
         // $jadmakul = DB::table('jadwal_makul')->orderBy('id','DESC')->get();
+        $entries = $request->input('entries', 5);
+
         $jadmakul = DB::table('jadwal_makul')
             ->join('tahun_ajaran', 'jadwal_makul.id_tahun_ajaran', '=', 'tahun_ajaran.id')
             ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')
@@ -25,9 +28,52 @@ class JadMakulController extends Controller
                 'ruangan.nama as ruangan'
             )
             ->orderBy('jadwal_makul.id', 'DESC')
-            ->get();
+            ->paginate($entries);
+
+        $jadmakul->appends($request->all());
 
         return view('admin.jadwal.makul.index',['jadmakul'=>$jadmakul]);
+    }
+
+    public function feature(Request $request)
+    {
+        $query = DB::table('jadwal_makul')
+            ->join('tahun_ajaran', 'jadwal_makul.id_tahun_ajaran', '=', 'tahun_ajaran.id')
+            ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')
+            ->join('ruangan', 'jadwal_makul.id_ruangan', '=', 'ruangan.id')
+            ->select(
+                'jadwal_makul.id',
+                'tahun_ajaran.nama as tahun_ajaran',
+                'jadwal_makul.hari',
+                'jadwal_makul.jam_mulai',
+                'jadwal_makul.jam_selesai',
+                'makul.nama as makul',
+                'ruangan.nama as ruangan'
+            );
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('jadwal_makul.id', 'like', "%{$search}%")
+                  ->orWhere('tahun_ajaran.nama', 'like', "%{$search}%")
+                  ->orWhere('jadwal_makul.hari', 'like', "%{$search}%")
+                  ->orWhere('jadwal_makul.jam_mulai', 'like', "%{$search}%")
+                  ->orWhere('jadwal_makul.jam_selesai', 'like', "%{$search}%")
+                  ->orWhere('makul.nama', 'like', "%{$search}%")
+                  ->orWhere('ruangan.nama', 'like', "%{$search}%");
+            });
+        }
+
+        // Show entries (default 10)
+        $entries = $request->get('entries', 10);
+
+        // Ambil data dengan pagination
+        $jadmakul = $query->orderBy('jadwal_makul.id', 'DESC')->paginate($entries);
+
+        // Supaya pagination tetap bawa query string (search / entries)
+        $jadmakul->appends($request->all());
+
+        return view('admin.jadwal.makul.index', compact('jadmakul'));
     }
 
     public function add(){

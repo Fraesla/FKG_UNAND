@@ -9,17 +9,51 @@ use Auth;
 
 class JurusanController extends Controller
 {
-    public function read(){
-        // $jurusan = DB::table('jurusan')->orderBy('id','DESC')->get();
+    public function read(Request $request){
+
+        // Ambil parameter entries dari request, default = 5
+        $entries = $request->input('entries', 5);
+
+        // Query pakai paginate
         $jurusan = DB::table('jurusan')
         ->join('fakultas', 'jurusan.id_fakultas', '=', 'fakultas.id')
         ->select('jurusan.*', 'fakultas.nama as nama_fakultas')
         ->orderBy('jurusan.id', 'DESC')
-        ->get();
+        ->paginate($entries);
+
+        // Supaya pagination tetap bawa query string (search / entries)
+        $jurusan->appends($request->all());
+
 
         return view('admin.master.jurusan.index',['jurusan'=>$jurusan]);
     }
+    public function feature(Request $request)
+    {
+        $query = DB::table('jurusan')
+        ->join('fakultas', 'jurusan.id_fakultas', '=', 'fakultas.id')
+        ->select('jurusan.*', 'fakultas.nama as nama_fakultas');
 
+        // Fitur Search (multi field: id jurusan, nama jurusan, nama fakultas)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('jurusan.id', 'like', "%{$search}%")
+                  ->orWhere('jurusan.nama', 'like', "%{$search}%")
+                  ->orWhere('fakultas.nama', 'like', "%{$search}%");
+            });
+        }
+
+        // Show entries (default 10)
+        $entries = $request->get('entries', 10);
+
+        // Ambil data dengan pagination
+        $jurusan = $query->orderBy('jurusan.id', 'DESC')->paginate($entries);
+
+        // Supaya pagination tetap bawa query string (search / entries)
+        $jurusan->appends($request->all());
+
+        return view('admin.master.jurusan.index', compact('jurusan'));
+    }
     public function add(){
         $fakultas = DB::table('fakultas')->orderBy('id','DESC')->get();
         return view('admin.master.jurusan.create',['fakultas'=>$fakultas]);

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->time('jam_masuk');
             $table->time('jam_pulang');
             $table->string('id_dosen')->unique();
-            $table->string('id_jadwal_dosen')->unique();
+            $table->string('id_jadwal_dosen');
             $table->text('qr');
             $table->timestamps();
         });

@@ -9,10 +9,42 @@ use Auth;
 
 class MahasiswaController extends Controller
 {
-    public function read(){
-        $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
+    public function read(Request $request){
+        $entries = $request->input('entries', 5);
+
+        $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->paginate($entries);
+
+         $mahasiswa->appends($request->all());
 
         return view('admin.akun.mahasiswa.index',['mahasiswa'=>$mahasiswa]);
+    }
+
+    public function feature(Request $request)
+    {
+        $query = DB::table('mahasiswa');
+
+        // Search berdasarkan ID/Nama
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('id', 'like', "%{$search}%")
+                  ->orWhere('nim', 'like', "%{$search}%")
+                  ->orWhere('nama', 'like', "%{$search}%")
+                  ->orWhere('gender', 'like', "%{$search}%")
+                  ->orWhere('tgl_lahir', 'like', "%{$search}%")
+                  ->orWhere('alamat', 'like', "%{$search}%")
+                  ->orWhere('no_hp', 'like', "%{$search}%");
+        }
+
+        // Show entries (default 10)
+        $entries = $request->get('entries', 10);
+
+        // Ambil data
+        $mahasiswa = $query->orderBy('id', 'DESC')->paginate($entries);
+
+        // Biar pagination tetap bawa query string
+        $mahasiswa->appends($request->all());
+
+        return view('admin.akun.mahasiswa.index', compact('mahasiswa'));
     }
 
     public function add(){

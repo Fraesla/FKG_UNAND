@@ -9,10 +9,41 @@ use Auth;
 
 class TahunAjaranController extends Controller
 {
-    public function read(){
-        $tahunajar = DB::table('tahun_ajaran')->orderBy('id','DESC')->get();
+    public function read(Request $request){
+        $entries = $request->input('entries', 5);
 
-        return view('admin.master.tahunajar.index',['tahunajar'=>$tahunajar]);
+        // Query pakai paginate
+        $tahunajar = DB::table('tahun_ajaran')
+                    ->orderBy('id', 'DESC')
+                    ->paginate($entries);
+
+        // Supaya pagination tetap bawa query string (search / entries)
+        $tahunajar->appends($request->all());
+
+        return view('admin.master.tahunajar.index', ['tahunajar' => $tahunajar]);
+    }
+
+    public function feature(Request $request)
+    {
+        $query = DB::table('tahun_ajaran');
+
+        // Search berdasarkan ID/Nama
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('id', 'like', "%{$search}%")
+                  ->orWhere('nama', 'like', "%{$search}%");
+        }
+
+        // Show entries (default 10)
+        $entries = $request->get('entries', 10);
+
+        // Ambil data
+        $tahunajar = $query->orderBy('id', 'DESC')->paginate($entries);
+
+        // Biar pagination tetap bawa query string
+        $tahunajar->appends($request->all());
+
+        return view('admin.master.tahunajar.index', compact('tahunajar'));
     }
 
     public function add(){

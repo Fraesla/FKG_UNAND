@@ -14,10 +14,42 @@ class FakultasController extends Controller
     //     $this->middleware('auth');
     // }
 
-    public function read(){
-        $fakultas = DB::table('fakultas')->orderBy('id','DESC')->get();
+    public function read(Request $request){
+        // Ambil parameter entries dari request, default = 5
+        $entries = $request->input('entries', 5);
 
-        return view('admin.master.fakultas.index',['fakultas'=>$fakultas]);
+        // Query pakai paginate
+        $fakultas = DB::table('fakultas')
+                    ->orderBy('id', 'DESC')
+                    ->paginate($entries);
+
+        // Supaya pagination tetap bawa query string (search / entries)
+        $fakultas->appends($request->all());
+
+        return view('admin.master.fakultas.index', ['fakultas' => $fakultas]);
+    }
+
+    public function feature(Request $request)
+    {
+        $query = DB::table('fakultas');
+
+        // Search berdasarkan ID/Nama
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('id', 'like', "%{$search}%")
+                  ->orWhere('nama', 'like', "%{$search}%");
+        }
+
+        // Show entries (default 10)
+        $entries = $request->get('entries', 10);
+
+        // Ambil data
+        $fakultas = $query->orderBy('id', 'DESC')->paginate($entries);
+
+        // Biar pagination tetap bawa query string
+        $fakultas->appends($request->all());
+
+        return view('admin.master.fakultas.index', compact('fakultas'));
     }
 
     public function add(){

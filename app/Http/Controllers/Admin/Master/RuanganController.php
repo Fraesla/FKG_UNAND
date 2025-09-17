@@ -9,10 +9,41 @@ use Auth;
 
 class RuanganController extends Controller
 {
-    public function read(){
-        $ruangan = DB::table('ruangan')->orderBy('id','DESC')->get();
+    public function read(Request $request){
+        $entries = $request->input('entries', 5);
 
-        return view('admin.master.ruangan.index',['ruangan'=>$ruangan]);
+        // Query pakai paginate
+        $ruangan = DB::table('ruangan')
+                    ->orderBy('id', 'DESC')
+                    ->paginate($entries);
+
+        // Supaya pagination tetap bawa query string (search / entries)
+        $ruangan->appends($request->all());
+
+        return view('admin.master.ruangan.index', ['ruangan' => $ruangan]);
+    }
+
+    public function feature(Request $request)
+    {
+        $query = DB::table('ruangan');
+
+        // Search berdasarkan ID/Nama
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('id', 'like', "%{$search}%")
+                  ->orWhere('nama', 'like', "%{$search}%");
+        }
+
+        // Show entries (default 10)
+        $entries = $request->get('entries', 10);
+
+        // Ambil data
+        $ruangan = $query->orderBy('id', 'DESC')->paginate($entries);
+
+        // Biar pagination tetap bawa query string
+        $ruangan->appends($request->all());
+
+        return view('admin.master.ruangan.index', compact('ruangan'));
     }
 
     public function add(){

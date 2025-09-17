@@ -9,8 +9,10 @@ use Auth;
 
 class AbsDosenController extends Controller
 {
-    public function read(){
+    public function read(Request $request){
         // $absdosen = DB::table('absen_dosen')->orderBy('id','DESC')->get();
+        $entries = $request->input('entries', 5);
+
         $absdosen = DB::table('absen_dosen as ad')
             ->join('dosen as d', 'ad.id_dosen', '=', 'd.id')
             ->join('jadwal_makul as jm', 'ad.id_jadwal_dosen', '=', 'jm.id')
@@ -23,13 +25,60 @@ class AbsDosenController extends Controller
                 'ad.jam_pulang',
                 'd.nama as nama_dosen',
                 'm.nama as makul',
-                'r.nama as ruangan'
+                'r.nama as ruangan',
+                'ad.qr'
             )
             ->orderBy('ad.id', 'DESC')
-            ->get();
+            ->paginate($entries);
+
+        $absdosen->appends($request->all());
 
         return view('admin.absensi.dosen.index',['absdosen'=>$absdosen]);
     }
+
+    public function feature(Request $request)
+    {
+        $query = DB::table('absen_dosen as ad')
+            ->join('dosen as d', 'ad.id_dosen', '=', 'd.id')
+            ->join('jadwal_makul as jm', 'ad.id_jadwal_dosen', '=', 'jm.id')
+            ->join('makul as m', 'jm.id_makul', '=', 'm.id')
+            ->join('ruangan as r', 'jm.id_ruangan', '=', 'r.id')
+            ->select(
+                'ad.id',
+                'ad.tgl',
+                'ad.jam_masuk',
+                'ad.jam_pulang',
+                'd.nama as nama_dosen',
+                'm.nama as makul',
+                'r.nama as ruangan',
+                'ad.qr'
+            );
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('ad.id', 'like', "%{$search}%")
+                  ->orWhere('ad.tgl', 'like', "%{$search}%")
+                  ->orWhere('ad.jam_masuk', 'like', "%{$search}%")
+                  ->orWhere('ad.jam_pulang', 'like', "%{$search}%")
+                  ->orWhere('d.nama', 'like', "%{$search}%")
+                  ->orWhere('m.nama', 'like', "%{$search}%")
+                  ->orWhere('r.nama', 'like', "%{$search}%");
+            });
+        }
+
+        // Show entries (default 10)
+        $entries = $request->get('entries', 10);
+
+        // Ambil data dengan pagination
+        $absdosen = $query->orderBy('ad.id', 'DESC')->paginate($entries);
+
+        // Supaya pagination tetap bawa query string (search / entries)
+        $absdosen->appends($request->all());
+
+        return view('admin.absensi.dosen.index', compact('absdosen'));
+    }
+
     public function add(){
         $jadmakul = DB::table('jadwal_makul')
             ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')
@@ -52,7 +101,7 @@ class AbsDosenController extends Controller
             'jam_pulang' => $request->jam_pulang,
             'id_dosen' => $request->id_dosen,
             'id_jadwal_dosen' => $request->id_jadwal_dosen,
-            'qr'=>''
+            'qr'=>uniqid()
         ]);
 
         return redirect('/admin/absdosen')->with("success","Data Berhasil Ditambah !");
@@ -87,7 +136,7 @@ class AbsDosenController extends Controller
             'jam_pulang' => $request->jam_pulang,
             'id_dosen' => $request->id_dosen,
             'id_jadwal_dosen' => $request->id_jadwal_dosen,
-            'qr'=>''
+            'qr'=>uniqid()
         ]);
 
         return redirect('/admin/absdosen')->with("success","Data Berhasil Diupdate !");

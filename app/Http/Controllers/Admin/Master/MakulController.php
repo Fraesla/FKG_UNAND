@@ -9,10 +9,43 @@ use Auth;
 
 class MakulController extends Controller
 {
-    public function read(){
-        $makul = DB::table('makul')->orderBy('id','DESC')->get();
+    public function read(Request $request){
+
+         $entries = $request->input('entries', 5);
+
+        // Query pakai paginate
+        $makul = DB::table('makul')
+                    ->orderBy('id', 'DESC')
+                    ->paginate($entries);
+
+        // Supaya pagination tetap bawa query string (search / entries)
+        $makul->appends($request->all());
 
         return view('admin.master.makul.index',['makul'=>$makul]);
+    }
+
+    public function feature(Request $request)
+    {
+        $query = DB::table('makul');
+
+        // Search berdasarkan ID/Nama
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('id', 'like', "%{$search}%")
+                  ->orWhere('kode', 'like', "%{$search}%")
+                  ->orWhere('nama', 'like', "%{$search}%");
+        }
+
+        // Show entries (default 10)
+        $entries = $request->get('entries', 10);
+
+        // Ambil data
+        $makul = $query->orderBy('id', 'DESC')->paginate($entries);
+
+        // Biar pagination tetap bawa query string
+        $makul->appends($request->all());
+
+        return view('admin.master.makul.index', compact('makul'));
     }
 
     public function add(){

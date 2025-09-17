@@ -9,15 +9,47 @@ use Auth;
 
 class ProdiController extends Controller
 {
-    public function read(){
+    public function read(Request $request){
         // $prodi = DB::table('prodi')->orderBy('id','DESC')->get();
+        $entries = $request->input('entries', 5);
+
         $prodi = DB::table('prodi')
         ->join('jurusan', 'prodi.id_jurusan', '=', 'jurusan.id')
         ->select('prodi.*', 'jurusan.nama as nama_jurusan')
         ->orderBy('prodi.id', 'DESC')
-        ->get();
+        ->paginate($entries);
+
+        $prodi->appends($request->all());
 
         return view('admin.master.prodi.index',['prodi'=>$prodi]);
+
+    }
+
+    public function feature(Request $request)
+    {
+        $query = DB::table('prodi')
+        ->join('jurusan', 'prodi.id_jurusan', '=', 'jurusan.id')
+        ->select('prodi.*', 'jurusan.nama as nama_jurusan');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('prodi.id', 'like', "%{$search}%")
+                  ->orWhere('prodi.nama', 'like', "%{$search}%")
+                  ->orWhere('jurusan.nama', 'like', "%{$search}%");
+            });
+        }
+
+        // Show entries (default 10)
+        $entries = $request->get('entries', 10);
+
+        // Ambil data dengan pagination
+        $prodi = $query->orderBy('prodi.id', 'DESC')->paginate($entries);
+
+        // Supaya pagination tetap bawa query string (search / entries)
+        $prodi->appends($request->all());
+
+        return view('admin.master.prodi.index', compact('prodi'));
     }
 
     public function add(){
