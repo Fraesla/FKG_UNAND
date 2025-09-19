@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('jadwal_mahasiswa', function (Blueprint $table) {
             $table->id();
-            $table->string('id_jadwal_makul')();
+            $table->string('id_jadwal_makul');
             $table->string('id_mahasiwa');
             $table->timestamps();
         });
