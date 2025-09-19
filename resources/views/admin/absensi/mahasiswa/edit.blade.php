@@ -70,6 +70,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        <input type="hidden" name="status" value="belum absen">
                                         <div>
                                             <label class="form-label">Jadwal Mahasiswa</label>
                                              <select class="form-select" name="id_jadwal_mahasiswa">

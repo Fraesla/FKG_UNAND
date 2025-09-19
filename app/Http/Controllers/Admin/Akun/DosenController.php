@@ -77,6 +77,13 @@ class DosenController extends Controller
             'foto' => $path
         ]);
 
+        DB::table('user')->insert([  
+            'username' => $request->nidm,
+            'password' => bcrypt('Unand2025'),
+            'level' => 'dosen',
+            'status' => '0',
+        ]);
+
         return redirect('/admin/dosen')->with("success","Data Berhasil Ditambah !");
     }
 

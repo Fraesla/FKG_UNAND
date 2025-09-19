@@ -18,6 +18,9 @@ return new class extends Migration
             $table->time('jam_pulang');
             $table->string('id_mahasiswa')->unique();
             $table->string('id_jadwal_mahasiswa');
+            $table->text('status');
+            $table->text('keterangan');
+            $table->text('qr');
             $table->timestamps();
         });
     }

@@ -21,6 +21,15 @@ use App\Http\Controllers\Admin\Absensi\AbsMahasiswaController;
 use App\Http\Controllers\Admin\Absensi\AbsDosenController;
 use App\Http\Controllers\Admin\Akun\MahasiswaController;
 use App\Http\Controllers\Admin\Akun\DosenController;
+use App\Http\Controllers\Mahasiswa\JadwalController;
+use App\Http\Controllers\Admin\TaController;
+use App\Http\Controllers\Admin\SuratIzinController;
+use App\Http\Controllers\Admin\PengajuanController;
+use App\Http\Controllers\Admin\SeminarProposalController;
+use App\Http\Controllers\Admin\SeminarHasilController;
+use App\Http\Controllers\Admin\YudisiumController;
+use App\Http\Controllers\Admin\SuratAktifKuliahController;
+use App\Http\Controllers\Admin\SAPSController;
 
 //Clear All:
 Route::get('/clear', function() {
@@ -71,14 +80,6 @@ Route::prefix('admin/fakultas')
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/delete/{id}', 'delete')->name('delete');
     });
-
-Route::get('/mahasiswa/akademik', function () {
-    return view('mahasiswa.akademik.index');
-});
-
-Route::get('/dosen/akademik', function () {
-    return view('dosen.akademik.index');
-});
 
 // Jurusan
 Route::prefix('admin/jurusan')
@@ -302,6 +303,19 @@ Route::prefix('admin/jadmahasiswa')
         Route::get('/delete/{id}', 'delete')->name('delete');
     });
 
+Route::prefix('mahasiswa/jadwal')
+    ->name('mahasiswa.jadwal.')
+    ->controller(JadwalController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/scan/{id}', 'scan')->name('scan');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
 
 // Absen Mahasiswa
 Route::prefix('admin/absmahasiswa')
@@ -350,6 +364,118 @@ Route::prefix('admin/jaddosen')
 Route::prefix('admin/absdosen')
     ->name('admin.absensi.dosen.')
     ->controller(AbsDosenController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Data Bimbingan Tugas Akhir
+Route::prefix('admin/ta')
+    ->name('admin.ta.')
+    ->controller(TaController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Data Surat Izin
+Route::prefix('admin/suratizin')
+    ->name('admin.suratizin.')
+    ->controller(SuratIzinController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Data Pengajuan
+Route::prefix('admin/pengajuan')
+    ->name('admin.pengajuan.')
+    ->controller(PengajuanController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Data Proposal
+Route::prefix('admin/seminarproposal')
+    ->name('admin.seminarproposal.')
+    ->controller(SeminarProposalController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Data Hasil
+Route::prefix('admin/seminarhasil')
+    ->name('admin.seminarhasil.')
+    ->controller(SeminarHasilController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Data Yudisium
+Route::prefix('admin/yudisium')
+    ->name('admin.yudisium.')
+    ->controller(YudisiumController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Data Surat Aktif Kuliah
+Route::prefix('admin/surataktifkuliah')
+    ->name('admin.surataktifkuliah.')
+    ->controller(SuratAKtifKuliahController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Data SAPS
+Route::prefix('admin/saps')
+    ->name('admin.saps.')
+    ->controller(SAPSController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');

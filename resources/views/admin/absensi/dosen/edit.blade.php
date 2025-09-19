@@ -82,6 +82,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        <input type="hidden" name="status" value="belum absen">
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">
                                                 Simpan

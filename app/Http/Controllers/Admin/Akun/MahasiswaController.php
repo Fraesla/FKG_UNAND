@@ -77,6 +77,13 @@ class MahasiswaController extends Controller
             'foto' => $path
         ]);
 
+        DB::table('user')->insert([  
+            'username' => $request->nim,
+            'password' => bcrypt('Unand2025'),
+            'level' => 'mahasiswa',
+            'status' => '0',
+        ]);
+
         return redirect('/admin/mahasiswa')->with("success","Data Berhasil Ditambah !");
     }
 

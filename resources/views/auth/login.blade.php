@@ -39,20 +39,19 @@
                     </span> -->
                 </label>
                 <div class="input-group input-group-flat">
-                    <input type="password" class="form-control" placeholder="Password" autocomplete="off" name="password"/>
-                    <span class="input-group-text">
-                        <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip">
+                    <input type="password" class="form-control" placeholder="Password" autocomplete="off" name="password" id="password"/>
+                    <span class="input-group-text" id="toggleIcon">
+                        <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip" onclick="togglePassword()">
                             <!-- Download SVG icon from http://tabler.io/icons/icon/eye -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="icon icon-1">
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="icon icon-1">
                                 <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
                                 <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"
-                                />
+                                    />
                             </svg>
                         </a>
                     </span>
-                    <input type="hidden" name="level" value="admin">
                 </div>
             </div>
            <!--  <div class="mb-3">
@@ -84,4 +83,20 @@
     </div>
 </div>
 <div class="text-center text-secondary mt-3">Don't have account yet?<a href="#" tabindex="-1"> Sign up</a></div>
+<!-- js -->
+<script>
+    function togglePassword() {
+        var passwordInput = document.getElementById("password");
+        var toggleIcon = document.getElementById("toggleIcon");
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            toggleIcon.classList.remove("dw-padlock1");
+            toggleIcon.classList.add("dw-unlock1");
+        } else {
+            passwordInput.type = "password";
+            toggleIcon.classList.remove("dw-unlock1");
+            toggleIcon.classList.add("dw-padlock1");
+        }
+    }
+</script>
 @endsection

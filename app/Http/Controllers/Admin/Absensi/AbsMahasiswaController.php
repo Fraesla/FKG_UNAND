@@ -25,7 +25,8 @@ class AbsMahasiswaController extends Controller
                 'ad.jam_pulang',
                 'd.nama as nama_mahasiswa',
                 'm.nama as makul',
-                'r.nama as ruangan'
+                'r.nama as ruangan',
+                'ad.qr'
             )
             ->orderBy('ad.id', 'DESC')
             ->paginate($entries);
@@ -49,7 +50,8 @@ class AbsMahasiswaController extends Controller
                 'ad.jam_pulang',
                 'd.nama as nama_mahasiswa',
                 'm.nama as makul',
-                'r.nama as ruangan'
+                'r.nama as ruangan',
+                'ad.qr'
             );
 
         if ($request->filled('search')) {
@@ -98,7 +100,10 @@ class AbsMahasiswaController extends Controller
             'jam_masuk' => $request->jam_masuk,
             'jam_pulang' => $request->jam_pulang,
             'id_mahasiswa' => $request->id_mahasiswa,
-            'id_jadwal_mahasiswa' => $request->id_jadwal_mahasiswa
+            'id_jadwal_mahasiswa' => $request->id_jadwal_mahasiswa,
+            'status' => $request->status,
+            'keterangan' => '',
+            'qr'=>uniqid()
         ]);
 
         return redirect('/admin/absmahasiswa')->with("success","Data Berhasil Ditambah !");
@@ -132,7 +137,10 @@ class AbsMahasiswaController extends Controller
             'jam_masuk' => $request->jam_masuk,
             'jam_pulang' => $request->jam_pulang,
             'id_mahasiswa' => $request->id_mahasiswa,
-            'id_jadwal_mahasiswa' => $request->id_jadwal_mahasiswa
+            'id_jadwal_mahasiswa' => $request->id_jadwal_mahasiswa,
+            'status' => $request->status,
+            'keterangan' => '',
+            'qr'=>uniqid()
         ]);
 
         return redirect('/admin/absmahasiswa')->with("success","Data Berhasil Diupdate !");

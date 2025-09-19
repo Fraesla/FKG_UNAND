@@ -59,7 +59,7 @@
           <!-- END NAVBAR TOGGLER -->
           <!-- BEGIN NAVBAR LOGO -->
           <div class="navbar-brand navbar-brand-autodark">
-            <a href="/dashboard" aria-label="Tabler">
+            <a href="/mahasiswa/dashboard" aria-label="Tabler">
               Aplikasi FKG
             </a>
           </div>
@@ -830,7 +830,7 @@
           <div class="collapse navbar-collapse" id="sidebar-menu">
             <!-- BEGIN NAVBAR MENU -->
             <ul class="navbar-nav pt-lg-3">
-              <li class="nav-item active">
+              <li class="nav-item @if ($activePage == 'dashboard') active @endif">
                 <a class="nav-link" href="/mahasiswa/dashboard">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
                     ><!-- Download SVG icon from http://tabler.io/icons/icon/home -->
@@ -853,64 +853,8 @@
                   <span class="nav-link-title"> Home </span>
                 </a>
               </li>
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#navbar-base"
-                  data-bs-toggle="dropdown"
-                  data-bs-auto-close="false"
-                  role="button"
-                  aria-expanded="false"
-                >
-                  <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/package -->
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="icon icon-1"
-                    >
-                      <path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" />
-                      <path d="M12 12l8 -4.5" />
-                      <path d="M12 12l0 9" />
-                      <path d="M12 12l-8 -4.5" />
-                      <path d="M16 5.25l-8 4.5" /></svg
-                  ></span>
-                  <span class="nav-link-title"> Data Master</span>
-                </a>
-                <div class="dropdown-menu">
-                  <div class="dropdown-menu-columns">
-                    <div class="dropdown-menu-column">
-                      <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
-                        Bimbingan Akademik
-                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                      </a> -->
-                      <a class="dropdown-item" href="/mahasiswa/absensi"> Fakultas </a>
-                      <a class="dropdown-item" href="/mahasiswa/ta"> Jurusan </a>
-                      <a class="dropdown-item" href="/mahasiswa/peneltian"> Prodi </a>
-                      <a class="dropdown-item" href="/mahasiswa/penguji"> Kelas </a>
-                      <a class="dropdown-item" href="/mahasiswa/proposal"> Ruangan </a>
-                      <a class="dropdown-item" href="/mahasiswa/seminar"> Mata Kuliah </a>
-                      <a class="dropdown-item" href="/mahasiswa/yudisium"> Tahun Ajaran </a>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#navbar-form"
-                  data-bs-toggle="dropdown"
-                  data-bs-auto-close="false"
-                  role="button"
-                  aria-expanded="false"
-                >
+              <li class="nav-item @if ($activePage == 'jadwal') active @endif">
+                <a class="nav-link" href="/mahasiswa/jadwal">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
                     ><!-- Download SVG icon from http://tabler.io/icons/icon/checkbox -->
                     <svg
@@ -930,29 +874,9 @@
                   ></span>
                   <span class="nav-link-title"> Data Jadwal </span>
                 </a>
-                <div class="dropdown-menu">
-                  <div class="dropdown-menu-columns">
-                    <div class="dropdown-menu-column">
-                      <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
-                        Bimbingan Akademik
-                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                      </a> -->
-                      <a class="dropdown-item" href="/mahasiswa/absensi"> Jadwal Mata Kuliah </a>
-                      <a class="dropdown-item" href="/mahasiswa/ta"> Jadwal Dosen </a>
-                      <a class="dropdown-item" href="/mahasiswa/peneltian"> Jadwal Mahasiswa </a>
-                    </div>
-                  </div>
-                </div>
               </li>
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#navbar-extra"
-                  data-bs-toggle="dropdown"
-                  data-bs-auto-close="false"
-                  role="button"
-                  aria-expanded="false"
-                >
+              <li class="nav-item @if ($activePage == 'absensi') active @endif">
+                <a class="nav-link" href="/mahasiswa/absensi">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
                     ><!-- Download SVG icon from http://tabler.io/icons/icon/star -->
                     <svg
@@ -971,71 +895,9 @@
                   ></span>
                   <span class="nav-link-title"> Data Absensi</span>
                 </a>
-                <div class="dropdown-menu">
-                  <div class="dropdown-menu-columns">
-                    <div class="dropdown-menu-column">
-                      <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
-                        Bimbingan Akademik
-                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                      </a> -->
-                      <a class="dropdown-item" href="/mahasiswa/ta"> Absensi Dosen </a>
-                      <a class="dropdown-item" href="/mahasiswa/peneltian"> Absensi Mahasiswa </a>
-                    </div>
-                  </div>
-                </div>
               </li>
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#navbar-layout"
-                  data-bs-toggle="dropdown"
-                  data-bs-auto-close="false"
-                  role="button"
-                  aria-expanded="true"
-                >
-                  <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/layout-2 -->
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="icon icon-1"
-                    >
-                      <path d="M4 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
-                      <path d="M4 13m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
-                      <path d="M14 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
-                      <path d="M14 15m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg
-                  ></span>
-                  <span class="nav-link-title"> Data Akun </span>
-                </a>
-                <div class="dropdown-menu">
-                  <div class="dropdown-menu-columns">
-                    <div class="dropdown-menu-column">
-                      <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
-                        Bimbingan Akademik
-                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                      </a> -->
-                      <a class="dropdown-item" href="/mahasiswa/ta"> Mahasiswa </a>
-                      <a class="dropdown-item" href="/mahasiswa/peneltian"> Dosen </a>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link"
-                  href="#navbar-plugins"
-                  data-bs-toggle="dropdown"
-                  data-bs-auto-close="false"
-                  role="button"
-                  aria-expanded="false"
-                >
+              <li class="nav-item @if ($activePage == 'profile') active @endif">
+                <a class="nav-link" href="/mahasiswa/profile">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
                     ><!-- Download SVG icon from http://tabler.io/icons/icon/puzzle -->
                     <svg
@@ -1054,11 +916,14 @@
                         d="M4 7h3a1 1 0 0 0 1 -1v-1a2 2 0 0 1 4 0v1a1 1 0 0 0 1 1h3a1 1 0 0 1 1 1v3a1 1 0 0 0 1 1h1a2 2 0 0 1 0 4h-1a1 1 0 0 0 -1 1v3a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-1a2 2 0 0 0 -4 0v1a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h1a2 2 0 0 0 0 -4h-1a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1"
                       /></svg
                   ></span>
-                  <span class="nav-link-title"> Data Invoice </span>
+                  <span class="nav-link-title"> Edit Profile </span>
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="./">
+                <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();
+                  document.getElementById('logout-form').submit();">
+                  @csrf
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
                     ><!-- Download SVG icon from http://tabler.io/icons/icon/home -->
                     <svg
@@ -1071,14 +936,16 @@
                       stroke-width="2"
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      class="icon icon-1"
-                    >
-                      <path
-                        d="M4 7h3a1 1 0 0 0 1 -1v-1a2 2 0 0 1 4 0v1a1 1 0 0 0 1 1h3a1 1 0 0 1 1 1v3a1 1 0 0 0 1 1h1a2 2 0 0 1 0 4h-1a1 1 0 0 0 -1 1v3a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-1a2 2 0 0 0 -4 0v1a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h1a2 2 0 0 0 0 -4h-1a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1"
-                      /></svg
-                  ></span>
+                      class="icon icon-1">
+
+                       <path d="M10 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2" />
+                       <path d="M15 12h-12l3 -3" />
+                       <path d="M6 15l-3 -3" />
+                    </svg>
+                  </span>
                   <span class="nav-link-title"> Logout </span>
                 </a>
+                </form>
               </li>
             </ul>
             <!-- END NAVBAR MENU -->

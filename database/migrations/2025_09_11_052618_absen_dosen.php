@@ -18,6 +18,8 @@ return new class extends Migration
             $table->time('jam_pulang');
             $table->string('id_dosen')->unique();
             $table->string('id_jadwal_dosen');
+            $table->text('status');
+            $table->text('keterangan');
             $table->text('qr');
             $table->timestamps();
         });

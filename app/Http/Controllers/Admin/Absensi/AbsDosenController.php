@@ -101,6 +101,8 @@ class AbsDosenController extends Controller
             'jam_pulang' => $request->jam_pulang,
             'id_dosen' => $request->id_dosen,
             'id_jadwal_dosen' => $request->id_jadwal_dosen,
+            'status' => $request->status,
+            'keterangan' => '',
             'qr'=>uniqid()
         ]);
 
@@ -136,6 +138,8 @@ class AbsDosenController extends Controller
             'jam_pulang' => $request->jam_pulang,
             'id_dosen' => $request->id_dosen,
             'id_jadwal_dosen' => $request->id_jadwal_dosen,
+            'status' => $request->status,
+            'keterangan' => '',
             'qr'=>uniqid()
         ]);
 
