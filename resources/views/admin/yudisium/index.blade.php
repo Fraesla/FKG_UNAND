@@ -114,15 +114,87 @@
                                 <td class="text-secondary">{{$data->judul}}</td>
                                 <td class="text-secondary">{{$data->tgl_semi_proposal}}</td>
                                 <td class="text-secondary">{{$data->tgl_semi_hasil}}</td>
-                                <td class="text-secondary">{{$data->hasil_turnitin}}</td>
-                                <td class="text-secondary">{{$data->bukti_lunas}}</td>
-                                <td class="text-secondary">{{$data->khs}}</td>
-                                <td class="text-secondary">{{$data->kbs}}</td>
-                                <td class="text-secondary">{{$data->brsempro}}</td>
-                                <td class="text-secondary">{{$data->brsemhas}}</td>
-                                <td class="text-secondary">{{$data->full_skripsi}}</td>
-                                <td class="text-secondary">{{$data->matriks}}</td>
-                                <td class="text-secondary">{{$data->toefl}}</td>
+                                <td class="text-secondary">
+                                    @if($data->hasil_turnitin)
+                                        <a href="{{ asset('storage/'.$data->hasil_turnitin) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Lihat Hasil
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Belum ada file</span>
+                                    @endif
+                                </td>
+                                <td class="text-secondary">
+                                    @if($data->bukti_lunas)
+                                        <a href="{{ asset('storage/'.$data->bukti_lunas) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Lihat Bukti
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Belum ada file</span>
+                                    @endif
+                                </td>
+                                <td class="text-secondary">
+                                    @if($data->khs)
+                                        <a href="{{ asset('storage/'.$data->khs) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Lihat KHS
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Belum ada file</span>
+                                    @endif
+                                </td>
+                                <td class="text-secondary">
+                                    @if($data->kbs)
+                                        <a href="{{ asset('storage/'.$data->kbs) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Lihat KBS
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Belum ada file</span>
+                                    @endif
+                                </td>
+                                <td class="text-secondary">
+                                    @if($data->brsempro)
+                                        <a href="{{ asset('storage/'.$data->brsempro) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Lihat Sempro
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Belum ada file</span>
+                                    @endif
+                                </td>
+                                <td class="text-secondary">
+                                    @if($data->brsemhas)
+                                        <a href="{{ asset('storage/'.$data->brsemhas) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Lihat Semhas
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Belum ada file</span>
+                                    @endif
+                                </td>
+                                <td class="text-secondary">
+                                    @if($data->full_skripsi)
+                                        <a href="{{ asset('storage/'.$data->full_skripsi) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Lihat Full Skripsi
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Belum ada file</span>
+                                    @endif
+                                </td>
+                                <td class="text-secondary">
+                                    @if($data->matriks)
+                                        <a href="{{ asset('storage/'.$data->matriks) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Lihat Matriks
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Belum ada file</span>
+                                    @endif
+                                </td>
+                                <td class="text-secondary">
+                                    @if($data->toefl)
+                                        <a href="{{ asset('storage/'.$data->toefl) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Lihat TOEFL
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Belum ada file</span>
+                                    @endif
+                                </td>
                                 <td class="w-0">
                                     <div class="d-flex gap-1">
                                         <!-- Tombol Edit -->

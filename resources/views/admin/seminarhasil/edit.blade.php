@@ -52,11 +52,11 @@
                                         </div>
                                         <div>
                                             <label class="form-label">Dosen Pembimbing 2</label>
-                                            <input type="text" placeholder="Masukkan Dosen Pembimbing 2" class="form-control" name="dosen_pembimbing_2" value="{{$seminar_hasil->dosen_pembimbing_2}"/>
+                                            <input type="text" placeholder="Masukkan Dosen Pembimbing 2" class="form-control" name="dosen_pembimbing_2" value="{{$seminar_hasil->dosen_pembimbing_2}}"/>
                                         </div>
                                          <div>
                                             <label class="form-label">Penguji 1</label>
-                                            <input type="text" placeholder="Masukkan Penguji 1" class="form-control" name="penguji_1" value="{{$seminar_hasil->penguji_1}"/>
+                                            <input type="text" placeholder="Masukkan Penguji 1" class="form-control" name="penguji_1" value="{{$seminar_hasil->penguji_1}}"/>
                                         </div>
                                         <div>
                                             <label class="form-label">Penguji 2</label>
@@ -66,21 +66,45 @@
                                             <label class="form-label">Penguji 3</label>
                                             <input type="text" placeholder="Masukkan Penguji 3" class="form-control" name="penguji_3" value="{{$seminar_hasil->penguji_3}}"/>
                                         </div>
-                                        <div>
-                                            <label class="form-label">Surat Seminar Hasil</label>
-                                            <input type="text" placeholder="Masukkan Surat Seminar Hasil" class="form-control" name="surat_hasil" value="{{$seminar_hasil->surat_hasil}}"/>
+                                        <div class="mb-3">
+                                            <label>Surat Seminar hasil</label>
+                                            <input type="file" name="surat_hasil" class="form-control">
+                                            @if($seminar_hasil->surat_hasil)
+                                                <small class="text-muted">
+                                                    File saat ini: 
+                                                    <a href="{{ asset('storage/'.$seminar_hasil->surat_hasil) }}" target="_blank">Lihat</a>
+                                                </small>
+                                            @endif
                                         </div>
-                                        <div>
-                                            <label class="form-label">File Draft Skripsi</label>
-                                            <input type="text" placeholder="Masukkan File Draft Skripsi" class="form-control" name="file_draft" value="{{$seminar_hasil->file_draft}}"/>
+                                        <div class="mb-3">
+                                            <label>File Draft</label>
+                                            <input type="file" name="file_draft" class="form-control">
+                                            @if($seminar_hasil->file_draft)
+                                                <small class="text-muted">
+                                                    File saat ini: 
+                                                    <a href="{{ asset('storage/'.$seminar_hasil->file_draft) }}" target="_blank">Lihat</a>
+                                                </small>
+                                            @endif
                                         </div>
-                                        <div>
-                                            <label class="form-label">Bukti Izin</label>
-                                            <input type="text" placeholder="Masukkan Bukti Izin" class="form-control" name="bukti_izin" value="{{$seminar_hasil->bukti_izin}}"/>
+                                        <div class="mb-3">
+                                            <label>Bukti Izin</label>
+                                            <input type="file" name="bukti_izin" class="form-control">
+                                            @if($seminar_hasil->bukti_izin)
+                                                <small class="text-muted">
+                                                    File saat ini: 
+                                                    <a href="{{ asset('storage/'.$seminar_hasil->bukti_izin) }}" target="_blank">Lihat</a>
+                                                </small>
+                                            @endif
                                         </div>
-                                        <div>
-                                            <label class="form-label">Lembar Jadwal</label>
-                                            <input type="text" placeholder="Masukkan Lembar Jadwal" class="form-control" name="lembar)jadwal" value="{{$seminar_hasil->lembar_jadwal}}"/>
+                                        <div class="mb-3">
+                                            <label>Lembar Jadwal</label>
+                                            <input type="file" name="lembar_jadwal" class="form-control">
+                                            @if($seminar_hasil->lembar_jadwal)
+                                                <small class="text-muted">
+                                                    File saat ini: 
+                                                    <a href="{{ asset('storage/'.$seminar_hasil->lembar_jadwal) }}" target="_blank">Lihat</a>
+                                                </small>
+                                            @endif
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

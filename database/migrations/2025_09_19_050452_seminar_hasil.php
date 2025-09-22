@@ -21,10 +21,10 @@ return new class extends Migration
         $table->string('penguji_1');
         $table->string('penguji_2');
         $table->string('penguji_3');
-        $table->string('surat_hasil');
-        $table->string('file_draft');
-        $table->string('bukti_izin');
-        $table->string('lembar_jadwal');
+        $table->text('surat_hasil');
+        $table->text('file_draft');
+        $table->text('bukti_izin');
+        $table->text('lembar_jadwal');
         $table->timestamps();
     });
     }

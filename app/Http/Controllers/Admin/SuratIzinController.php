@@ -64,7 +64,7 @@ class SuratIzinController extends Controller
     public function create(Request $request){
         DB::table('surat_izin')->insert([  
             'jenis' => $request->jenis,
-            'nama_' => $request->nama,
+            'nama' => $request->nama,
             'no_bp' => $request->no_bp,
             'alamat' => $request->alamat,
             'judul_penilitian' => $request->judul_penilitian,
@@ -89,7 +89,7 @@ class SuratIzinController extends Controller
             ->where('id', $id)
             ->update([
             'jenis' => $request->jenis,
-            'nama_' => $request->nama,
+            'nama' => $request->nama,
             'no_bp' => $request->no_bp,
             'alamat' => $request->alamat,
             'judul_penilitian' => $request->judul_penilitian,

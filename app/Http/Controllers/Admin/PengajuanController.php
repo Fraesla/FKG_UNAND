@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Auth;
 
 class PengajuanController extends Controller
@@ -58,16 +59,26 @@ class PengajuanController extends Controller
     }
 
     public function create(Request $request){
+
+         $request->validate([
+        'surat_pengajuan' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+        'krs' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+        // tambahkan validasi field lain
+        ]);
+
+        // Simpan file ke storage/pengajuan
+        $surat = $request->file('surat_pengajuan')->store('pengajuan', 'public');
+        $krs = $request->file('krs')->store('pengajuan', 'public');
+
         DB::table('pengajuan')->insert([  
-            'nama_' => $request->nama,
+            'nama' => $request->nama,
             'no_bp' => $request->no_bp,
             'no_hp' => $request->no_hp,
-            'gmail' => $request->gmail,
             'dosen_pembimbing_1' => $request->dosen_pembimbing_1,
             'dosen_pembimbing_2' => $request->dosen_pembimbing_2,
-            'surat_pengajuan' => $request->surat_pengajuan,
+            'surat_pengajuan' => $surat,
             'judul' => $request->judul,
-            'krs' => $request->krs
+            'krs' => $krs
         ]);
 
         return redirect('/admin/pengajuan')->with("success","Data Berhasil Ditambah !");
@@ -79,27 +90,82 @@ class PengajuanController extends Controller
         return view('admin.pengajuan.edit',['pengajuan'=>$pengajuan]);
     }
 
-    public function update(Request $request, $id) {
-        DB::table('pengajuan')  
-            ->where('id', $id)
-            ->update([
-            'nama_' => $request->nama,
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'no_bp' => 'required|string|max:20',
+            'no_hp' => 'required|string|max:20',
+            'dosen_pembimbing_1' => 'required|string|max:255',
+            'dosen_pembimbing_2' => 'nullable|string|max:255',
+            'judul' => 'required|string|max:255',
+
+            // file rules
+            'surat_pengajuan' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048',
+            'krs' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048',
+        ]);
+
+        // ambil data lama
+        $pengajuan = DB::table('pengajuan')->where('id', $id)->first();
+
+        $updateData = [
+            'nama' => $request->nama,
             'no_bp' => $request->no_bp,
             'no_hp' => $request->no_hp,
             'dosen_pembimbing_1' => $request->dosen_pembimbing_1,
             'dosen_pembimbing_2' => $request->dosen_pembimbing_2,
-            'surat_pengajuan' => $request->surat_pengajuan,
             'judul' => $request->judul,
-            'krs' => $request->krs
-        ]);
+        ];
 
-        return redirect('/admin/pengajuan')->with("success","Data Berhasil Diupdate !");
-    }
+        // === Surat Pengajuan ===
+        if ($request->hasFile('surat_pengajuan')) {
+            // hapus file lama
+            if ($pengajuan->surat_pengajuan && Storage::disk('public')->exists($pengajuan->surat_pengajuan)) {
+                Storage::disk('public')->delete($pengajuan->surat_pengajuan);
+            }
 
+            // upload file baru
+            $path = $request->file('surat_pengajuan')->store('surat_pengajuan', 'public');
+            $updateData['surat_pengajuan'] = $path;
+        }
+
+        // === KRS ===
+        if ($request->hasFile('krs')) {
+            // hapus file lama
+            if ($pengajuan->krs && Storage::disk('public')->exists($pengajuan->krs)) {
+                Storage::disk('public')->delete($pengajuan->krs);
+            }
+
+            // upload file baru
+            $path = $request->file('krs')->store('krs', 'public');
+            $updateData['krs'] = $path;
+        }
+
+        // update DB
+        DB::table('pengajuan')->where('id', $id)->update($updateData);
+
+        return redirect('/admin/pengajuan')->with("success", "Data Berhasil Diupdate !");
+    } 
     public function delete($id)
     {
-        DB::table('pengajuan')->where('id',$id)->delete();
+         // ambil data pengajuan
+        $pengajuan = DB::table('pengajuan')->where('id', $id)->first();
 
-        return redirect('/admin/pengajuan')->with("success","Data Berhasil Dihapus !");
+        if ($pengajuan) {
+            // hapus file surat_pengajuan kalau ada
+            if ($pengajuan->surat_pengajuan && Storage::disk('public')->exists($pengajuan->surat_pengajuan)) {
+                Storage::disk('public')->delete($pengajuan->surat_pengajuan);
+            }
+
+            // hapus file krs kalau ada
+            if ($pengajuan->krs && Storage::disk('public')->exists($pengajuan->krs)) {
+                Storage::disk('public')->delete($pengajuan->krs);
+            }
+
+            // hapus data dari tabel
+            DB::table('pengajuan')->where('id', $id)->delete();
+        }
+
+        return redirect('/admin/pengajuan')->with("success", "Data dan file berhasil dihapus!");
     }
 }

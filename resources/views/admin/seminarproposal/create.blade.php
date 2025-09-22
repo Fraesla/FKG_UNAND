@@ -68,19 +68,19 @@
                                         </div>
                                         <div>
                                             <label class="form-label">Surat Seminar Proposal</label>
-                                            <input type="text" placeholder="Masukkan Surat Seminar Proposal" class="form-control" name="surat_proposal" />
+                                            <input type="file" class="form-control" name="surat_proposal" accept=".pdf,.doc,.docx,.jpg,.png"/>
                                         </div>
                                         <div>
                                             <label class="form-label">File Draft Skripsi</label>
-                                            <input type="text" placeholder="Masukkan File Draft Skripsi" class="form-control" name="file_draft" />
+                                            <input type="file" class="form-control" name="file_draft" accept=".pdf,.doc,.docx,.jpg,.png"/>
                                         </div>
                                         <div>
                                             <label class="form-label">Bukti Izin</label>
-                                            <input type="text" placeholder="Masukkan Bukti Izin" class="form-control" name="bukti_izin" />
+                                            <input type="file" class="form-control" name="bukti_izin" accept=".pdf,.doc,.docx,.jpg,.png"/>
                                         </div>
                                         <div>
                                             <label class="form-label">Lembar Jadwal</label>
-                                            <input type="text" placeholder="Masukkan Lembar Jadwal" class="form-control" name="lembar)jadwal" />
+                                            <input type="file" class="form-control" name="lembar_jadwal" accept=".pdf,.doc,.docx,.jpg,.png"/>
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

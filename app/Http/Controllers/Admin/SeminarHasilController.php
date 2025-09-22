@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Auth;
 
 class SeminarHasilController extends Controller
@@ -60,8 +61,22 @@ class SeminarHasilController extends Controller
     }
 
     public function create(Request $request){
+        $request->validate([
+        'surat_hasil' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+        'file_draft' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+        'bukti_izin' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+        'lembar_jadwal' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+        // tambahkan validasi field lain
+        ]);
+
+        // Simpan file ke storage/Seminar Hasil
+        $surat = $request->file('surat_hasil')->store('seminar_hasil', 'public');
+        $draft = $request->file('file_draft')->store('seminar_hasil', 'public');
+        $izin = $request->file('bukti_izin')->store('seminar_hasil', 'public');
+        $lembar = $request->file('lembar_jadwal')->store('seminar_hasil', 'public');
+
         DB::table('seminar_hasil')->insert([  
-            'nama_' => $request->nama,
+            'nama' => $request->nama,
             'no_bp' => $request->no_bp,
             'no_hp' => $request->no_hp,
             'dosen_pembimbing_1' => $request->dosen_pembimbing_1,
@@ -69,10 +84,10 @@ class SeminarHasilController extends Controller
             'penguji_1' => $request->penguji_1,
             'penguji_2' => $request->penguji_2,
             'penguji_3' => $request->penguji_3,
-            'surat_hasil' => $request->surat_hasil,
-            'file_draft' => $request->file_draft,
-            'bukti_izin' => $request->bukti_izin,
-            'lembar_jadwal' => $request->lembar_jadwal
+            'surat_hasil' => $surat,
+            'file_draft' => $draft,
+            'bukti_izin' => $izin,
+            'lembar_jadwal' => $lembar
         ]);
 
         return redirect('/admin/seminarhasil')->with("success","Data Berhasil Ditambah !");
@@ -85,10 +100,29 @@ class SeminarHasilController extends Controller
     }
 
     public function update(Request $request, $id) {
-        DB::table('seminar_hasil')  
-            ->where('id', $id)
-            ->update([
-            'nama_' => $request->nama,
+
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'no_bp' => 'required|string|max:20',
+            'no_hp' => 'required|string|max:20',
+            'dosen_pembimbing_1' => 'required|string|max:255',
+            'dosen_pembimbing_2' => 'nullable|string|max:255',
+            'penguji_1' => 'nullable|string|max:255',
+            'penguji_2' => 'nullable|string|max:255',
+            'penguji_3' => 'nullable|string|max:255',
+
+            // file rules
+            'surat_hasil' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048',
+            'file_draft' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048',
+            'bukti_izin' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048',
+            'lembar_jadwal' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048',
+        ]);
+
+        // ambil data lama
+        $seminar_hasil = DB::table('seminar_hasil')->where('id', $id)->first();
+
+        $updateData = [
+            'nama' => $request->nama,
             'no_bp' => $request->no_bp,
             'no_hp' => $request->no_hp,
             'dosen_pembimbing_1' => $request->dosen_pembimbing_1,
@@ -96,18 +130,79 @@ class SeminarHasilController extends Controller
             'penguji_1' => $request->penguji_1,
             'penguji_2' => $request->penguji_2,
             'penguji_3' => $request->penguji_3,
-            'surat_hasil' => $request->surat_hasil,
-            'file_draft' => $request->file_draft,
-            'bukti_izin' => $request->bukti_izin,
-            'lembar_jadwal' => $request->lembar_jadwal
-        ]);
+        ];
+
+        // === Surat Seminar Proposal ===
+        if ($request->hasFile('surat_hasil')) {
+            // hapus file lama
+            if ($seminar_hasil->surat_hasil && Storage::disk('public')->exists($seminar_hasil->surat_hasil)) {
+                Storage::disk('public')->delete($seminar_hasil->surat_hasil);
+            }
+
+            // upload file baru
+            $path = $request->file('surat_hasil')->store('surat_hasil', 'public');
+            $updateData['surat_hasil'] = $path;
+        }
+
+        // === File Draft ===
+        if ($request->hasFile('file_draft')) {
+            // hapus file lama
+            if ($seminar_hasil->file_draft && Storage::disk('public')->exists($seminar_hasil->file_draft)) {
+                Storage::disk('public')->delete($seminar_hasil->file_draft);
+            }
+
+            // upload file baru
+            $path = $request->file('file_draft')->store('file_draft', 'public');
+            $updateData['file_draft'] = $path;
+        }
+
+        // === File Draft ===
+        if ($request->hasFile('lembar_jadwal')) {
+            // hapus file lama
+            if ($seminar_hasil->lembar_jadwal && Storage::disk('public')->exists($seminar_hasil->lembar_jadwal)) {
+                Storage::disk('public')->delete($seminar_hasil->lembar_jadwal);
+            }
+
+            // upload file baru
+            $path = $request->file('lembar_jadwal')->store('lembar_jadwal', 'public');
+            $updateData['lembar_jadwal'] = $path;
+        }
+
+        // update DB
+        DB::table('seminar_hasil')->where('id', $id)->update($updateData);
 
         return redirect('/admin/seminarhasil')->with("success","Data Berhasil Diupdate !");
     }
 
     public function delete($id)
     {
-        DB::table('seminar_hasil')->where('id',$id)->delete();
+        // ambil data seminar_hasil
+        $seminar_hasil = DB::table('seminar_hasil')->where('id', $id)->first();
+
+        if ($seminar_hasil) {
+            // hapus file surat_seminar_hasil kalau ada
+            if ($seminar_hasil->surat_hasil && Storage::disk('public')->exists($seminar_hasil->surat_hasil)) {
+                Storage::disk('public')->delete($seminar_hasil->surat_hasil);
+            }
+
+            // hapus file file_draft kalau ada
+            if ($seminar_hasil->file_draft && Storage::disk('public')->exists($seminar_hasil->file_draft)) {
+                Storage::disk('public')->delete($seminar_hasil->file_draft);
+            }
+
+            // hapus file bukti_izin kalau ada
+            if ($seminar_hasil->bukti_izin && Storage::disk('public')->exists($seminar_hasil->bukti_izin)) {
+                Storage::disk('public')->delete($seminar_hasil->bukti_izin);
+            }
+
+            // hapus file lembar_jadwal kalau ada
+            if ($seminar_hasil->lembar_jadwal && Storage::disk('public')->exists($seminar_hasil->lembar_jadwal)) {
+                Storage::disk('public')->delete($seminar_hasil->lembar_jadwal);
+            }
+
+            // hapus data dari tabel
+            DB::table('seminar_hasil')->where('id', $id)->delete();
+        }
 
         return redirect('/admin/seminarhasil')->with("success","Data Berhasil Dihapus !");
     }

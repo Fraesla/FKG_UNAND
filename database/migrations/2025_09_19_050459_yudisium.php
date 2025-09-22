@@ -18,15 +18,15 @@ return new class extends Migration
         $table->string('judul');
         $table->string('tgl_semi_proposal');
         $table->string('tgl_semi_hasil');
-        $table->string('hasil_turnitin');
-        $table->string('bukti_lunas');
-        $table->string('khs');
-        $table->string('kbs');
-        $table->string('brsempro');
-        $table->string('brsemhas');
-        $table->string('full_skripsi');
-        $table->string('matriks');
-        $table->string('toefl');
+        $table->text('hasil_turnitin');
+        $table->text('bukti_lunas');
+        $table->text('khs');
+        $table->text('kbs');
+        $table->text('brsempro');
+        $table->text('brsemhas');
+        $table->text('full_skripsi');
+        $table->text('matriks');
+        $table->text('toefl');
         $table->timestamps();
     });
     }

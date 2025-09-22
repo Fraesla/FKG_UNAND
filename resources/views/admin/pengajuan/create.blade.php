@@ -56,7 +56,7 @@
                                         </div>
                                         <div>
                                             <label class="form-label">Surat Pengajuan</label>
-                                            <input type="text" placeholder="Masukkan Surat Pengajuan" class="form-control" name="surat_pengajuan" />
+                                            <input type="file" class="form-control" name="surat_pengajuan" accept=".pdf,.doc,.docx,.jpg,.png"/>
                                         </div>
                                         <div>
                                             <label class="form-label">Judul</label>
@@ -64,7 +64,7 @@
                                         </div>
                                         <div>
                                             <label class="form-label">KRS</label>
-                                            <input type="text" placeholder="Masukkan KRS" class="form-control" name="KRS" />
+                                            <input type="file" class="form-control" name="krs" accept=".pdf,.doc,.docx,.jpg,.png"/>
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

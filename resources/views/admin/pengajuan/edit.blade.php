@@ -54,17 +54,29 @@
                                             <label class="form-label">Dosen Pembimbing 2</label>
                                             <input type="text" placeholder="Masukkan Dosen Pembimbing 2" class="form-control" name="dosen_pembimbing_2" value="{{$pengajuan->dosen_pembimbing_2}}"/>
                                         </div>
-                                        <div>
-                                            <label class="form-label">Surat Pengajuan</label>
-                                            <input type="text" placeholder="Masukkan Surat Pengajuan" class="form-control" name="surat_pengajuan" value="{{$pengajuan->surat_pengajuan}}"/>
+                                        <div class="mb-3">
+                                            <label>Surat Pengajuan</label>
+                                            <input type="file" name="surat_pengajuan" class="form-control">
+                                            @if($pengajuan->surat_pengajuan)
+                                                <small class="text-muted">
+                                                    File saat ini: 
+                                                    <a href="{{ asset('storage/'.$pengajuan->surat_pengajuan) }}" target="_blank">Lihat</a>
+                                                </small>
+                                            @endif
                                         </div>
                                         <div>
                                             <label class="form-label">Judul</label>
                                             <input type="text" placeholder="Masukkan Judul" class="form-control" name="judul" value="{{$pengajuan->judul}}"/>
                                         </div>
-                                        <div>
-                                            <label class="form-label">KRS</label>
-                                            <input type="text" placeholder="Masukkan KRS" class="form-control" name="KRS" value="{{$pengajuan->krs}}"/>
+                                        <div class="mb-3">
+                                            <label>KRS</label>
+                                            <input type="file" name="krs" class="form-control">
+                                            @if($pengajuan->krs)
+                                                <small class="text-muted">
+                                                    File saat ini: 
+                                                    <a href="{{ asset('storage/'.$pengajuan->krs) }}" target="_blank">Lihat</a>
+                                                </small>
+                                            @endif
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

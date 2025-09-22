@@ -48,47 +48,121 @@
                                         </div>
                                         <div>
                                             <label class="form-label">Tanggal Seminar Proposal</label>
-                                            <input type="text" placeholder="Masukkan Tanggal Seminar Proposal" class="form-control" name="tgl_semi_proposal" value="{{$yudisium->tgl_semi_proposal}}" />
+                                            <div class="input-icon">
+                                                <span class="input-icon-addon"><!-- Download SVG icon from http://tabler.io/icons/icon/calendar -->
+                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                                                    <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
+                                                    <path d="M16 3v4"></path>
+                                                    <path d="M8 3v4"></path>
+                                                    <path d="M4 11h16"></path>
+                                                    <path d="M11 15h1"></path>
+                                                    <path d="M12 15v3"></path></svg></span>
+                                                <input class="form-control" placeholder="Masukkan Tanggal Seminar Proposal" id="datepicker-icon-prepend" name="tgl_semi_proposal" value="{{$yudisium->tgl_semi_proposal}}">
+                                            </div>
                                         </div>
                                         <div>
                                             <label class="form-label">Tanggal Seminar Hasil</label>
-                                            <input type="text" placeholder="Masukkan Tanggal Seminar Hasil" class="form-control" name="tgl_semi_hasil" value="{{$yudisium->tgl_semi_hasil}}"/>
+                                            <div class="input-icon">
+                                                <span class="input-icon-addon"><!-- Download SVG icon from http://tabler.io/icons/icon/calendar -->
+                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                                                    <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
+                                                    <path d="M16 3v4"></path>
+                                                    <path d="M8 3v4"></path>
+                                                    <path d="M4 11h16"></path>
+                                                    <path d="M11 15h1"></path>
+                                                    <path d="M12 15v3"></path></svg></span>
+                                                <input class="form-control" placeholder="Masukkan Tanggal Seminar Hasil" id="datepicker-icon-prepend_2" name="tgl_semi_hasil" value="{{$yudisium->tgl_semi_hasil}}">
+                                            </div>
                                         </div>
-                                         <div>
+                                        <div class="mb-3">
                                             <label class="form-label">Hasil Turnitin</label>
-                                            <input type="text" placeholder="Masukkan Hasil Turnitin" class="form-control" name="hasil_turnitin" value="{{$yudisium->hasil_turnitin}}"/>
+                                            <input type="file" name="hasil_turnitin" class="form-control">
+                                            @if($yudisium->hasil_turnitin)
+                                                <small class="text-muted">
+                                                    File saat ini: 
+                                                    <a href="{{ asset('storage/'.$yudisium->hasil_turnitin) }}" target="_blank">Lihat</a>
+                                                </small>
+                                            @endif
                                         </div>
-                                        <div>
+                                        <div class="mb-3">
                                             <label class="form-label">Bukti Lunas</label>
-                                            <input type="text" placeholder="Masukkan Bukti Lunas" class="form-control" name="bukti_lunas" value="{{$yudisium->bukti_lunas}}"/>
+                                            <input type="file" name="bukti_lunas" class="form-control">
+                                            @if($yudisium->bukti_lunas)
+                                                <small class="text-muted">
+                                                    File saat ini: 
+                                                    <a href="{{ asset('storage/'.$yudisium->bukti_lunas) }}" target="_blank">Lihat</a>
+                                                </small>
+                                            @endif
                                         </div>
-                                        <div>
+                                        <div class="mb-3">>
                                             <label class="form-label">KHS</label>
-                                            <input type="text" placeholder="Masukkan KHS" class="form-control" name="khs" value="{{$yudisium->khs}}"/>
+                                            <input type="file" name="khs" class="form-control">
+                                            @if($yudisium->khs)
+                                                <small class="text-muted">
+                                                    File saat ini: 
+                                                    <a href="{{ asset('storage/'.$yudisium->khs) }}" target="_blank">Lihat</a>
+                                                </small>
+                                            @endif
                                         </div>
-                                        <div>
+                                        <div class="mb-3">
                                             <label class="form-label">KBS</label>
-                                            <input type="text" placeholder="Masukkan KBS" class="form-control" name="kbs" value="{{$yudisium->kbs}}"/>
+                                            <input type="file" name="kbs" class="form-control">
+                                            @if($yudisium->kbs)
+                                                <small class="text-muted">
+                                                    File saat ini: 
+                                                    <a href="{{ asset('storage/'.$yudisium->kbs) }}" target="_blank">Lihat</a>
+                                                </small>
+                                            @endif
                                         </div>
-                                        <div>
-                                            <label class="form-label">BRSempro</label>
-                                            <input type="text" placeholder="Masukkan BRSempro" class="form-control" name="brsempro"value="{{$yudisium->brsempro}}" />
+                                        <div class="mb-3">
+                                            <label class="form-label">Brsempro</label>
+                                            <input type="file" name="brsempro" class="form-control">
+                                            @if($yudisium->brsempro)
+                                                <small class="text-muted">
+                                                    File saat ini: 
+                                                    <a href="{{ asset('storage/'.$yudisium->brsempro) }}" target="_blank">Lihat</a>
+                                                </small>
+                                            @endif
                                         </div>
-                                        <div>
-                                            <label class="form-label">BRSemhas</label>
-                                            <input type="text" placeholder="Masukkan BRSemhas" class="form-control" name="brsemhas" value="{{$yudisium->brsemhas}}" />
+                                        <div class="mb-3">
+                                            <label class="form-label">Brsemhas</label>
+                                            <input type="file" name="brsemhas" class="form-control">
+                                            @if($yudisium->brsemhas)
+                                                <small class="text-muted">
+                                                    File saat ini: 
+                                                    <a href="{{ asset('storage/'.$yudisium->brsemhas) }}" target="_blank">Lihat</a>
+                                                </small>
+                                            @endif
                                         </div>
-                                        <div>
+                                        <div class="mb-3">
                                             <label class="form-label">Full Skripsi</label>
-                                            <input type="text" placeholder="Masukkan Full Skripsi" class="form-control" name="full_skripsi" value="{{$yudisium->full_skripsi}}"/>
+                                            <input type="file" name="full_skripsi" class="form-control">
+                                            @if($yudisium->full_skripsi)
+                                                <small class="text-muted">
+                                                    File saat ini: 
+                                                    <a href="{{ asset('storage/'.$yudisium->full_skripsi) }}" target="_blank">Lihat</a>
+                                                </small>
+                                            @endif
                                         </div>
-                                        <div>
+                                        <div class="mb-3">
                                             <label class="form-label">Matriks</label>
-                                            <input type="text" placeholder="Masukkan Matriks" class="form-control" name="matriks" value="{{$yudisium->matriks}}"/>
+                                            <input type="file" name="matriks" class="form-control">
+                                            @if($yudisium->matriks)
+                                                <small class="text-muted">
+                                                    File saat ini: 
+                                                    <a href="{{ asset('storage/'.$yudisium->matriks) }}" target="_blank">Lihat</a>
+                                                </small>
+                                            @endif
                                         </div>
-                                        <div>
+                                        <div class="mb-3">
                                             <label class="form-label">TOEFL</label>
-                                            <input type="text" placeholder="Masukkan TOEFL" class="form-control" name="toefl" value="{{$yudisium->toefl}}"/>
+                                            <input type="file" name="toefl" class="form-control">
+                                            @if($yudisium->toefl)
+                                                <small class="text-muted">
+                                                    File saat ini: 
+                                                    <a href="{{ asset('storage/'.$yudisium->toefl) }}" target="_blank">Lihat</a>
+                                                </small>
+                                            @endif
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

@@ -81,11 +81,23 @@
                                         <path d="M6 15l6 -6l6 6"></path>
                                     </svg>
                                 </th>
+                                <th>Nama</th>
+                                <th>NIP</th>
+                                <th>Pangkat / Golongan</th>
+                                <th>Jabatan</th>
                                 <th>Nama Mahasiswa</th>
-                                <th>Tanggal Lahir</th>
+                                <th>Tempat Lahir Mahasiswa</th>
+                                <th>Tanggal Lahir Mahasiswa</th>
                                 <th>NO.BP</th>
                                 <th>Semester</th>
                                 <th>Tahun Akademik</th>
+                                <th>Nama Orang Tua</th>
+                                <th>Tempat Lahir</th>
+                                <th>Tanggal Lahir</th>
+                                <th>NIP </th>
+                                <th>Pangkat / Golongan </th>
+                                <th>Jabatan </th>
+                                <th>Instansi </th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -101,10 +113,22 @@
                                     <span class="text-secondary"> {{$no++}}</span>
                                 </td>
                                 <td class="text-secondary">{{$data->nama}}</td>
-                                <td class="text-secondary">{{$data->tgl_lahir}}</td>
+                                <td class="text-secondary">{{$data->nip}}</td>
+                                <td class="text-secondary">{{$data->pango}}</td>
+                                <td class="text-secondary">{{$data->jabatan}}</td>
+                                <td class="text-secondary">{{$data->nama_mhs}}</td>
+                                <td class="text-secondary">{{$data->tmp_lahir_mhs}}</td>
+                                <td class="text-secondary">{{$data->tgl_lahir_mhs}}</td>
                                 <td class="text-secondary">{{$data->no_bp}}</td>
                                 <td class="text-secondary">{{$data->semester}}</td>
                                 <td class="text-secondary">{{$data->tahun_akademik}}</td>
+                                <td class="text-secondary">{{$data->nama_ort}}</td>
+                                <td class="text-secondary">{{$data->tmp_lahir_ort}}</td>
+                                <td class="text-secondary">{{$data->tgl_lahir_ort}}</td>
+                                <td class="text-secondary">{{$data->nip_ort}}</td>
+                                <td class="text-secondary">{{$data->pango_ort}}</td>
+                                <td class="text-secondary">{{$data->jabatan_ort}}</td>
+                                <td class="text-secondary">{{$data->instansi_ort}}</td>
                                 <td class="w-0">
                                     <div class="d-flex gap-1">
                                         <!-- Tombol Edit -->
@@ -156,7 +180,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="7" class="text-center">Data tidak ditemukan</td>
+                                <td colspan="19" class="text-center">Data tidak ditemukan</td>
                             </tr>
                             @endforelse
                         </tbody>

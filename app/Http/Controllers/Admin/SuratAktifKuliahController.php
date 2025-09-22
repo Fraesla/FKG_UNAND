@@ -34,10 +34,21 @@ class SuratAktifKuliahController extends Controller
             $search = $request->search;
             $query->where('id', 'like', "%{$search}%")
                   ->orWhere('nama', 'like', "%{$search}%")
+                  ->orWhere('nip', 'like', "%{$search}%")
+                  ->orWhere('pango', 'like', "%{$search}%")
+                  ->orWhere('jabatan', 'like', "%{$search}%")
+                  ->orWhere('nama_mhs', 'like', "%{$search}%")
                   ->orWhere('tgl_lahir', 'like', "%{$search}%")
                   ->orWhere('no_bp', 'like', "%{$search}%")
                   ->orWhere('semester', 'like', "%{$search}%")
-                  ->orWhere('tahun_akademik', 'like', "%{$search}%");
+                  ->orWhere('tahun_akademik', 'like', "%{$search}%")
+                  ->orWhere('nama_ort', 'like', "%{$search}%")
+                  ->orWhere('tmp_lahir_ort', 'like', "%{$search}%")
+                  ->orWhere('tgl_lahir_ort', 'like', "%{$search}%")
+                  ->orWhere('nip_ort', 'like', "%{$search}%")
+                  ->orWhere('pango_ort', 'like', "%{$search}%")
+                  ->orWhere('jabatan_ort', 'like', "%{$search}%")
+                  ->orWhere('instansi_ort', 'like', "%{$search}%");
         }
 
         // Show entries (default 10)
@@ -59,10 +70,22 @@ class SuratAktifKuliahController extends Controller
     public function create(Request $request){
         DB::table('surat_aktif_kuliah')->insert([  
             'nama' => $request->nama,
-            'tgl_lahir' => $request->tgl_lahir,
+            'nip' => $request->nip,
+            'pango' => $request->pango,
+            'jabatan' => $request->jabatan,
+            'nama_mhs' => $request->nama_mhs,
+            'tmp_lahir_mhs' => $request->tmp_lahir_mhs,
+            'tgl_lahir_mhs' => $request->tgl_lahir_mhs,
             'no_bp' => $request->no_bp,
             'semester' => $request->semester,
-            'tahun_akademik' => $request->tahun_akademik
+            'tahun_akademik' => $request->tahun_akademik,
+            'nama_ort' => $request->nama_ort,
+            'tmp_lahir_ort' => $request->tmp_lahir_ort,
+            'tgl_lahir_ort' => $request->tgl_lahir_ort,
+            'nip_ort' => $request->nip_ort,
+            'pango_ort' => $request->pango_ort,
+            'jabatan_ort' => $request->jabatan_ort,
+            'instansi_ort' => $request->instansi_ort
         ]);
 
         return redirect('/admin/surataktifkuliah')->with("success","Data Berhasil Ditambah !");
@@ -79,10 +102,22 @@ class SuratAktifKuliahController extends Controller
             ->where('id', $id)
             ->update([
             'nama' => $request->nama,
-            'tgl_lahir' => $request->tgl_lahir,
+            'nip' => $request->nip,
+            'pango' => $request->pango,
+            'jabatan' => $request->jabatan,
+            'nama_mhs' => $request->nama_mhs,
+            'tmp_lahir_mhs' => $request->tmp_lahir_mhs,
+            'tgl_lahir_mhs' => $request->tgl_lahir_mhs,
             'no_bp' => $request->no_bp,
             'semester' => $request->semester,
-            'tahun_akademik' => $request->tahun_akademik
+            'tahun_akademik' => $request->tahun_akademik,
+            'nama_ort' => $request->nama_ort,
+            'tmp_lahir_ort' => $request->tmp_lahir_ort,
+            'tgl_lahir_ort' => $request->tgl_lahir_ort,
+            'nip_ort' => $request->nip_ort,
+            'pango_ort' => $request->pango_ort,
+            'jabatan_ort' => $request->jabatan_ort,
+            'instansi_ort' => $request->instansi_ort
         ]);
 
         return redirect('/admin/surataktifkuliah')->with("success","Data Berhasil Diupdate !");

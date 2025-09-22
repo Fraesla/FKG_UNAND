@@ -108,9 +108,25 @@
                                 <td class="text-secondary">{{$data->no_hp}}</td>
                                 <td class="text-secondary">{{$data->dosen_pembimbing_1}}</td>
                                 <td class="text-secondary">{{$data->dosen_pembimbing_2}}</td>
-                                <td class="text-secondary">{{$data->surat_pengajuan}}</td>
+                                <td class="text-secondary">
+                                    @if($data->surat_pengajuan)
+                                        <a href="{{ asset('storage/'.$data->surat_pengajuan) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Lihat Surat
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Belum ada file</span>
+                                    @endif
+                                </td>
                                 <td class="text-secondary">{{$data->judul}}</td>
-                                <td class="text-secondary">{{$data->KRS}}</td>
+                                <td class="text-secondary">
+                                    @if($data->krs)
+                                        <a href="{{ asset('storage/'.$data->surat_pengajuan) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Lihat KRS
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Belum ada file</span>
+                                    @endif
+                                </td>
                                 <td class="w-0">
                                     <div class="d-flex gap-1">
                                         <!-- Tombol Edit -->
@@ -240,6 +256,8 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/docx-preview@0.3.1/dist/docx-preview.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 function deleteData(id) {

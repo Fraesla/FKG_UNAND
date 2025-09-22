@@ -115,10 +115,42 @@
                                 <td class="text-secondary">{{$data->penguji_1}}</td>
                                 <td class="text-secondary">{{$data->penguji_2}}</td>
                                 <td class="text-secondary">{{$data->penguji_3}}</td>
-                                <td class="text-secondary">{{$data->surat_proposal}}</td>
-                                <td class="text-secondary">{{$data->file_draft}}</td>
-                                <td class="text-secondary">{{$data->bukti_izin}}</td>
-                                <td class="text-secondary">{{$data->lembar_jadwal}}</td>
+                                <td class="text-secondary">
+                                    @if($data->surat_proposal)
+                                        <a href="{{ asset('storage/'.$data->surat_proposal) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Lihat Surat
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Belum ada file</span>
+                                    @endif
+                                </td>
+                                <td class="text-secondary">
+                                    @if($data->file_draft)
+                                        <a href="{{ asset('storage/'.$data->file_draft) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Lihat file draft
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Belum ada file</span>
+                                    @endif
+                                </td>
+                                <td class="text-secondary">
+                                    @if($data->bukti_izin)
+                                        <a href="{{ asset('storage/'.$data->bukti_izin) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Lihat Bukti izin
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Belum ada file</span>
+                                    @endif
+                                </td>
+                                <td class="text-secondary">
+                                    @if($data->lembar_jadwal)
+                                        <a href="{{ asset('storage/'.$data->lembar_jadwal) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Lihat Lembar Jadwal
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Belum ada file</span>
+                                    @endif
+                                </td>
                                 <td class="w-0">
                                     <div class="d-flex gap-1">
                                         <!-- Tombol Edit -->

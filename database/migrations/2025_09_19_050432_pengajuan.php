@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('no_hp');
             $table->string('dosen_pembimbing_1');
             $table->string('dosen_pembimbing_2');
-            $table->string('surat_pengajuan');
+            $table->text('surat_pengajuan');
             $table->string('judul');
-            $table->string('krs');
+            $table->text('krs');
             $table->timestamps();
         });
     }
