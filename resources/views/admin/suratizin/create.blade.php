@@ -46,9 +46,9 @@
                                             <label class="form-label">NO.BP</label>
                                             <input type="text" placeholder="Masukkan No.BP" class="form-control" name="no_bp" />
                                         </div>
-                                        <div>
-                                            <label class="form-label">Alamat</label>
-                                            <input type="text" placeholder="Masukkan Alamat" class="form-control" name="alamat" />
+                                        <div class="mb-3">
+                                          <label class="form-label">Alamat</label>
+                                          <textarea class="form-control" data-bs-toggle="autosize"  placeholder="Masukkan Alamat..." style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 56px;" name="alamat"></textarea>
                                         </div>
                                         <div>
                                             <label class="form-label">Judul Penelitian</label>
@@ -56,7 +56,10 @@
                                         </div>
                                         <div>
                                             <label class="form-label">Gmail</label>
-                                            <input type="text" placeholder="Masukkan Gmail" class="form-control" name="gmail" />
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text"> @ </span>
+                                                <input type="text" class="form-control" placeholder="Masukkan Gmail" autocomplete="off">
+                                            </div>
                                         </div>
                                         <div>
                                             <label class="form-label">Dosen Pembimbing 1</label>
@@ -66,9 +69,9 @@
                                             <label class="form-label">Dosen Pembimbing 2</label>
                                             <input type="text" placeholder="Masukkan Dosen Pembimbing 2" class="form-control" name="dosen_pembimbing_2" />
                                         </div>
-                                        <div>
-                                            <label class="form-label">Isi Surat</label>
-                                            <input type="text" placeholder="Masukkan Isi Surat" class="form-control" name="isi_surat" />
+                                        <div class="mb-3">
+                                          <label class="form-label">Isi Surat</label>
+                                          <textarea class="form-control" data-bs-toggle="autosize"  placeholder="Masukkan Isi Surat..." style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 56px;" name="isi_surat"></textarea>
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

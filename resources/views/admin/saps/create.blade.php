@@ -1,5 +1,5 @@
 @extends('admin.layouts.app', [
-'activePage' => 'ta',
+'activePage' => 'saps',
 'activeDrop' => '',
 ])
 @section('content')
@@ -10,7 +10,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Bimbingan Tugas Akhir</h2>
+                  <h2 class="page-title">Data SAPS</h2>
               </div>
               <!-- Page title actions -->
       </div>
@@ -27,42 +27,40 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    Penambahan Data Bimbingan Tugas Akhir
+                                    Penambahan Data SAPS
                                 </h3>
                             </div>
                             <div class="card-body">
-                                <form action="/admin/ta/create" method="POST" enctype="multipart/form-data">
+                                <form action="/admin/saps/create" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
                                         <div>
-                                            <label class="form-label">NO.BP</label>
-                                            <input type="text" placeholder="Masukkan No.BP" class="form-control" name="no_bp" />
+                                            <label class="form-label">NIM</label>
+                                            <input type="text" placeholder="Masukkan NIM" class="form-control" name="nim" />
                                         </div>
                                         <div>
-                                            <label class="form-label">Nama Mahasiswa</label>
-                                            <input type="text" placeholder="Masukkan Nama Mahasiswa" class="form-control" name="nama_mahasiswa" />
+                                            <label class="form-label">Nama</label>
+                                            <input type="text" placeholder="Masukkan Nama" class="form-control" name="nama" />
                                         </div>
                                         <div>
-                                            <label class="form-label">Dosen Pembimbing</label>
-                                            <input type="text" placeholder="Masukkan Dosen Pembimbing" class="form-control" name="dosen_pembimbing" />
+                                            <label class="form-label">Jumlah Point A</label>
+                                            <input type="text" placeholder="Masukkan Jumlah Point A" class="form-control" name="jumlah_point_a" />
                                         </div>
                                         <div>
-                                            <label class="form-label">Tanggal Pembimbing</label>
-                                            <div class="input-icon">
-                                                <span class="input-icon-addon"><!-- Download SVG icon from http://tabler.io/icons/icon/calendar -->
-                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
-                                                    <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
-                                                    <path d="M16 3v4"></path>
-                                                    <path d="M8 3v4"></path>
-                                                    <path d="M4 11h16"></path>
-                                                    <path d="M11 15h1"></path>
-                                                    <path d="M12 15v3"></path></svg></span>
-                                                <input class="form-control" placeholder="Masukkan Tanggal Pembimbing" id="datepicker-icon-prepend" name="tgl_pembimbing">
-                                            </div>
+                                            <label class="form-label">Jumlah Point B</label>
+                                            <input type="text" placeholder="Masukkan Jumlah Point B" class="form-control" name="jumlah_point_b" />
                                         </div>
-                                        <div class="mb-3">
-                                          <label class="form-label">Catatan</label>
-                                          <textarea class="form-control" data-bs-toggle="autosize"  placeholder="Masukkan Catatan..." style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 56px;" name="catatan"></textarea>
+                                        <div>
+                                            <label class="form-label">Jumlah Point C</label>
+                                            <input type="text" placeholder="Masukkan Jumlah Point C" class="form-control" name="jumlah_point_c" />
+                                        </div>
+                                        <div>
+                                            <label class="form-label">Total</label>
+                                            <input type="text" placeholder="Masukkan Total" class="form-control" name="total" />
+                                        </div>
+                                        <div>
+                                            <label class="form-label">Predikat</label>
+                                            <input type="text" placeholder="Masukkan Predikat" class="form-control" name="predikat" />
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

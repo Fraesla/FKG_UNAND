@@ -52,11 +52,21 @@
                                         </div>
                                         <div>
                                             <label class="form-label">Tanggal Pembimbing</label>
-                                            <input type="text" placeholder="Masukkan Tanggal Pembimbing" class="form-control" name="tgl_pembimbing" value="{{$ta->tgl_pembimbing}}" />
+                                            <div class="input-icon">
+                                                <span class="input-icon-addon"><!-- Download SVG icon from http://tabler.io/icons/icon/calendar -->
+                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                                                    <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
+                                                    <path d="M16 3v4"></path>
+                                                    <path d="M8 3v4"></path>
+                                                    <path d="M4 11h16"></path>
+                                                    <path d="M11 15h1"></path>
+                                                    <path d="M12 15v3"></path></svg></span>
+                                                <input class="form-control" placeholder="Masukkan Tanggal Pembimbing" id="datepicker-icon-prepend" name="tgl_pembimbing" value="{{$ta->tgl_pembimbing}}">
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label class="form-label">Catatan</label>
-                                            <input type="text" placeholder="Masukkan Catatan" class="form-control" name="catatan" value="{{$ta->catatan}}"/>
+                                        <div class="mb-3">
+                                              <label class="form-label">Catatan</label>
+                                              <textarea class="form-control" data-bs-toggle="autosize"  placeholder="Masukkan Catatan..." style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 56px;" name="catatan" value="{{$ta->catatan}}"></textarea>
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

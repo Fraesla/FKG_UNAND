@@ -61,11 +61,11 @@
                                         </div>
                                         <div>
                                             <label class="form-label">Jam Mulai</label>
-                                            <input type="text" name="jam_mulai" class="form-control" data-mask="00:00:00" data-mask-visible="true" placeholder="00:00:00" autocomplete="off" value="{{$jadmakul->jam_mulai}}">
+                                            <input type="text" name="jam_mulai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off" value="{{$jadmakul->jam_mulai}}">
                                         </div>
                                         <div>
                                             <label class="form-label">Jam Selesai</label>
-                                            <input type="text" name="jam_selesai" class="form-control" data-mask="00:00:00" data-mask-visible="true" placeholder="00:00:00" autocomplete="off" value="{{$jadmakul->jam_selesai}}">
+                                            <input type="text" name="jam_selesai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off" value="{{$jadmakul->jam_selesai}}">
                                         </div>
                                         <div>
                                             <label class="form-label">Mata Kuliah</label>

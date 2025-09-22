@@ -10,7 +10,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data surataktifkuliah</h2>
+                  <h2 class="page-title">Data Surat Aktif Kuliah</h2>
               </div>
               <!-- Page title actions -->
       </div>
@@ -27,7 +27,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    Penambahan Data surataktifkuliah
+                                    Penambahan Data Surat Aktif Kuliah
                                 </h3>
                             </div>
                             <div class="card-body">
