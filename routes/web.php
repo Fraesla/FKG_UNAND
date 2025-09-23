@@ -303,17 +303,25 @@ Route::prefix('admin/jadmahasiswa')
         Route::get('/delete/{id}', 'delete')->name('delete');
     });
 
+
 Route::prefix('mahasiswa/jadwal')
     ->name('mahasiswa.jadwal.')
     ->controller(JadwalController::class)
     ->group(function () {
-        Route::get('/', 'read')->name('read');
-        Route::get('/add', 'add')->name('add');
+        Route::get('/', 'index')->name('index');      // daftar jadwal
+        Route::get('/create', 'create')->name('create'); // form tambah
+        Route::post('/', 'store')->name('store');        // simpan jadwal baru
+        Route::get('/{id}', 'show')->name('show');       // detail jadwal
+        Route::get('/{id}/edit', 'edit')->name('edit');  // edit jadwal
+        Route::put('/{id}', 'update')->name('update');   // update jadwal
+        Route::delete('/{id}', 'destroy')->name('destroy'); // hapus jadwal
+
+        // fitur tambahan
         Route::get('/feature', 'feature')->name('feature');
-        Route::post('/create', 'create')->name('create');
+
+        // scan + simpan absensi
         Route::get('/scan/{id}', 'scan')->name('scan');
-        Route::post('/update/{id}', 'update')->name('update');
-        Route::get('/delete/{id}', 'delete')->name('delete');
+        Route::post('/simpan', 'simpan')->name('simpan'); // <-- FIX: tanpa {id}
     });
 
 

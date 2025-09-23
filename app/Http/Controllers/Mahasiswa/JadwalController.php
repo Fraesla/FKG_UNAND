@@ -111,7 +111,7 @@ class JadwalController extends Controller
     //     return redirect('/admin/absmahasiswa')->with("success","Data Berhasil Ditambah !");
     // }
 
-    public function scan($id){
+    public function scan($id) {
         $jadwal = DB::table('absen_mahasiswa')->where('id',$id)->first();
         $jadmakul = DB::table('jadwal_makul')
             ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')
@@ -126,32 +126,37 @@ class JadwalController extends Controller
             )
             ->orderBy('jadwal_makul.id', 'DESC')
             ->get();
-        $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
-        
-        return view('mahasiswa.jadwal.scan',['jadwal'=>$jadwal,'jadmakul'=>$jadmakul,'mahasiswa'=>$mahasiswa]);
+
+        return view('mahasiswa.jadwal.scan', [
+            'jadwal' => $jadwal,
+            'jadmakul' => $jadmakul,
+            'mahasiswa' => auth()->user()
+        ]);
     }
 
-    public function update(Request $request, $id) {
-        DB::table('absen_mahasiswa')  
-            ->where('id', $id)
-            ->update([
-            'tgl' => $request->tgl,
-            'jam_masuk' => $request->jam_masuk,
-            'jam_pulang' => $request->jam_pulang,
-            'id_mahasiswa' => $request->id_mahasiswa,
-            'id_jadwal_mahasiswa' => $request->id_jadwal_mahasiswa,
-            'status' => $request->status,
-            'keterangan' => '',
-            'qr'=>uniqid()
+    public function simpan(Request $request)
+    {
+        $request->validate([
+            'jadwal_id' => 'required|integer',
+            'mahasiswa_id' => 'required|integer',
         ]);
 
-        return redirect('/admin/absmahasiswa')->with("success","Data Berhasil Diupdate !");
+        // update atau buat data absensi
+        $absensi = Absensi::updateOrCreate(
+            [
+                'jadwal_id'    => $request->jadwal_id,
+                'mahasiswa_id' => $request->mahasiswa_id,
+            ],
+            [
+                'status' => 'Hadir',
+            ]
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Absensi berhasil disimpan',
+            'data' => $absensi
+        ]);
     }
 
-    public function delete($id)
-    {
-        DB::table('absen_mahasiswa')->where('id',$id)->delete();
-
-        return redirect('/admin/absmahasiswa')->with("success","Data Berhasil Dihapus !");
-    }
 }
