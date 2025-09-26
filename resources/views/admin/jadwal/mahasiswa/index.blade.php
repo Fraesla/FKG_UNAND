@@ -85,7 +85,6 @@
                                 <th class="text-center">Jam</th>
                                 <th>Mata Kuliah</th>
                                 <th>Ruangan</th>
-                                <th>Nama Dosen</th>
                                 <th>Nama Mahasiswa</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -103,7 +102,6 @@
                                 <td class="text-center">{{ $data->jam_mulai }} - {{ $data->jam_selesai }}</td>
                                 <td>{{ $data->makul }}</td>
                                 <td>{{ $data->ruangan }}</td>
-                                <td>{{ $data->dosen}}</td>
                                 <td>{{ $data->nama_mahasiswa }}</td>
                                 <td class="w-0">
                                     <div class="d-flex gap-1">
@@ -153,7 +151,7 @@
                             </tr>
                              @empty
                             <tr>
-                                <td colspan="7" class="text-center">Data tidak ditemukan</td>
+                                <td colspan="6" class="text-center">Data tidak ditemukan</td>
                             </tr>
                             @endforelse
                         </tbody>

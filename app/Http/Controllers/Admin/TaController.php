@@ -14,10 +14,16 @@ class TaController extends Controller
         // Ambil parameter entries dari request, default = 5
         $entries = $request->input('entries', 5);
 
-        // Query pakai paginate
+        // Query pakai join ke mahasiswa
         $ta = DB::table('ta')
-                    ->orderBy('id', 'DESC')
-                    ->paginate($entries);
+            ->join('mahasiswa', 'ta.id_mahasiswa', '=', 'mahasiswa.id')
+            ->select(
+                'ta.*',
+                'mahasiswa.nim',
+                'mahasiswa.nama'
+            )
+            ->orderBy('ta.id', 'DESC')
+            ->paginate($entries);
 
         // Supaya pagination tetap bawa query string (search / entries)
         $ta->appends($request->all());
@@ -27,41 +33,50 @@ class TaController extends Controller
 
     public function feature(Request $request)
     {
-        $query = DB::table('ta');
+        $query = DB::table('ta')
+        ->join('mahasiswa', 'ta.id_mahasiswa', '=', 'mahasiswa.id')
+        ->select(
+            'ta.*',
+            'mahasiswa.nim',
+            'mahasiswa.nama'
+        );
 
-        // Search berdasarkan ID/Nama
+        // Search berdasarkan ID/Nama/No BP/Dosen dll
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where('id', 'like', "%{$search}%")
-                  ->orWhere('no_bp', 'like', "%{$search}%")
-                  ->orWhere('nama_mahasiswa', 'like', "%{$search}%")
-                  ->orWhere('dosen_pembimbing', 'like', "%{$search}%")
-                  ->orWhere('tgl_pembimbing', 'like', "%{$search}%")
-                  ->orWhere('catatan', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('ta.id', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.nim', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.nama', 'like', "%{$search}%")
+                  ->orWhere('ta.dosen_bimbingan', 'like', "%{$search}%")
+                  ->orWhere('ta.tgl_bimbingan', 'like', "%{$search}%")
+                  ->orWhere('ta.catatan', 'like', "%{$search}%");
+            });
         }
 
         // Show entries (default 10)
         $entries = $request->get('entries', 10);
 
-        // Ambil data
-        $ta = $query->orderBy('id', 'DESC')->paginate($entries);
+        // Ambil data dengan pagination
+        $ta = $query->orderBy('ta.id', 'DESC')->paginate($entries);
 
-        // Biar pagination tetap bawa query string
+        // Supaya pagination tetap bawa query string
         $ta->appends($request->all());
 
         return view('admin.ta.index', compact('ta'));
     }
 
     public function add(){
-        return view('admin.ta.create');
+        $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
+        $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
+        return view('admin.ta.create',['mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
     }
 
     public function create(Request $request){
         DB::table('ta')->insert([  
-            'no_bp' => $request->no_bp,
-            'nama_mahasiswa' => $request->nama_mahasiswa,
-            'dosen_pembimbing' => $request->dosen_pembimbing,
-            'tgl_pembimbing' => $request->tgl_pembimbing,
+            'id_mahasiswa' => $request->id_mahasiswa,
+            'dosen_bimbingan' => $request->dosen_bimbingan,
+            'tgl_bimbingan' => $request->tgl_bimbingan,
             'catatan' => $request->catatan
         ]);
 
@@ -70,18 +85,18 @@ class TaController extends Controller
 
     public function edit($id){
         $ta = DB::table('ta')->where('id',$id)->first();
-        
-        return view('admin.ta.edit',['ta'=>$ta]);
+        $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
+        $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
+        return view('admin.ta.edit',['ta'=>$ta,'mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
     }
 
     public function update(Request $request, $id) {
         DB::table('ta')  
             ->where('id', $id)
             ->update([
-            'no_bp' => $request->no_bp,
-            'nama_mahasiswa' => $request->nama_mahasiswa,
-            'dosen_pembimbing' => $request->dosen_pembimbing,
-            'tgl_pembimbing' => $request->tgl_pembimbing,
+            'id_mahasiswa' => $request->id_mahasiswa,
+            'dosen_bimbingan' => $request->dosen_bimbingan,
+            'tgl_bimbingan' => $request->tgl_bimbingan,
             'catatan' => $request->catatan
         ]);
 

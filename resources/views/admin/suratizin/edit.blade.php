@@ -39,39 +39,48 @@
                                             <input type="text" placeholder="Masukkan Jenis" class="form-control" name="jenis" value="{{$suratizin->jenis}}" />
                                         </div>
                                         <div>
-                                            <label class="form-label">Nama Mahasiswa</label>
-                                            <input type="text" placeholder="Masukkan Nama Mahasiswa" class="form-control" name="nama" value="{{$suratizin->nama}}"/>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">NO.BP</label>
-                                            <input type="text" placeholder="Masukkan No.BP" class="form-control" name="no_bp" value="{{$suratizin->no_bp}}"/>
-                                        </div>
-                                        <div class="mb-3">
-                                          <label class="form-label">Alamat</label>
-                                          <textarea class="form-control" data-bs-toggle="autosize"  placeholder="Masukkan Alamat..." style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 56px;" name="alamat" value="{{$suratizin->alamat}}"></textarea>
+                                            <label class="form-label">Mahasiswa</label>
+                                             <select class="form-select" name="id_mahasiswa">
+                                                <option>Pilih Data Mahasiswa</option>
+                                                @foreach($mahasiswa as $data)
+                                                    <option value="{{$data->id}}"
+                                                        {{ $suratizin->id_mahasiswa == $data->id ? 'selected' : '' }}>
+                                                        No.BP : {{$data->nim}} | Nama Mahasiswa : {{$data->nama}}  
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div>
                                             <label class="form-label">Judul Penelitian</label>
                                             <input type="text" placeholder="Masukkan Judul Penelitian" class="form-control" name="judul_penelitian" value="{{$suratizin->judul_penelitian}}"/>
                                         </div>
-                                        <div>
-                                            <label class="form-label">Gmail</label>
-                                            <div class="input-group mb-2">
-                                                <span class="input-group-text"> @ </span>
-                                                <input type="text" class="form-control" placeholder="Masukkan Gmail" value="{{$suratizin->gmail}}" autocomplete="off">
-                                            </div>
-                                        </div>
-                                        <div>
+                                       <div>
                                             <label class="form-label">Dosen Pembimbing 1</label>
-                                            <input type="text" placeholder="Masukkan Dosen Pembimbing 1" class="form-control" name="dosen_pembimbing_1" value="{{$suratizin->dosen_pembimbing_1}}"/>
+                                             <select class="form-select" name="dosen_pembimbing_1">
+                                                <option>Pilih Data Dosen</option>
+                                                @foreach($dosen as $data)
+                                                    <option value="{{$data->nama}}"
+                                                        {{ $suratizin->dosen_pembimbing_1 == $data->nama ? 'selected' : '' }}>
+                                                        NIDM : {{$data->nidm}} | Nama Dosen : {{$data->nama}}  
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div>
                                             <label class="form-label">Dosen Pembimbing 2</label>
-                                            <input type="text" placeholder="Masukkan Dosen Pembimbing 2" class="form-control" name="dosen_pembimbing_2" value="{{$suratizin->dosen_pembimbing_2}}"/>
+                                             <select class="form-select" name="dosen_pembimbing_2">
+                                                <option>Pilih Data Dosen</option>
+                                                @foreach($dosen as $data)
+                                                    <option value="{{$data->nama}}"
+                                                        {{ $suratizin->dosen_pembimbing_2 == $data->nama ? 'selected' : '' }}>
+                                                        NIDM : {{$data->nidm}} | Nama Dosen : {{$data->nama}}  
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="mb-3">
                                           <label class="form-label">Isi Surat</label>
-                                          <textarea class="form-control" data-bs-toggle="autosize"  placeholder="Masukkan Isi Surat..." style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 56px;" name="isi_surat" value="{{$suratizin->isi_surat}}"></textarea>
+                                          <textarea class="form-control" data-bs-toggle="autosize"  placeholder="Masukkan Isi Surat..." style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 56px;" name="isi_surat">{{$suratizin->isi_surat}}</textarea>
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

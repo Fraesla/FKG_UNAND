@@ -100,9 +100,10 @@
                                 <td>
                                     <span class="text-secondary"> {{$no++}}</span>
                                 </td>
-                                <td class="text-secondary">{{$data->no_bp}}</td>
-                                <td class="text-secondary">{{$data->nama_mahasiswa}}</td>
-                                <td class="text-secondary">{{$data->dosen_pembimbing}}</td>
+                                <td class="text-secondary">{{$data->nim}}</td>
+                                <td class="text-secondary">{{$data->nama}}</td>
+                                <td class="text-secondary">{{$data->dosen_bimbingan}}</td>
+                                <td class="text-secondary">{{$data->tgl_bimbingan}}</td>
                                 <td class="text-secondary">{{$data->catatan}}</td>
                                 <td class="w-0">
                                     <div class="d-flex gap-1">

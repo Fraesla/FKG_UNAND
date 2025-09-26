@@ -15,47 +15,65 @@ class PengajuanController extends Controller
         // Ambil parameter entries dari request, default = 5
         $entries = $request->input('entries', 5);
 
-        // Query pakai paginate
+        // Query pakai join ke tabel mahasiswa
         $pengajuan = DB::table('pengajuan')
-                    ->orderBy('id', 'DESC')
-                    ->paginate($entries);
+            ->join('mahasiswa', 'pengajuan.id_mahasiswa', '=', 'mahasiswa.id')
+            ->select(
+                'pengajuan.*',
+                'mahasiswa.nama',
+                'mahasiswa.nim',
+                'mahasiswa.no_hp'
+            )
+            ->orderBy('pengajuan.id', 'DESC')
+            ->paginate($entries);
 
         // Supaya pagination tetap bawa query string (search / entries)
         $pengajuan->appends($request->all());
 
-        return view('admin.pengajuan.index', ['pengajuan' => $pengajuan]);
+        return view('admin.pengajuan.index', compact('pengajuan'));
     }
 
     public function feature(Request $request)
     {
-        $query = DB::table('pengajuan');
+        $query = DB::table('pengajuan')
+            ->join('mahasiswa', 'pengajuan.id_mahasiswa', '=', 'mahasiswa.id')
+            ->select(
+                'pengajuan.*',
+                'mahasiswa.nama',
+                'mahasiswa.nim',
+                'mahasiswa.no_hp'
+            );
 
-        // Search berdasarkan ID/Nama
+        // Search
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where('id', 'like', "%{$search}%")
-                  ->orWhere('nama', 'like', "%{$search}%")
-                  ->orWhere('no_bp', 'like', "%{$search}%")
-                  ->orWhere('no_hp', 'like', "%{$search}%")
-                  ->orWhere('dosen_pembimbing_1', 'like', "%{$search}%")
-                  ->orWhere('dosen_pembimbing_2', 'like', "%{$search}%")
-                  ->orWhere('judul', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('pengajuan.id', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.nama', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.nim', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.no_hp', 'like', "%{$search}%")
+                  ->orWhere('pengajuan.dosen_pembimbing_1', 'like', "%{$search}%")
+                  ->orWhere('pengajuan.dosen_pembimbing_2', 'like', "%{$search}%")
+                  ->orWhere('pengajuan.judul', 'like', "%{$search}%");
+            });
         }
 
         // Show entries (default 10)
         $entries = $request->get('entries', 10);
 
-        // Ambil data
-        $pengajuan = $query->orderBy('id', 'DESC')->paginate($entries);
+        // Ambil data dengan pagination
+        $pengajuan = $query->orderBy('pengajuan.id', 'DESC')->paginate($entries);
 
-        // Biar pagination tetap bawa query string
+        // Supaya pagination tetap bawa query string
         $pengajuan->appends($request->all());
 
         return view('admin.pengajuan.index', compact('pengajuan'));
     }
 
     public function add(){
-        return view('admin.pengajuan.create');
+        $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
+        $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
+        return view('admin.pengajuan.create',['mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
     }
 
     public function create(Request $request){
@@ -71,9 +89,7 @@ class PengajuanController extends Controller
         $krs = $request->file('krs')->store('pengajuan', 'public');
 
         DB::table('pengajuan')->insert([  
-            'nama' => $request->nama,
-            'no_bp' => $request->no_bp,
-            'no_hp' => $request->no_hp,
+            'id_mahasiswa' => $request->id_mahasiswa,
             'dosen_pembimbing_1' => $request->dosen_pembimbing_1,
             'dosen_pembimbing_2' => $request->dosen_pembimbing_2,
             'surat_pengajuan' => $surat,
@@ -86,17 +102,17 @@ class PengajuanController extends Controller
 
     public function edit($id){
         $pengajuan = DB::table('pengajuan')->where('id',$id)->first();
+        $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
+        $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
         
-        return view('admin.pengajuan.edit',['pengajuan'=>$pengajuan]);
+        return view('admin.pengajuan.edit',['pengajuan'=>$pengajuan,'mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'no_bp' => 'required|string|max:20',
-            'no_hp' => 'required|string|max:20',
-            'dosen_pembimbing_1' => 'required|string|max:255',
+            'id_mahasiswa' => 'required|string|max:255',
+            'dosen_pembimbing_1' => 'nullable|string|max:255',
             'dosen_pembimbing_2' => 'nullable|string|max:255',
             'judul' => 'required|string|max:255',
 
@@ -109,9 +125,7 @@ class PengajuanController extends Controller
         $pengajuan = DB::table('pengajuan')->where('id', $id)->first();
 
         $updateData = [
-            'nama' => $request->nama,
-            'no_bp' => $request->no_bp,
-            'no_hp' => $request->no_hp,
+            'id_mahasiswa' => $request->id_mahasiswa,
             'dosen_pembimbing_1' => $request->dosen_pembimbing_1,
             'dosen_pembimbing_2' => $request->dosen_pembimbing_2,
             'judul' => $request->judul,

@@ -18,8 +18,6 @@ class JadMahasiwaController extends Controller
             ->join('mahasiswa as mh', 'jm.id_mahasiwa', '=', 'mh.id')
             ->join('makul as m', 'jmk.id_makul', '=', 'm.id')
             ->join('ruangan as r', 'jmk.id_ruangan', '=', 'r.id')
-            ->join('jadwal_dosen as jd', 'jmk.id', '=', 'jd.id_jadwal_makul')
-            ->join('dosen as d', 'jd.id_dosen', '=', 'd.id')
             ->select(
                 'jm.id',
                 'jmk.hari',
@@ -27,7 +25,6 @@ class JadMahasiwaController extends Controller
                 'jmk.jam_selesai',
                 'm.nama as makul',
                 'r.nama as ruangan',
-                'd.nama as dosen',
                 'mh.nama as nama_mahasiswa'
             )
             ->orderBy('jm.id', 'DESC')
@@ -45,8 +42,6 @@ class JadMahasiwaController extends Controller
             ->join('mahasiswa as mh', 'jm.id_mahasiwa', '=', 'mh.id')
             ->join('makul as m', 'jmk.id_makul', '=', 'm.id')
             ->join('ruangan as r', 'jmk.id_ruangan', '=', 'r.id')
-            ->join('jadwal_dosen as jd', 'jmk.id', '=', 'jd.id_jadwal_makul')
-            ->join('dosen as d', 'jd.id_dosen', '=', 'd.id')
             ->select(
                 'jm.id',
                 'jmk.hari',
@@ -54,7 +49,6 @@ class JadMahasiwaController extends Controller
                 'jmk.jam_selesai',
                 'm.nama as makul',
                 'r.nama as ruangan',
-                'd.nama as dosen',
                 'mh.nama as nama_mahasiswa'
             );
 
@@ -67,7 +61,6 @@ class JadMahasiwaController extends Controller
                   ->orWhere('jmk.jam_selesai', 'like', "%{$search}%")
                   ->orWhere('m.nama', 'like', "%{$search}%")
                   ->orWhere('r.nama', 'like', "%{$search}%")
-                  ->orWhere('d.nama', 'like', "%{$search}%")
                   ->orWhere('mh.nama', 'like', "%{$search}%");
             });
         }
@@ -85,22 +78,33 @@ class JadMahasiwaController extends Controller
     }
 
     public function add(){
-         $jadmakul = DB::table('jadwal_mahasiswa as jm')
-            ->join('jadwal_makul as jmk', 'jm.id_jadwal_makul', '=', 'jmk.id')
-            ->join('makul as m', 'jmk.id_makul', '=', 'm.id')
-            ->join('ruangan as r', 'jmk.id_ruangan', '=', 'r.id')
-            ->join('jadwal_dosen as jd', 'jmk.id', '=', 'jd.id_jadwal_makul')
-            ->join('dosen as d', 'jd.id_dosen', '=', 'd.id')
+         // $jadmakul = DB::table('jadwal_mahasiswa as jm')
+         //    ->join('makul as m', 'jmk.id_makul', '=', 'm.id')
+         //    ->join('ruangan as r', 'jmk.id_ruangan', '=', 'r.id')
+         //    ->select(
+         //        'jm.id',
+         //        'jmk.hari',
+         //        'jmk.jam_mulai',
+         //        'jmk.jam_selesai',
+         //        'm.nama as makul',
+         //        'r.nama as ruangan',
+         //        'd.nama as dosen'
+         //    )
+         //    ->orderBy('jm.id', 'DESC')
+         //    ->get();
+
+        $jadmakul = DB::table('jadwal_makul')
+            ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')
+            ->join('ruangan', 'jadwal_makul.id_ruangan', '=', 'ruangan.id')
             ->select(
-                'jm.id',
-                'jmk.hari',
-                'jmk.jam_mulai',
-                'jmk.jam_selesai',
-                'm.nama as makul',
-                'r.nama as ruangan',
-                'd.nama as dosen'
+                'jadwal_makul.id',
+                'jadwal_makul.hari',
+                'jadwal_makul.jam_mulai',
+                'jadwal_makul.jam_selesai',
+                'makul.nama as nama_makul',
+                'ruangan.nama as nama_ruangan'
             )
-            ->orderBy('jm.id', 'DESC')
+            ->orderBy('jadwal_makul.id', 'DESC')
             ->get();
         $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
         return view('admin.jadwal.mahasiswa.create',['mahasiswa'=>$mahasiswa,'jadmakul'=>$jadmakul]);
@@ -122,7 +126,6 @@ class JadMahasiwaController extends Controller
             ->join('makul as m', 'jmk.id_makul', '=', 'm.id')
             ->join('ruangan as r', 'jmk.id_ruangan', '=', 'r.id')
             ->join('jadwal_dosen as jd', 'jmk.id', '=', 'jd.id_jadwal_makul')
-            ->join('dosen as d', 'jd.id_dosen', '=', 'd.id')
             ->select(
                 'jm.id',
                 'jmk.hari',
@@ -130,7 +133,6 @@ class JadMahasiwaController extends Controller
                 'jmk.jam_selesai',
                 'm.nama as makul',
                 'r.nama as ruangan',
-                'd.nama as dosen'
             )
             ->orderBy('jm.id', 'DESC')
             ->get();

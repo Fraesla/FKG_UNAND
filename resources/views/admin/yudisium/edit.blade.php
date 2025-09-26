@@ -35,12 +35,16 @@
                                 {{ csrf_field() }}
                                     <div class="space-y">
                                         <div>
-                                            <label class="form-label">Nama Mahasiswa</label>
-                                            <input type="text" placeholder="Masukkan Nama Mahasiswa" class="form-control" name="nama" value="{{$yudisium->nama}}"/>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">NO.BP</label>
-                                            <input type="text" placeholder="Masukkan No.BP" class="form-control" name="no_bp" value="{{$yudisium->no_bp}}" />
+                                            <label class="form-label">Mahasiswa</label>
+                                             <select class="form-select" name="id_mahasiswa">
+                                                <option>Pilih Data Mahasiswa</option>
+                                                @foreach($mahasiswa as $data)
+                                                    <option value="{{$data->id}}"
+                                                        {{ $yudisium->id_mahasiswa == $data->id ? 'selected' : '' }}>
+                                                        No.BP : {{$data->nim}} | Nama Mahasiswa : {{$data->nama}}  
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div>
                                             <label class="form-label">Judul</label>

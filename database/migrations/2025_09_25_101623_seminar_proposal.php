@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('surat_izin', function (Blueprint $table) {
+        Schema::create('seminar_proposal', function (Blueprint $table) {
             $table->id();
-            $table->string('jenis');
-            $table->string('nama');
-            $table->string('no_bp')->unique();
-            $table->text('alamat');
-            $table->string('judul_penelitian');
-            $table->string('gmail');
-            $table->string('no_hp');
+            $table->string('id_mahasiswa');
             $table->string('dosen_pembimbing_1');
             $table->string('dosen_pembimbing_2');
-            $table->text('isi_surat');
+            $table->string('penguji_1');
+            $table->string('penguji_2');
+            $table->string('penguji_3');
+            $table->text('surat_proposal');
+            $table->text('file_draft');
+            $table->text('bukti_izin');
+            $table->text('lembar_jadwal');
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('surat_izin');
+        Schema::dropIfExists('seminar_proposal');
     }
 };

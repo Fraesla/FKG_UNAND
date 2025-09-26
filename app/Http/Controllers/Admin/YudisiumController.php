@@ -15,9 +15,15 @@ class YudisiumController extends Controller
         // Ambil parameter entries dari request, default = 5
         $entries = $request->input('entries', 5);
 
-        // Query pakai paginate
+        // Query pakai join ke tabel mahasiswa
         $yudisium = DB::table('yudisium')
-                    ->orderBy('id', 'DESC')
+                    ->join('mahasiswa', 'yudisium.id_mahasiswa', '=', 'mahasiswa.id')
+                    ->select(
+                        'yudisium.*',
+                        'mahasiswa.nama as nama',
+                        'mahasiswa.nim'
+                    )
+                    ->orderBy('yudisium.id', 'DESC')
                     ->paginate($entries);
 
         // Supaya pagination tetap bawa query string (search / entries)
@@ -28,92 +34,103 @@ class YudisiumController extends Controller
 
     public function feature(Request $request)
     {
-        $query = DB::table('yudisium');
+        $query = DB::table('yudisium')
+                    ->join('mahasiswa', 'yudisium.id_mahasiswa', '=', 'mahasiswa.id')
+                    ->select(
+                        'yudisium.*',
+                        'mahasiswa.nama as namaa',
+                        'mahasiswa.nim'
+                    );
 
-        // Search berdasarkan ID/Nama
+        // Search berdasarkan field di yudisium & mahasiswa
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where('id', 'like', "%{$search}%")
-                  ->orWhere('nama', 'like', "%{$search}%")
-                  ->orWhere('no_bp', 'like', "%{$search}%")
-                  ->orWhere('judul', 'like', "%{$search}%")
-                  ->orWhere('tgl_semi_proposal', 'like', "%{$search}%")
-                  ->orWhere('tgl_semi_hasil', 'like', "%{$search}%");
+            $query->where(function($q) use ($search) {
+                $q->where('yudisium.id', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.nama', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.nim', 'like', "%{$search}%")
+                  ->orWhere('yudisium.judul', 'like', "%{$search}%")
+                  ->orWhere('yudisium.tgl_semi_proposal', 'like', "%{$search}%")
+                  ->orWhere('yudisium.tgl_semi_hasil', 'like', "%{$search}%");
+            });
         }
 
         // Show entries (default 10)
         $entries = $request->get('entries', 10);
 
         // Ambil data
-        $yudisium = $query->orderBy('id', 'DESC')->paginate($entries);
+        $yudisium = $query->orderBy('yudisium.id', 'DESC')->paginate($entries);
 
-        // Biar pagination tetap bawa query string
+        // Supaya pagination tetap bawa query string
         $yudisium->appends($request->all());
 
         return view('admin.yudisium.index', compact('yudisium'));
     }
 
     public function add(){
-        return view('admin.yudisium.create');
+        $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
+        return view('admin.yudisium.create',['mahasiswa'=>$mahasiswa]);
     }
 
-    public function create(Request $request){
-
+    public function create(Request $request)
+    {
         $request->validate([
-        'hasil_turnitin' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        'bukti_lunas' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        'khs' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        'kbs' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        'brsempro' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        'brsemhas' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        'full_skripsi' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        'matriks' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        'toefl' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        // tambahkan validasi field lain
+            'id_mahasiswa'       => 'required|exists:mahasiswa,id',
+            'judul'              => 'required|string|max:255',
+            'tgl_semi_proposal'  => 'required|date',
+            'tgl_semi_hasil'     => 'required|date',
+            'hasil_turnitin'     => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'bukti_lunas'        => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'khs'                => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'kbs'                => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'brsempro'           => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'brsemhas'           => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'full_skripsi'       => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'matriks'            => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'toefl'              => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
         ]);
 
-        // Simpan file ke storage/Seminar Hasil
-        $hasil = $request->file('hasil_turnitin')->store('yudisium', 'public');
-        $bukti = $request->file('bukti_lunas')->store('yudisium', 'public');
-        $khs = $request->file('khs')->store('yudisium', 'public');
-        $kbs = $request->file('kbs')->store('yudisium', 'public');
-        $brsempro = $request->file('brsempro')->store('yudisium', 'public');
-        $brsemhas = $request->file('brsemhas')->store('yudisium', 'public');
-        $skripsi = $request->file('full_skripsi')->store('yudisium', 'public');
-        $matriks = $request->file('matriks')->store('yudisium', 'public');
-        $toefl = $request->file('toefl')->store('yudisium', 'public');
+        // Simpan file hanya jika ada
+        $hasil      = $request->hasFile('hasil_turnitin') ? $request->file('hasil_turnitin')->store('yudisium', 'public') : null;
+        $bukti      = $request->hasFile('bukti_lunas') ? $request->file('bukti_lunas')->store('yudisium', 'public') : null;
+        $khs        = $request->hasFile('khs') ? $request->file('khs')->store('yudisium', 'public') : null;
+        $kbs        = $request->hasFile('kbs') ? $request->file('kbs')->store('yudisium', 'public') : null;
+        $brsempro   = $request->hasFile('brsempro') ? $request->file('brsempro')->store('yudisium', 'public') : null;
+        $brsemhas   = $request->hasFile('brsemhas') ? $request->file('brsemhas')->store('yudisium', 'public') : null;
+        $skripsi    = $request->hasFile('full_skripsi') ? $request->file('full_skripsi')->store('yudisium', 'public') : null;
+        $matriks    = $request->hasFile('matriks') ? $request->file('matriks')->store('yudisium', 'public') : null;
+        $toefl      = $request->hasFile('toefl') ? $request->file('toefl')->store('yudisium', 'public') : null;
 
-        DB::table('yudisium')->insert([  
-            'nama' => $request->nama,
-            'no_bp' => $request->no_bp,
-            'judul' => $request->judul,
+        DB::table('yudisium')->insert([
+            'id_mahasiswa'      => $request->id_mahasiswa,
+            'judul'             => $request->judul,
             'tgl_semi_proposal' => $request->tgl_semi_proposal,
-            'tgl_semi_hasil' => $request->tgl_semi_hasil,
-            'hasil_turnitin' => $hasil,
-            'bukti_lunas' => $bukti,
-            'khs' => $khs,
-            'kbs' => $kbs,
-            'brsempro' => $brsempro,
-            'brsemhas' => $brsemhas,
-            'full_skripsi' => $skripsi,
-            'matriks' => $matriks,
-            'toefl' => $toefl
+            'tgl_semi_hasil'    => $request->tgl_semi_hasil,
+            'hasil_turnitin'    => $hasil,
+            'bukti_lunas'       => $bukti,
+            'khs'               => $khs,
+            'kbs'               => $kbs,
+            'brsempro'          => $brsempro,
+            'brsemhas'          => $brsemhas,
+            'full_skripsi'      => $skripsi,
+            'matriks'           => $matriks,
+            'toefl'             => $toefl
         ]);
 
-        return redirect('/admin/yudisium')->with("success","Data Berhasil Ditambah !");
+        return redirect('/admin/yudisium')->with("success", "Data Berhasil Ditambah !");
     }
 
     public function edit($id){
         $yudisium = DB::table('yudisium')->where('id',$id)->first();
+        $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
         
-        return view('admin.yudisium.edit',['yudisium'=>$yudisium]);
+        return view('admin.yudisium.edit',['yudisium'=>$yudisium,'mahasiswa'=>$mahasiswa]);
     }
 
     public function update(Request $request, $id) {
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'no_bp' => 'required|string|max:20',
-            'judul' => 'required|string|max:20',
+            'id_mahasiswa' => 'required|string|max:255',
+            'judul' => 'required|string|max:255',
             'tgl_semi_proposal' => 'required|string|max:255',
             'tgl_semi_hasil' => 'nullable|string|max:255',
 
@@ -133,8 +150,7 @@ class YudisiumController extends Controller
         $yudisium = DB::table('yudisium')->where('id', $id)->first();
 
         $updateData = [
-            'nama' => $request->nama,
-            'no_bp' => $request->no_bp,
+            'id_mahasiswa' => $request->id_mahasiswa,
             'judul' => $request->judul,
             'tgl_semi_proposal' => $request->tgl_semi_proposal,
             'tgl_semi_hasil' => $request->tgl_semi_hasil,

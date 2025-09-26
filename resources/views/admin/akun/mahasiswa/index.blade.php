@@ -88,6 +88,7 @@
                                 <th>Tanggal Lahir</th>
                                 <th>Alamat</th>
                                 <th>No.HP</th>
+                                <th>Gmail</th>
                                 <th class="text-center" colspan="2">Action</th>
                             </tr>
                         </thead>
@@ -111,6 +112,7 @@
                                 <td class="text-secondary">{{$data->tgl_lahir}}</td>
                                 <td class="text-secondary">{{$data->alamat}}</td>
                                 <td class="text-secondary">{{$data->no_hp}}</td>
+                                <td class="text-secondary">{{$data->gmail}}</td>
                                 <td class="w-0">
                                     <div class="d-flex gap-1">
                                         <!-- Tombol Edit -->

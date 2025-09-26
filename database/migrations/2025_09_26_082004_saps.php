@@ -12,16 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('saps', function (Blueprint $table) {
-        $table->id();
-        $table->string('nim')->unique();
-        $table->string('nama');
-        $table->string('jml_point_a');
-        $table->string('jml_point_b');
-        $table->string('jml_point_c');
-        $table->string('total');
-        $table->string('predikat');
-        $table->timestamps();
-    });
+            $table->id();
+            $table->string('id_mahasiswa');
+            $table->string('jml_point_a');
+            $table->string('jml_point_b');
+            $table->string('jml_point_c');
+            $table->string('total');
+            $table->string('predikat');
+            $table->timestamps();
+        });
     }
 
     /**

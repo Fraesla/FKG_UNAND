@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('yudisium', function (Blueprint $table) {
         $table->id();
-        $table->string('nama');
-        $table->string('no_bp')->unique();
+        $table->string('id_mahasiswa');
         $table->string('judul');
         $table->string('tgl_semi_proposal');
         $table->string('tgl_semi_hasil');

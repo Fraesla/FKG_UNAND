@@ -35,20 +35,28 @@
                                 {{ csrf_field() }}
                                     <div class="space-y">
                                         <div>
-                                            <label class="form-label">Nama ta</label>
-                                            <input type="text" placeholder="Masukkan Nama ta" class="form-control" name="nama" value="{{$ta->nama}}" />
-                                        </div>
-                                        <div>
-                                            <label class="form-label">NO.BP</label>
-                                            <input type="text" placeholder="Masukkan No.BP" class="form-control" name="no_bp" value="{{$ta->no_bp}}" />
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Nama Mahasiswa</label>
-                                            <input type="text" placeholder="Masukkan Nama Mahasiswa" class="form-control" name="nama_mahasiswa" value="{{$ta->nama_mahasiswa}}"/>
+                                            <label class="form-label">Mahasiswa</label>
+                                             <select class="form-select" name="id_mahasiswa">
+                                                <option>Pilih Data Mahasiswa</option>
+                                                @foreach($mahasiswa as $data)
+                                                    <option value="{{$data->id}}"
+                                                        {{ $ta->id_mahasiswa == $data->id ? 'selected' : '' }}>
+                                                        No.BP : {{$data->nim}} | Nama Mahasiswa : {{$data->nama}}  
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div>
                                             <label class="form-label">Dosen Pembimbing</label>
-                                            <input type="text" placeholder="Masukkan Dosen Pembimbing" class="form-control" name="dosen_pembimbing" value="{{$ta->dosen_pembimbing}}"/>
+                                             <select class="form-select" name="dosen_bimbingan">
+                                                <option>Pilih Data Dosen</option>
+                                                @foreach($dosen as $data)
+                                                    <option value="{{$data->nama}}"
+                                                        {{ $ta->dosen_bimbingan == $data->nama ? 'selected' : '' }}>
+                                                        NIDM : {{$data->nidm}} | Nama Dosen : {{$data->nama}}  
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div>
                                             <label class="form-label">Tanggal Pembimbing</label>
@@ -61,12 +69,12 @@
                                                     <path d="M4 11h16"></path>
                                                     <path d="M11 15h1"></path>
                                                     <path d="M12 15v3"></path></svg></span>
-                                                <input class="form-control" placeholder="Masukkan Tanggal Pembimbing" id="datepicker-icon-prepend" name="tgl_pembimbing" value="{{$ta->tgl_pembimbing}}">
+                                                <input class="form-control" placeholder="Masukkan Tanggal Pembimbing" id="datepicker-icon-prepend" name="tgl_bimbingan" value="{{$ta->tgl_bimbingan}}">
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                               <label class="form-label">Catatan</label>
-                                              <textarea class="form-control" data-bs-toggle="autosize"  placeholder="Masukkan Catatan..." style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 56px;" name="catatan" value="{{$ta->catatan}}"></textarea>
+                                              <textarea class="form-control" data-bs-toggle="autosize"  placeholder="Masukkan Catatan..." style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 56px;" name="catatan">{{$ta->catatan}}</textarea>
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

@@ -35,24 +35,40 @@
                                 {{ csrf_field() }}
                                     <div class="space-y">
                                         <div>
-                                            <label class="form-label">Nama Mahasiswa</label>
-                                            <input type="text" placeholder="Masukkan Nama Mahasiswa" class="form-control" name="nama" value="{{$seminar_hasil->nama}}" />
+                                            <label class="form-label">Mahasiswa</label>
+                                             <select class="form-select" name="id_mahasiswa">
+                                                <option>Pilih Data Mahasiswa</option>
+                                                @foreach($mahasiswa as $data)
+                                                    <option value="{{$data->id}}"
+                                                        {{ $seminar_hasil->id_mahasiswa == $data->id ? 'selected' : '' }}>
+                                                        No.BP : {{$data->nim}} | Nama Mahasiswa : {{$data->nama}}  
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
-                                        <div>
-                                            <label class="form-label">NO.BP</label>
-                                            <input type="text" placeholder="Masukkan No.BP" class="form-control" name="no_bp" value="{{$seminar_hasil->no_bp}}"/>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">No.HP</label>
-                                            <input type="text" placeholder="Masukkan No.HP" class="form-control" name="no_hp" value="{{$seminar_hasil->no_hp}}"/>
-                                        </div>
-                                        <div>
+                                       <div>
                                             <label class="form-label">Dosen Pembimbing 1</label>
-                                            <input type="text" placeholder="Masukkan Dosen Pembimbing 1" class="form-control" name="dosen_pembimbing_1" value="{{$seminar_hasil->dosen_pembimbing_1}}"/>
+                                             <select class="form-select" name="dosen_pembimbing_1">
+                                                <option>Pilih Data Dosen</option>
+                                                @foreach($dosen as $data)
+                                                    <option value="{{$data->nama}}"
+                                                        {{ $seminar_hasil->dosen_pembimbing_1 == $data->nama ? 'selected' : '' }}>
+                                                        NIDM : {{$data->nidm}} | Nama Dosen : {{$data->nama}}  
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div>
                                             <label class="form-label">Dosen Pembimbing 2</label>
-                                            <input type="text" placeholder="Masukkan Dosen Pembimbing 2" class="form-control" name="dosen_pembimbing_2" value="{{$seminar_hasil->dosen_pembimbing_2}}"/>
+                                             <select class="form-select" name="dosen_pembimbing_2">
+                                                <option>Pilih Data Dosen</option>
+                                                @foreach($dosen as $data)
+                                                    <option value="{{$data->nama}}"
+                                                        {{ $seminar_hasil->dosen_pembimbing_2 == $data->nama ? 'selected' : '' }}>
+                                                        NIDM : {{$data->nidm}} | Nama Dosen : {{$data->nama}}  
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                          <div>
                                             <label class="form-label">Penguji 1</label>

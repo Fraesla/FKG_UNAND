@@ -55,12 +55,12 @@ class DosenController extends Controller
          // Validasi input
         $request->validate([
             'nidm' => 'required|string|max:255',
-            'nama' => 'required|string|max:255',
-            'gender' => 'required|string|max:255',
-            'tgl_lahir' => 'required|string|max:255',
-            'alamat' => 'required|string|max:255',
-            'no_hp' => 'required|string|max:255',
-            'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048', // maksimal 2MB
+            'nama' => 'nullable|string|max:255',
+            'gender' => 'nullable|string|max:255',
+            'tgl_lahir' => 'nullable|string|max:255',
+            'alamat' => 'nullable|string|max:255',
+            'no_hp' => 'nullable|string|max:255',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // maksimal 2MB
         ]);
 
         // Simpan file ke storage/public/foto_dosen
@@ -100,11 +100,11 @@ class DosenController extends Controller
         // Validasi input
         $request->validate([
             'nidm' => 'required|string|max:255',
-            'nama' => 'required|string|max:255',
-            'gender' => 'required|string|max:255',
-            'tgl_lahir' => 'required|string|max:255',
-            'alamat' => 'required|string|max:255',
-            'no_hp' => 'required|string|max:255',
+            'nama' => 'nullable|string|max:255',
+            'gender' => 'nullable|string|max:255',
+            'tgl_lahir' => 'nullable|string|max:255',
+            'alamat' => 'nullable|string|max:255',
+            'no_hp' => 'nullable|string|max:255',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 

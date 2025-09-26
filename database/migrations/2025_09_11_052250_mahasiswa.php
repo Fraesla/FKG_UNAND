@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('tgl_lahir')->nullable();
             $table->text('alamat')->nullable();
             $table->string('no_hp')->nullable();
+            $table->string('gmail')->nullable();
             $table->text('foto')->nullable();
             $table->timestamps();
         });

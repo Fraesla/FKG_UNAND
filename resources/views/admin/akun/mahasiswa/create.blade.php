@@ -77,6 +77,13 @@
                                             <label class="form-label">No.HP</label>
                                             <input type="text" placeholder="Masukkan No.HP" class="form-control" name="no_hp" />
                                         </div>
+                                        <div>
+                                            <label class="form-label">Gmail</label>
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text"> @ </span>
+                                                <input type="text" class="form-control" placeholder="Masukkan Gmail" name="gmail" autocomplete="off">
+                                            </div>
+                                        </div>
                                         <div class="mb-3">
                                           <div class="form-label">Foto</div>
                                           <input type="file" class="form-control" accept="image/*" name="foto">

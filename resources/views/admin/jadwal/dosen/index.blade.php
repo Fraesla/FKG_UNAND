@@ -84,7 +84,7 @@
                                 <th>Hari</th>
                                 <th class="text-center">Jam</th>
                                 <th>Mata Kuliah</th>
-                                <th>jaddosen</th>
+                                <th>Ruangan</th>
                                 <th>Nama Dosen</th>
                                 <th class="text-center">Action</th>
                             </tr>

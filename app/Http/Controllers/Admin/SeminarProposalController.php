@@ -15,40 +15,56 @@ class SeminarProposalController extends Controller
         // Ambil parameter entries dari request, default = 5
         $entries = $request->input('entries', 5);
 
-        // Query pakai paginate
+        // Query pakai join + paginate
         $seminar_proposal = DB::table('seminar_proposal')
-                    ->orderBy('id', 'DESC')
-                    ->paginate($entries);
+            ->join('mahasiswa', 'seminar_proposal.id_mahasiswa', '=', 'mahasiswa.id')
+            ->select(
+                'seminar_proposal.*',
+                'mahasiswa.nama as nama',
+                'mahasiswa.nim',
+                'mahasiswa.no_hp'
+            )
+            ->orderBy('seminar_proposal.id', 'DESC')
+            ->paginate($entries);
 
         // Supaya pagination tetap bawa query string (search / entries)
         $seminar_proposal->appends($request->all());
 
-        return view('admin.seminarproposal.index', ['seminar_proposal' => $seminar_proposal]);
+        return view('admin.seminarproposal.index', compact('seminar_proposal'));
     }
 
     public function feature(Request $request)
     {
-        $query = DB::table('seminar_proposal');
+        $query = DB::table('seminar_proposal')
+            ->join('mahasiswa', 'seminar_proposal.id_mahasiswa', '=', 'mahasiswa.id')
+            ->select(
+                'seminar_proposal.*',
+                'mahasiswa.nama as nama',
+                'mahasiswa.nim',
+                'mahasiswa.no_hp'
+            );
 
-        // Search berdasarkan ID/Nama
+        // Search
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where('id', 'like', "%{$search}%")
-                  ->orWhere('nama', 'like', "%{$search}%")
-                  ->orWhere('no_bp', 'like', "%{$search}%")
-                  ->orWhere('no_hp', 'like', "%{$search}%")
-                  ->orWhere('dosen_pembimbing_1', 'like', "%{$search}%")
-                  ->orWhere('dosen_pembimbing_2', 'like', "%{$search}%")
-                  ->orWhere('penguji_1', 'like', "%{$search}%")
-                  ->orWhere('penguji_2', 'like', "%{$search}%")
-                  ->orWhere('penguji_3', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('seminar_proposal.id', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.nama', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.nim', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.no_hp', 'like', "%{$search}%")
+                  ->orWhere('seminar_proposal.dosen_pembimbing_1', 'like', "%{$search}%")
+                  ->orWhere('seminar_proposal.dosen_pembimbing_2', 'like', "%{$search}%")
+                  ->orWhere('seminar_proposal.penguji_1', 'like', "%{$search}%")
+                  ->orWhere('seminar_proposal.penguji_2', 'like', "%{$search}%")
+                  ->orWhere('seminar_proposal.penguji_3', 'like', "%{$search}%");
+            });
         }
 
         // Show entries (default 10)
         $entries = $request->get('entries', 10);
 
         // Ambil data
-        $seminar_proposal = $query->orderBy('id', 'DESC')->paginate($entries);
+        $seminar_proposal = $query->orderBy('seminar_proposal.id', 'DESC')->paginate($entries);
 
         // Biar pagination tetap bawa query string
         $seminar_proposal->appends($request->all());
@@ -57,38 +73,52 @@ class SeminarProposalController extends Controller
     }
 
     public function add(){
-        return view('admin.seminarproposal.create');
+        $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
+        $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
+        return view('admin.seminarproposal.create',['mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
     }
 
     public function create(Request $request){
 
+        // Validasi
         $request->validate([
-        'surat_proposal' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        'file_draft' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        'bukti_izin' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        'lembar_jadwal' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        // tambahkan validasi field lain
+            'id_mahasiswa' => 'required|string|max:255',
+            'dosen_pembimbing_1' => 'nullable|string|max:255',
+            'dosen_pembimbing_2' => 'nullable|string|max:255',
+            'penguji_1' => 'nullable|string|max:255',
+            'penguji_2' => 'nullable|string|max:255',
+            'penguji_3' => 'nullable|string|max:255',
+
+            // field file (nullable karena user bisa upload sebagian)
+            'surat_proposal' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'file_draft'     => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'bukti_izin'     => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'lembar_jadwal'  => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
         ]);
 
-        // Simpan file ke storage/Seminar Proposal
-        $surat = $request->file('surat_proposal')->store('seminar_proposal', 'public');
-        $draft = $request->file('file_draft')->store('seminar_proposal', 'public');
-        $izin = $request->file('bukti_izin')->store('seminar_proposal', 'public');
-        $lembar = $request->file('lembar_jadwal')->store('seminar_proposal', 'public');
+        // Simpan file jika ada
+        $paths = [];
+        foreach (['surat_proposal','file_draft','bukti_izin','lembar_jadwal'] as $field) {
+            if ($request->hasFile($field)) {
+                $paths[$field] = $request->file($field)->store('seminar_proposal', 'public');
+            } else {
+                $paths[$field] = null;
+            }
+        }
 
-        DB::table('seminar_proposal')->insert([  
-            'nama' => $request->nama,
-            'no_bp' => $request->no_bp,
-            'no_hp' => $request->no_hp,
+        // Insert ke database
+        DB::table('seminar_proposal')->insert([
+            'id_mahasiswa' => $request->id_mahasiswa,
             'dosen_pembimbing_1' => $request->dosen_pembimbing_1,
             'dosen_pembimbing_2' => $request->dosen_pembimbing_2,
             'penguji_1' => $request->penguji_1,
             'penguji_2' => $request->penguji_2,
             'penguji_3' => $request->penguji_3,
-            'surat_proposal' => $surat,
-            'file_draft' => $draft,
-            'bukti_izin' => $izin,
-            'lembar_jadwal' => $lembar
+            'surat_proposal' => $paths['surat_proposal'],
+            'file_draft' => $paths['file_draft'],
+            'bukti_izin' => $paths['bukti_izin'],
+            'lembar_jadwal' => $paths['lembar_jadwal'],
+            'created_at' => now(),
         ]);
 
         return redirect('/admin/seminarproposal')->with("success","Data Berhasil Ditambah !");
@@ -96,16 +126,16 @@ class SeminarProposalController extends Controller
 
     public function edit($id){
         $seminar_proposal = DB::table('seminar_proposal')->where('id',$id)->first();
+        $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
+        $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
         
-        return view('admin.seminarproposal.edit',['seminar_proposal'=>$seminar_proposal]);
+        return view('admin.seminarproposal.edit',['seminar_proposal'=>$seminar_proposal,'mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
     }
 
     public function update(Request $request, $id) {
 
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'no_bp' => 'required|string|max:20',
-            'no_hp' => 'required|string|max:20',
+            'id_mahasiswa' => 'required|string|max:255',
             'dosen_pembimbing_1' => 'required|string|max:255',
             'dosen_pembimbing_2' => 'nullable|string|max:255',
             'penguji_1' => 'nullable|string|max:255',
@@ -123,9 +153,7 @@ class SeminarProposalController extends Controller
         $seminar_proposal = DB::table('seminar_proposal')->where('id', $id)->first();
 
         $updateData = [
-            'nama' => $request->nama,
-            'no_bp' => $request->no_bp,
-            'no_hp' => $request->no_hp,
+            'id_mahasiswa' => $request->id_mahasiswa,
             'dosen_pembimbing_1' => $request->dosen_pembimbing_1,
             'dosen_pembimbing_2' => $request->dosen_pembimbing_2,
             'penguji_1' => $request->penguji_1,

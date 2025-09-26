@@ -40,7 +40,7 @@
                                                 <option>Pilih Jadwal Mata Kuliah</option>
                                                 @foreach($jadmakul as $data)
                                                     <option value="{{$data->id}}">
-                                                        Mata Kuliah: {{$data->makul}} | Hari: {{$data->hari}} | Jam : {{$data->jam_mulai}}-{{$data->jam_selesai}} | Ruangan: {{$data->ruangan}} | Dosen: {{$data->dosen}} 
+                                                        Mata Kuliah: {{$data->nama_makul}} | Hari: {{$data->hari}} | Jam : {{$data->jam_mulai}}-{{$data->jam_selesai}} | Ruangan: {{$data->nama_ruangan}}  
                                                     </option>
                                                 @endforeach
                                             </select>

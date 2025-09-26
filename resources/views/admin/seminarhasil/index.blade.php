@@ -108,7 +108,7 @@
                                     <span class="text-secondary"> {{$no++}}</span>
                                 </td>
                                 <td class="text-secondary">{{$data->nama}}</td>
-                                <td class="text-secondary">{{$data->no_bp}}</td>
+                                <td class="text-secondary">{{$data->nim}}</td>
                                 <td class="text-secondary">{{$data->no_hp}}</td>
                                 <td class="text-secondary">{{$data->dosen_pembimbing_1}}</td>
                                 <td class="text-secondary">{{$data->dosen_pembimbing_2}}</td>

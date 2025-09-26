@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('ta', function (Blueprint $table) {
         $table->id();
-        $table->string('no_bp')->unique();
-        $table->string('nama_mahasiswa');
-        $table->string('dosen_pembimbing');
+        $table->string('id_mahasiswa');
+        $table->string('dosen_bimbingan');
         $table->string('tgl_bimbingan');
         $table->text('catatan');
         $table->timestamps();

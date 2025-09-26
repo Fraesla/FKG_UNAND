@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('pengajuan', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('no_bp')->unique();
-            $table->string('no_hp');
+            $table->string('id_mahasiswa');
             $table->string('dosen_pembimbing_1');
             $table->string('dosen_pembimbing_2');
             $table->text('surat_pengajuan');

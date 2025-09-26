@@ -85,9 +85,9 @@
                                 <th>Nama Mahasiswa</th>
                                 <th>NO.BP</th>
                                 <th>Alamat</th>
-                                <th>Judul Penelitan</th>
                                 <th>Gmail</th>
                                 <th>No.HP</th>
+                                <th>Judul Penelitan</th>
                                 <th>Dosen Pembimbing 1</th>
                                 <th>Dosen Pembimbing 2</th>
                                 <th>Isi Surat</th>
@@ -107,11 +107,11 @@
                                 </td>
                                 <td class="text-secondary">{{$data->jenis}}</td>
                                 <td class="text-secondary">{{$data->nama}}</td>
-                                <td class="text-secondary">{{$data->no_bp}}</td>
+                                <td class="text-secondary">{{$data->nim}}</td>
                                 <td class="text-secondary">{{$data->alamat}}</td>
-                                <td class="text-secondary">{{$data->judul_penelitian}}</td>
                                 <td class="text-secondary">{{$data->gmail}}</td>
                                 <td class="text-secondary">{{$data->no_hp}}</td>
+                                <td class="text-secondary">{{$data->judul_penelitian}}</td>
                                 <td class="text-secondary">{{$data->dosen_pembimbing_1}}</td>
                                 <td class="text-secondary">{{$data->dosen_pembimbing_2}}</td>
                                 <td class="text-secondary">{{$data->isi_surat}}</td>

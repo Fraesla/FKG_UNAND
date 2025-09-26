@@ -15,40 +15,56 @@ class SeminarHasilController extends Controller
         // Ambil parameter entries dari request, default = 5
         $entries = $request->input('entries', 5);
 
-        // Query pakai paginate
+        // Query pakai join ke tabel mahasiswa
         $seminar_hasil = DB::table('seminar_hasil')
-                    ->orderBy('id', 'DESC')
-                    ->paginate($entries);
+            ->join('mahasiswa', 'seminar_hasil.id_mahasiswa', '=', 'mahasiswa.id')
+            ->select(
+                'seminar_hasil.*',
+                'mahasiswa.nama as nama',
+                'mahasiswa.nim',
+                'mahasiswa.no_hp'
+            )
+            ->orderBy('seminar_hasil.id', 'DESC')
+            ->paginate($entries);
 
         // Supaya pagination tetap bawa query string (search / entries)
         $seminar_hasil->appends($request->all());
 
-        return view('admin.seminarhasil.index', ['seminar_hasil' => $seminar_hasil]);
-    }
+        return view('admin.seminarhasil.index', compact('seminar_hasil'));
+    } 
 
     public function feature(Request $request)
     {
-        $query = DB::table('seminar_hasil');
+        $query = DB::table('seminar_hasil')
+        ->join('mahasiswa', 'seminar_hasil.id_mahasiswa', '=', 'mahasiswa.id')
+        ->select(
+            'seminar_hasil.*',
+            'mahasiswa.nama as nama',
+            'mahasiswa.nim',
+            'mahasiswa.no_hp'
+        );
 
-        // Search berdasarkan ID/Nama
+        // Search berdasarkan field seminar_hasil & mahasiswa
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where('id', 'like', "%{$search}%")
-                  ->orWhere('nama', 'like', "%{$search}%")
-                  ->orWhere('no_bp', 'like', "%{$search}%")
-                  ->orWhere('no_hp', 'like', "%{$search}%")
-                  ->orWhere('dosen_pembimbing_1', 'like', "%{$search}%")
-                  ->orWhere('dosen_pembimbing_2', 'like', "%{$search}%")
-                  ->orWhere('penguji_1', 'like', "%{$search}%")
-                  ->orWhere('penguji_2', 'like', "%{$search}%")
-                  ->orWhere('penguji_3', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('seminar_hasil.id', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.nama', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.nim', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.no_hp', 'like', "%{$search}%")
+                  ->orWhere('seminar_hasil.dosen_pembimbing_1', 'like', "%{$search}%")
+                  ->orWhere('seminar_hasil.dosen_pembimbing_2', 'like', "%{$search}%")
+                  ->orWhere('seminar_hasil.penguji_1', 'like', "%{$search}%")
+                  ->orWhere('seminar_hasil.penguji_2', 'like', "%{$search}%")
+                  ->orWhere('seminar_hasil.penguji_3', 'like', "%{$search}%");
+            });
         }
 
         // Show entries (default 10)
         $entries = $request->get('entries', 10);
 
         // Ambil data
-        $seminar_hasil = $query->orderBy('id', 'DESC')->paginate($entries);
+        $seminar_hasil = $query->orderBy('seminar_hasil.id', 'DESC')->paginate($entries);
 
         // Biar pagination tetap bawa query string
         $seminar_hasil->appends($request->all());
@@ -57,7 +73,9 @@ class SeminarHasilController extends Controller
     }
 
     public function add(){
-        return view('admin.seminarhasil.create');
+        $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
+        $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
+        return view('admin.seminarhasil.create',['mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
     }
 
     public function create(Request $request){
@@ -76,9 +94,7 @@ class SeminarHasilController extends Controller
         $lembar = $request->file('lembar_jadwal')->store('seminar_hasil', 'public');
 
         DB::table('seminar_hasil')->insert([  
-            'nama' => $request->nama,
-            'no_bp' => $request->no_bp,
-            'no_hp' => $request->no_hp,
+            'id_mahasiswa' => $request->id_mahasiswa,
             'dosen_pembimbing_1' => $request->dosen_pembimbing_1,
             'dosen_pembimbing_2' => $request->dosen_pembimbing_2,
             'penguji_1' => $request->penguji_1,
@@ -95,17 +111,17 @@ class SeminarHasilController extends Controller
 
     public function edit($id){
         $seminar_hasil = DB::table('seminar_hasil')->where('id',$id)->first();
+        $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
+        $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
         
-        return view('admin.seminarhasil.edit',['seminar_hasil'=>$seminar_hasil]);
+        return view('admin.seminarhasil.edit',['seminar_hasil'=>$seminar_hasil,'mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
     }
 
     public function update(Request $request, $id) {
 
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'no_bp' => 'required|string|max:20',
-            'no_hp' => 'required|string|max:20',
-            'dosen_pembimbing_1' => 'required|string|max:255',
+            'id_mahasiswa' => 'required|string|max:255',
+            'dosen_pembimbing_1' => 'nullable|string|max:255',
             'dosen_pembimbing_2' => 'nullable|string|max:255',
             'penguji_1' => 'nullable|string|max:255',
             'penguji_2' => 'nullable|string|max:255',
@@ -122,9 +138,7 @@ class SeminarHasilController extends Controller
         $seminar_hasil = DB::table('seminar_hasil')->where('id', $id)->first();
 
         $updateData = [
-            'nama' => $request->nama,
-            'no_bp' => $request->no_bp,
-            'no_hp' => $request->no_hp,
+            'id_mahasiswa' => $request->id_mahasiswa,
             'dosen_pembimbing_1' => $request->dosen_pembimbing_1,
             'dosen_pembimbing_2' => $request->dosen_pembimbing_2,
             'penguji_1' => $request->penguji_1,

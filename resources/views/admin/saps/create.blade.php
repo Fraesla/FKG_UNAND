@@ -35,32 +35,27 @@
                                 {{ csrf_field() }}
                                     <div class="space-y">
                                         <div>
-                                            <label class="form-label">NIM</label>
-                                            <input type="text" placeholder="Masukkan NIM" class="form-control" name="nim" />
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Nama</label>
-                                            <input type="text" placeholder="Masukkan Nama" class="form-control" name="nama" />
+                                            <label class="form-label">Mahasiswa</label>
+                                             <select class="form-select" name="id_mahasiswa">
+                                                <option>Pilih Data Mahasiswa</option>
+                                                @foreach($mahasiswa as $data)
+                                                    <option value="{{$data->id}}">
+                                                        No.BP: {{$data->nim}} | Nama Mahasiswa: {{$data->nama}} 
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div>
                                             <label class="form-label">Jumlah Point A</label>
-                                            <input type="text" placeholder="Masukkan Jumlah Point A" class="form-control" name="jumlah_point_a" />
+                                            <input type="text" placeholder="Masukkan Jumlah Point A" class="form-control" name="jml_point_a" />
                                         </div>
                                         <div>
                                             <label class="form-label">Jumlah Point B</label>
-                                            <input type="text" placeholder="Masukkan Jumlah Point B" class="form-control" name="jumlah_point_b" />
+                                            <input type="text" placeholder="Masukkan Jumlah Point B" class="form-control" name="jml_point_b" />
                                         </div>
                                         <div>
                                             <label class="form-label">Jumlah Point C</label>
-                                            <input type="text" placeholder="Masukkan Jumlah Point C" class="form-control" name="jumlah_point_c" />
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Total</label>
-                                            <input type="text" placeholder="Masukkan Total" class="form-control" name="total" />
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Predikat</label>
-                                            <input type="text" placeholder="Masukkan Predikat" class="form-control" name="predikat" />
+                                            <input type="text" placeholder="Masukkan Jumlah Point C" class="form-control" name="jml_point_c" />
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

@@ -34,18 +34,40 @@
                                 <form action="/admin/ta/create" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
-                                        <div>
+                                        <!-- <div>
                                             <label class="form-label">NO.BP</label>
                                             <input type="text" placeholder="Masukkan No.BP" class="form-control" name="no_bp" />
                                         </div>
                                         <div>
                                             <label class="form-label">Nama Mahasiswa</label>
                                             <input type="text" placeholder="Masukkan Nama Mahasiswa" class="form-control" name="nama_mahasiswa" />
+                                        </div> -->
+                                        <div>
+                                            <label class="form-label">Mahasiswa</label>
+                                             <select class="form-select" name="id_mahasiswa">
+                                                <option>Pilih Data Mahasiswa</option>
+                                                @foreach($mahasiswa as $data)
+                                                    <option value="{{$data->id}}">
+                                                        No.BP: {{$data->nim}} | Nama Mahasiswa: {{$data->nama}} 
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div>
                                             <label class="form-label">Dosen Pembimbing</label>
-                                            <input type="text" placeholder="Masukkan Dosen Pembimbing" class="form-control" name="dosen_pembimbing" />
+                                             <select class="form-select" name="dosen_bimbingan">
+                                                <option>Pilih Data Dosen</option>
+                                                @foreach($dosen as $data)
+                                                    <option value="{{$data->nama}}">
+                                                        NIDM: {{$data->nidm}} | Nama Dosen : {{$data->nama}} 
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
+                                        <!-- <div>
+                                            <label class="form-label">Dosen Pembimbing</label>
+                                            <input type="text" placeholder="Masukkan Dosen Pembimbing" class="form-control" name="dosen_pembimbing" />
+                                        </div> -->
                                         <div>
                                             <label class="form-label">Tanggal Pembimbing</label>
                                             <div class="input-icon">
@@ -57,7 +79,7 @@
                                                     <path d="M4 11h16"></path>
                                                     <path d="M11 15h1"></path>
                                                     <path d="M12 15v3"></path></svg></span>
-                                                <input class="form-control" placeholder="Masukkan Tanggal Pembimbing" id="datepicker-icon-prepend" name="tgl_pembimbing">
+                                                <input class="form-control" placeholder="Masukkan Tanggal Pembimbing" id="datepicker-icon-prepend" name="tgl_bimbingan">
                                             </div>
                                         </div>
                                         <div class="mb-3">

@@ -41,7 +41,7 @@
                                                 @foreach($jadmakul as $data)
                                                     <option value="{{$data->id}}"
                                                         {{ $jadmahasiswa->id_jadwal_makul == $data->id ? 'selected' : '' }}>
-                                                        Mata Kuliah: {{$data->makul}} | Hari: {{$data->hari}} | Jam : {{$data->jam_mulai}}-{{$data->jam_selesai}} | Ruangan: {{$data->ruangan}} | Dosen: {{$data->dosen}} 
+                                                        Mata Kuliah: {{$data->makul}} | Hari: {{$data->hari}} | Jam : {{$data->jam_mulai}}-{{$data->jam_selesai}} | Ruangan: {{$data->ruangan}}  
                                                     </option>
                                                 @endforeach
                                             </select>

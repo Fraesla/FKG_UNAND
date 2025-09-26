@@ -32,7 +32,8 @@ class MahasiswaController extends Controller
                   ->orWhere('gender', 'like', "%{$search}%")
                   ->orWhere('tgl_lahir', 'like', "%{$search}%")
                   ->orWhere('alamat', 'like', "%{$search}%")
-                  ->orWhere('no_hp', 'like', "%{$search}%");
+                  ->orWhere('no_hp', 'like', "%{$search}%")
+                  ->orWhere('gmail', 'like', "%{$search}%");
         }
 
         // Show entries (default 10)
@@ -55,12 +56,13 @@ class MahasiswaController extends Controller
          // Validasi input
         $request->validate([
             'nim' => 'required|string|max:255',
-            'nama' => 'required|string|max:255',
-            'gender' => 'required|string|max:255',
-            'tgl_lahir' => 'required|string|max:255',
-            'alamat' => 'required|string|max:255',
-            'no_hp' => 'required|string|max:255',
-            'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048', // maksimal 2MB
+            'nama' => 'nullable|string|max:255',
+            'gender' => 'nullable|string|max:255',
+            'tgl_lahir' => 'nullable|string|max:255',
+            'alamat' => 'nullable|string|max:255',
+            'no_hp' => 'nullable|string|max:255',
+            'gmail' => 'nullable|string|max:255',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // maksimal 2MB
         ]);
 
         // Simpan file ke storage/public/foto_dosen
@@ -74,6 +76,7 @@ class MahasiswaController extends Controller
             'tgl_lahir' => $request->tgl_lahir,
             'alamat' => $request->alamat,
             'no_hp' => $request->no_hp,
+            'gmail' => $request->gmail,
             'foto' => $path
         ]);
 
@@ -100,11 +103,12 @@ class MahasiswaController extends Controller
         // Validasi input
         $request->validate([
             'nim' => 'required|string|max:255',
-            'nama' => 'required|string|max:255',
-            'gender' => 'required|string|max:255',
-            'tgl_lahir' => 'required|string|max:255',
-            'alamat' => 'required|string|max:255',
-            'no_hp' => 'required|string|max:255',
+            'nama' => 'nullable|string|max:255',
+            'gender' => 'nullable|string|max:255',
+            'tgl_lahir' => 'nullable|string|max:255',
+            'alamat' => 'nullable|string|max:255',
+            'no_hp' => 'nullable|string|max:255',
+            'gmail' => 'nullable|string|max:255',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -115,6 +119,7 @@ class MahasiswaController extends Controller
             'tgl_lahir' => $request->tgl_lahir,
             'alamat' => $request->alamat,
             'no_hp' => $request->no_hp,
+            'gmail' => $request->gmail,
         ];
 
         // kalau ada upload foto baru
