@@ -57,6 +57,13 @@ class KelasController extends Controller
     }
 
     public function create(Request $request){
+        $request->validate([
+            'nama' => 'required|string|max:100',
+            'id_prodi' => 'required|exists:prodi,id'
+        ],[
+            'nama.required' => 'Nama Blok wajib diisi.',
+            'id_prodi.exists' => 'Prodi yang dipilih tidak valid..',
+        ]);
         DB::table('kelas')->insert([  
             'id_prodi' => $request->id_prodi,
             'nama' => $request->nama]);
@@ -72,6 +79,13 @@ class KelasController extends Controller
     }
 
     public function update(Request $request, $id) {
+        $request->validate([
+            'nama' => 'required|string|max:100',
+            'id_prodi' => 'required|exists:prodi,id'
+        ],[
+            'nama.required' => 'Nama Blok wajib diisi.',
+            'id_prodi.exists' => 'Prodi yang dipilih tidak valid..',
+        ]);
         DB::table('kelas')  
             ->where('id', $id)
             ->update([

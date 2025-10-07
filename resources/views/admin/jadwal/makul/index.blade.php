@@ -10,7 +10,8 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Jadwal Mata Kuliah</h2>
+                  <h2 class="page-title">Data Jadwal Mata Kuliah (Data Blok)</h2>
+                  @include('components.alert')
               </div>
               <!-- Page title actions -->
       </div>
@@ -22,8 +23,19 @@
     <div class="container-xl">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Tabel Jadwal Mata Kuliah</h3>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title">Tabel Jadwal Mata Kuliah (Data Blok)</h3>
+                    <div class="d-flex align-items-center ms-auto">
+                        <label class="form-label me-2 mb-0">Blok</label>
+                        <select class="form-select"  name="id_kelas" style="min-width: 200px;" onchange="window.location.href='{{ route('admin.jadwal.makul.read') }}?id_kelas='+this.value">
+                            <option value="">-- Pilih Blok --</option>
+                            @foreach($blok as $data)
+                                <option value="{{ $data->id }}" {{ request('id_kelas') == $data->id ? 'selected' : '' }}>
+                                    {{ $data->nama }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
                 <form action="/admin/jadmakul/feature" method="GET">
                     <div class="card-body border-bottom py-3">
@@ -45,9 +57,9 @@
                             <div class="ms-auto text-secondary d-flex align-items-center">
                                 <span class="me-2">Search:</span>
                                 <input type="text" class="form-control form-control-mm" 
-                                       aria-label="Search data Jadwal Mata Kuliah" 
+                                       aria-label="Search data Jadwal Mata Kuliah (Data Blok)" 
                                        name="search" 
-                                       placeholder="Cari Data Jadwal Mata Kuliah ..." 
+                                       placeholder="Cari Data Jadwal Mata Kuliah (Data Blok)..." 
                                        value="{{ request('search') }}">
 
                                 <a href="/admin/jadmakul/add" class="btn btn-success btn-mm ms-2">
@@ -81,6 +93,7 @@
                                         <path d="M6 15l6 -6l6 6"></path>
                                     </svg>
                                 </th>
+                                <th>Minggu Ke</th>
                                 <th>Hari</th>
                                 <th class="text-center">Jam</th>
                                 <th>Mata Kuliah</th>
@@ -97,37 +110,110 @@
                                     type="checkbox" aria-label="Select invoice">
                                 </td> -->
                                 <td><span class="text-secondary"> {{$no++}}</span></td>
+                                <td>Minggu Ke-{{ $data->minggu }}</td>
                                 <td>{{ $data->hari }}</td>
                                 <td class="text-center">{{ $data->jam_mulai }} - {{ $data->jam_selesai }}</td>
                                 <td>{{ $data->makul }}</td>
                                 <td>{{ $data->ruangan }}</td>
                                 <td class="w-0">
                                     <div class="d-flex gap-1">
-                                        <!-- Tombol Edit -->
-                                        <a href="/admin/jadmakul/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
-                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
-                                                 class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
-                                                <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
-                                                <path d="M16 5l3 3" />
-                                            </svg>
-                                        </a>
+                                        @switch($data->makul)
+                                            @case('Kuliah Pengantar')
+                                            @case('Pleno')
+                                                {{-- Hanya tampilkan Absensi --}}
+                                                <a href="/admin/makul" class="btn btn-success btn-sm p-1">
+                                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  
+                                                         viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  
+                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"  
+                                                         class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-text">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                        <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                                                        <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                                                        <path d="M9 12h6" /><path d="M9 16h6" />
+                                                    </svg>
+                                                </a>
 
-                                        <!-- Tombol Delete -->
-                                        <button type="button" class="btn btn-danger btn-sm p-1" onclick="deleteData({{ $data->id }})">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
-                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
-                                                 class="icon icon-tabler icons-tabler-outline icon-tabler-trash-x">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                                <path d="M4 7h16" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
-                                                <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-                                                <path d="M10 12l4 4m0 -4l-4 4" />
-                                            </svg>
-                                        </button>
+                                                <!-- Edit -->
+                                                <a href="/admin/jadmakul/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
+                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                                         class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                        <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+                                                        <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                                        <path d="M16 5l3 3" />
+                                                    </svg>
+                                                </a>
+
+                                                <!-- Delete -->
+                                                <button type="button" class="btn btn-danger btn-sm p-1" onclick="deleteData({{ $data->id }})">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
+                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                                         class="icon icon-tabler icons-tabler-outline icon-tabler-trash-x">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                        <path d="M4 7h16" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                                        <path d="M10 12l4 4m0 -4l-4 4" />
+                                                    </svg>
+                                                </button>
+                                                @break
+
+                                            @default
+                                                {{-- Default: semua tombol --}}
+                                                <!-- Nilai -->
+                                                <a href="/admin/nilai" class="btn btn-primary btn-sm p-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"  
+                                                         class="icon icon-tabler icons-tabler-outline icon-tabler-browser-check">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                        <path d="M4 4m0 1a1 1 0 0 1 1 -1h14a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-14a1 1 0 0 1 -1 -1z" />
+                                                        <path d="M4 8h16" /><path d="M8 4v4" />
+                                                        <path d="M9.5 14.5l1.5 1.5l3 -3" />
+                                                    </svg>
+                                                </a>
+
+                                                <!-- Absensi -->
+                                                <a href="/admin/makul" class="btn btn-success btn-sm p-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                         class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-text">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                        <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                                                        <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                                                        <path d="M9 12h6" /><path d="M9 16h6" />
+                                                    </svg>
+                                                </a>
+
+                                                <!-- Edit -->
+                                                <a href="/admin/jadmakul/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
+                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                                         class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                        <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+                                                        <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                                                        <path d="M16 5l3 3" />
+                                                    </svg>
+                                                </a>
+
+                                                <!-- Delete -->
+                                                <button type="button" class="btn btn-danger btn-sm p-1" onclick="deleteData({{ $data->id }})">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
+                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                                         class="icon icon-tabler icons-tabler-outline icon-tabler-trash-x">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                        <path d="M4 7h16" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                                        <path d="M10 12l4 4m0 -4l-4 4" />
+                                                    </svg>
+                                                </button>
+                                        @endswitch
                                     </div>
                                 </td>
                                 <!-- <td class="text-end">

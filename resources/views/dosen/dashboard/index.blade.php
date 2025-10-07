@@ -10,6 +10,7 @@
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
                   <h2 class="page-title">Dashboard Dosen</h2>
+                  @include('components.alert')
               </div>
               <!-- Page title actions -->
       </div>

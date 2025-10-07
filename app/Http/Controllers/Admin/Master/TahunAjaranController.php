@@ -31,7 +31,8 @@ class TahunAjaranController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where('id', 'like', "%{$search}%")
-                  ->orWhere('nama', 'like', "%{$search}%");
+                  ->orWhere('nama', 'like', "%{$search}%")
+                  ->orWhere('semester', 'like', "%{$search}%");
         }
 
         // Show entries (default 10)
@@ -51,23 +52,46 @@ class TahunAjaranController extends Controller
     }
 
     public function create(Request $request){
+       $request->validate([
+            'nama' => 'required|string|max:100',
+            'semester' => 'required|integer|min:1|max:8',
+            'status' => 'required|string|max:100',
+        ],[
+            'nama.required' => 'Nama Tahun Ajaran wajib diisi.',
+            'semester.required' => 'Semester wajib diisi.',
+            'status.required' => 'Status wajib diisi.',
+        ]);
         DB::table('tahun_ajaran')->insert([  
-            'nama' => $request->nama,'status' => $request->status]);
+            'nama' => $request->nama,'semester'=>$request->semester,'status' => $request->status]);
 
         return redirect('/admin/tahunajar')->with("success","Data Berhasil Ditambah !");
     }
 
     public function edit($id){
-        $tahunajar = DB::table('tahun_ajaran')->where('id',$id)->first();
-        
+         $tahunajar = DB::table('tahun_ajaran')
+        ->where('id', $id)
+        ->first();
+
         return view('admin.master.tahunajar.edit',['tahunajar'=>$tahunajar]);
-    }
+    } 
 
     public function update(Request $request, $id) {
+        $request->validate([
+            'nama' => 'required|string|max:100',
+            'semester' => 'required|integer|min:1|max:8',
+            'status' => 'required|string|max:100',
+        ],[
+            'nama.required' => 'Nama Tahun Ajaran wajib diisi.',
+            'semester.required' => 'Semester wajib diisi.',
+            'semester.integer'  => 'Semester tidak valid.',
+            'semester.min'      => 'Semester yang dipilih tidak valid.',
+            'semester.max'      => 'Semester yang dipilih tidak valid.',
+            'status.required' => 'Status wajib diisi.',
+        ]);
         DB::table('tahun_ajaran')  
             ->where('id', $id)
             ->update([
-            'nama' => $request->nama,'status' => $request->status]);
+            'nama' => $request->nama,'semester'=>$request->semester,'status' => $request->status]);
 
         return redirect('/admin/tahunajar')->with("success","Data Berhasil Diupdate !");
     }

@@ -53,6 +53,13 @@ class MakulController extends Controller
     }
 
     public function create(Request $request){
+        $request->validate([
+            'kode' => 'required|string|max:100',
+            'nama' => 'required|string|max:100',
+        ],[
+            'kode.required' => 'Kode Mata Kuliah wajib diisi.',
+            'nama.required' => 'Nama Mata Kuliah wajib diisi.',
+        ]);
         DB::table('makul')->insert([  
             'kode' => $request->kode,'nama' => $request->nama]);
 
@@ -60,12 +67,20 @@ class MakulController extends Controller
     }
 
     public function edit($id){
+
         $makul = DB::table('makul')->where('id',$id)->first();
         
         return view('admin.master.makul.edit',['makul'=>$makul]);
     }
 
     public function update(Request $request, $id) {
+        $request->validate([
+            'kode' => 'required|string|max:100',
+            'nama' => 'required|string|max:100',
+        ],[
+            'kode.required' => 'Kode Mata Kuliah wajib diisi.',
+            'nama.required' => 'Nama Mata Kuliah wajib diisi.',
+        ]);
         DB::table('makul')  
             ->where('id', $id)
             ->update([

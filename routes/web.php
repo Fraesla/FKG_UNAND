@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\HomeController as AdminHomeController;
+use App\Http\Controllers\Dosen\HomeController as DosenHomeController;
+use App\Http\Controllers\Mahasiswa\HomeController as MahasiswaHomeController;
+use App\Http\Controllers\Pimpinan\HomeController as PimpinanHomeController;
 use App\Http\Controllers\Admin\AbsensiController;
-// use App\Http\Controllers\Mahasiswa\HomeController;
-// use App\Http\Controllers\Dosen\HomeController;
-// use App\Http\Controllers\Pimpinan\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\Master\FakultasController;
 use App\Http\Controllers\Admin\Master\JurusanController;
@@ -13,8 +13,10 @@ use App\Http\Controllers\Admin\Master\ProdiController;
 use App\Http\Controllers\Admin\Master\KelasController;
 use App\Http\Controllers\Admin\Master\RuanganController;
 use App\Http\Controllers\Admin\Master\MakulController;
+use App\Http\Controllers\Admin\Master\NilaiController;
 use App\Http\Controllers\Admin\Master\TahunAjaranController;
 use App\Http\Controllers\Admin\Jadwal\JadMakulController;
+use App\Http\Controllers\Admin\Jadwal\JadMetopenController;
 use App\Http\Controllers\Admin\Jadwal\JadDosenController;
 use App\Http\Controllers\Admin\Jadwal\JadMahasiwaController;
 use App\Http\Controllers\Admin\Absensi\AbsMahasiswaController;
@@ -22,6 +24,7 @@ use App\Http\Controllers\Admin\Absensi\AbsDosenController;
 use App\Http\Controllers\Admin\Akun\MahasiswaController;
 use App\Http\Controllers\Admin\Akun\DosenController;
 use App\Http\Controllers\Mahasiswa\JadwalController;
+use App\Http\Controllers\Mahasiswa\BlokMahasiswaController;
 use App\Http\Controllers\Admin\TaController;
 use App\Http\Controllers\Admin\SuratIzinController;
 use App\Http\Controllers\Admin\PengajuanController;
@@ -51,25 +54,65 @@ Route::get('/login', [LoginController::class, 'index']);
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard.index');
-});
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')
+    ->middleware(['auth', 'checkrole:admin'])
+    ->group(function () {
+        Route::get('/dashboard', [AdminHomeController::class, 'index'])->name('admin.dashboard');
+        // contoh tambahan route Admin
+        // Route::resource('/users', \App\Http\Controllers\Admin\UserController::class);
+    });
 
-Route::get('/mahasiswa/dashboard', function () {
-    return view('mahasiswa.dashboard.index');
-});
 
-Route::get('/dosen/dashboard', function () {
-    return view('dosen.dashboard.index');
-});
+/*
+|--------------------------------------------------------------------------
+| Dosen Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('dosen')
+    ->middleware(['auth', 'checkrole:dosen'])
+    ->group(function () {
+        Route::get('/dashboard', [DosenHomeController::class, 'index'])->name('dosen.dashboard');
+        // contoh tambahan route Dosen
+        // Route::get('/jadwal', [\App\Http\Controllers\Dosen\JadwalController::class, 'index'])->name('dosen.jadwal');
+    });
 
-Route::get('/pimpinan/dashboard', function () {
-    return view('pimpinan.dashboard.index');
-});
+
+/*
+|--------------------------------------------------------------------------
+| Mahasiswa Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('mahasiswa')
+    ->middleware(['auth', 'checkrole:mahasiswa'])
+    ->group(function () {
+        Route::get('/dashboard', [MahasiswaHomeController::class, 'index'])->name('mahasiswa.dashboard');
+        // contoh tambahan route Mahasiswa
+        // Route::get('/profile', [\App\Http\Controllers\Mahasiswa\ProfileController::class, 'index'])->name('mahasiswa.profile');
+    });
+
+
+/*
+|--------------------------------------------------------------------------
+| Pimpinan Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('pimpinan')
+    ->middleware(['auth', 'checkrole:pimpinan'])
+    ->group(function () {
+        Route::get('/dashboard', [PimpinanHomeController::class, 'index'])->name('pimpinan.dashboard');
+        // contoh tambahan route Pimpinan
+        // Route::get('/laporan', [\App\Http\Controllers\Pimpinan\LaporanController::class, 'index'])->name('pimpinan.laporan');
+    });
 
 // Fakultas
 Route::prefix('admin/fakultas')
     ->name('admin.master.fakultas.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(FakultasController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -84,6 +127,7 @@ Route::prefix('admin/fakultas')
 // Jurusan
 Route::prefix('admin/jurusan')
     ->name('admin.master.jurusan.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(JurusanController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -126,6 +170,7 @@ Route::get('/dosen/absensi/addnilai', function () {
 // Prodi
 Route::prefix('admin/prodi')
     ->name('admin.master.prodi.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(ProdiController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -156,6 +201,7 @@ Route::get('/pimpinan/penguji/add', function () {
 // Kelas
 Route::prefix('admin/kelas')
     ->name('admin.master.kelas.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(KelasController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -182,6 +228,7 @@ Route::get('/dosen/proposal', function () {
 // Ruangan
 Route::prefix('admin/ruangan')
     ->name('admin.master.ruangan.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(RuanganController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -208,7 +255,23 @@ Route::get('/dosen/seminar', function () {
 // Mata Kuliah
 Route::prefix('admin/makul')
     ->name('admin.master.makul.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(MakulController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Nilai
+Route::prefix('admin/nilai')
+    ->name('admin.master.nilai.')
+    ->middleware(['auth', 'checkrole:admin'])
+    ->controller(NilaiController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
@@ -242,6 +305,7 @@ Route::get('/dosen/penelitian', function () {
 // Tahun Ajaran
 Route::prefix('admin/tahunajar')
     ->name('admin.master.tahunajar.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(TahunAjaranController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -264,6 +328,7 @@ Route::get('/mahasiswa/yudisium/file', function () {
 // Jadwal Mata Kuliah
 Route::prefix('admin/jadmakul')
     ->name('admin.jadwal.makul.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(JadMakulController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -273,11 +338,27 @@ Route::prefix('admin/jadmakul')
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/delete/{id}', 'delete')->name('delete');
-    });
+    }); 
+
+// Jadwal Mata Kuliah (Data Metopen)
+Route::prefix('admin/jadmetopen')
+    ->name('admin.jadwal.metopen.')
+    ->middleware(['auth', 'checkrole:admin'])
+    ->controller(JadMetopenController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    }); 
 
 // Mahasiswa
 Route::prefix('admin/mahasiswa')
     ->name('admin.akun.mahasiwswa.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(MahasiswaController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -292,6 +373,7 @@ Route::prefix('admin/mahasiswa')
 // Jadwal Mahasiswa
 Route::prefix('admin/jadmahasiswa')
     ->name('admin.jadwal.mahasiwswa.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(JadMahasiwaController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -306,16 +388,10 @@ Route::prefix('admin/jadmahasiswa')
 
 Route::prefix('mahasiswa/jadwal')
     ->name('mahasiswa.jadwal.')
+    ->middleware(['auth', 'checkrole:mahasiswa'])
     ->controller(JadwalController::class)
     ->group(function () {
-        Route::get('/', 'index')->name('index');      // daftar jadwal
-        Route::get('/create', 'create')->name('create'); // form tambah
-        Route::post('/', 'store')->name('store');        // simpan jadwal baru
-        Route::get('/{id}', 'show')->name('show');       // detail jadwal
-        Route::get('/{id}/edit', 'edit')->name('edit');  // edit jadwal
-        Route::put('/{id}', 'update')->name('update');   // update jadwal
-        Route::delete('/{id}', 'destroy')->name('destroy'); // hapus jadwal
-
+        Route::get('/', 'read')->name('read');
         // fitur tambahan
         Route::get('/feature', 'feature')->name('feature');
 
@@ -328,7 +404,23 @@ Route::prefix('mahasiswa/jadwal')
 // Absen Mahasiswa
 Route::prefix('admin/absmahasiswa')
     ->name('admin.absensi.mahasiwswa.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(AbsMahasiswaController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Blok Mahasiswa
+Route::prefix('mahasiswa/blokmahasiswa')
+    ->name('mahasiswa.blokmahasiswa.')
+    ->middleware(['auth', 'checkrole:mahasiswa'])
+    ->controller(BlokMahasiswaController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
@@ -342,6 +434,7 @@ Route::prefix('admin/absmahasiswa')
 // Dosen
 Route::prefix('admin/dosen')
     ->name('admin.akun.dosen.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(DosenController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -356,6 +449,7 @@ Route::prefix('admin/dosen')
 // Jadwal Dosen
 Route::prefix('admin/jaddosen')
     ->name('admin.jadwal.dosen.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(JadDosenController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -371,6 +465,7 @@ Route::prefix('admin/jaddosen')
 // Absen Dosen
 Route::prefix('admin/absdosen')
     ->name('admin.absensi.dosen.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(AbsDosenController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -385,6 +480,7 @@ Route::prefix('admin/absdosen')
 // Data Bimbingan Tugas Akhir
 Route::prefix('admin/ta')
     ->name('admin.ta.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(TaController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -399,6 +495,7 @@ Route::prefix('admin/ta')
 // Data Surat Izin
 Route::prefix('admin/suratizin')
     ->name('admin.suratizin.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(SuratIzinController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -413,6 +510,7 @@ Route::prefix('admin/suratizin')
 // Data Pengajuan
 Route::prefix('admin/pengajuan')
     ->name('admin.pengajuan.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(PengajuanController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -427,6 +525,7 @@ Route::prefix('admin/pengajuan')
 // Data Proposal
 Route::prefix('admin/seminarproposal')
     ->name('admin.seminarproposal.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(SeminarProposalController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -441,6 +540,7 @@ Route::prefix('admin/seminarproposal')
 // Data Hasil
 Route::prefix('admin/seminarhasil')
     ->name('admin.seminarhasil.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(SeminarHasilController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -455,6 +555,7 @@ Route::prefix('admin/seminarhasil')
 // Data Yudisium
 Route::prefix('admin/yudisium')
     ->name('admin.yudisium.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(YudisiumController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -469,6 +570,7 @@ Route::prefix('admin/yudisium')
 // Data Surat Aktif Kuliah
 Route::prefix('admin/surataktifkuliah')
     ->name('admin.surataktifkuliah.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(SuratAKtifKuliahController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
@@ -483,6 +585,7 @@ Route::prefix('admin/surataktifkuliah')
 // Data SAPS
 Route::prefix('admin/saps')
     ->name('admin.saps.')
+    ->middleware(['auth', 'checkrole:admin'])
     ->controller(SAPSController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');

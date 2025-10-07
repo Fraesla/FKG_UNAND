@@ -7,7 +7,7 @@
         <h2 class="h2 text-center mb-4">
             Login Page
         </h2>
-        @if (session('error'))
+        <!-- @if (session('error'))
             <div class="alert alert-primary">
                 {{ session('error')}}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -22,7 +22,8 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
              </div>
-        @endif
+        @endif -->
+        @include('components.alert')
         <form action="{{ route('login') }}" method="POST" autocomplete="off" novalidate>
             @csrf
             <div class="mb-3">

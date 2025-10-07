@@ -60,6 +60,14 @@ class JurusanController extends Controller
     }
 
     public function create(Request $request){
+        $request->validate([
+            'id_fakultas' => 'required|exists:fakultas,id',
+            'nama' => 'required|string|max:100',
+        ],[
+            'id_fakultas.exists'   => 'Fakultas yang dipilih tidak valid.',
+            'nama.required' => 'Nama Jurusan wajib diisi.',
+        ]);
+
         DB::table('jurusan')->insert([  
             'id_fakultas' => $request->id_fakultas,
             'nama' => $request->nama]);
@@ -75,6 +83,13 @@ class JurusanController extends Controller
     }
 
     public function update(Request $request, $id) {
+        $request->validate([
+            'id_fakultas' => 'required|exists:fakultas,id',
+            'nama' => 'required|string|max:100',
+        ],[
+            'id_fakultas.exists'   => 'Fakultas yang dipilih tidak valid.',
+            'nama.required' => 'Nama Jurusan wajib diisi.',
+        ]);
         DB::table('jurusan')  
             ->where('id', $id)
             ->update([

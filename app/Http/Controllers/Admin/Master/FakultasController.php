@@ -57,19 +57,32 @@ class FakultasController extends Controller
     }
 
     public function create(Request $request){
+        $request->validate([
+            'nama' => 'required|string|max:100',
+        ],[
+            'nama.required' => 'Nama fakultas wajib diisi.',
+        ]);
+
         DB::table('fakultas')->insert([  
             'nama' => $request->nama]);
 
         return redirect('/admin/fakultas')->with("success","Data Berhasil Ditambah !");
-    }
+    } 
 
     public function edit($id){
+
         $fakultas = DB::table('fakultas')->where('id',$id)->first();
         
         return view('admin.master.fakultas.edit',['fakultas'=>$fakultas]);
     }
 
     public function update(Request $request, $id) {
+        $request->validate([
+            'nama' => 'required|string|max:100',
+        ],[
+            'nama.required' => 'Nama fakultas wajib diisi.',
+        ]);
+
         DB::table('fakultas')  
             ->where('id', $id)
             ->update([

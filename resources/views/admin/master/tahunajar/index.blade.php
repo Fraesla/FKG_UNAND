@@ -11,6 +11,7 @@
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
                   <h2 class="page-title">Data Tahun Ajaran</h2>
+                  @include('components.alert')
               </div>
               <!-- Page title actions -->
       </div>
@@ -82,6 +83,7 @@
                                     </svg>
                                 </th>
                                 <th>Tahun Ajaran</th>
+                                <th>Semester</th>
                                 <th>Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -96,6 +98,7 @@
                                 </td> -->
                                 <td><span class="text-secondary"> {{$no++}}</span></td>
                                 <td class="text-secondary">{{$data->nama}}</td>
+                                <td class="text-secondary">{{$data->semester}}</td>
                                 <td class="text-secondary">{{ $data->status == 1 ? 'Aktif' : 'Nonaktif' }}</td>
                                 <td class="w-0">
                                     <div class="d-flex gap-1">

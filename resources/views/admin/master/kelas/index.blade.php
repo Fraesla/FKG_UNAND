@@ -10,7 +10,8 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Kelas</h2>
+                  <h2 class="page-title">Data Blok</h2>
+                  @include('components.alert')
               </div>
               <!-- Page title actions -->
       </div>
@@ -23,7 +24,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Tabel Kelas</h3>
+                    <h3 class="card-title">Tabel Blok</h3>
                 </div>
                 <form action="/admin/kelas/feature" method="GET">
                     <div class="card-body border-bottom py-3">
@@ -40,14 +41,13 @@
                                 </div>
                                 entries
                             </div>
-
                             <!-- Search + Button ADD di kanan -->
                             <div class="ms-auto text-secondary d-flex align-items-center">
                                 <span class="me-2">Search:</span>
                                 <input type="text" class="form-control form-control-mm" 
-                                       aria-label="Search data Kelas" 
+                                       aria-label="Search data blok" 
                                        name="search" 
-                                       placeholder="Cari Data Kelas ..." 
+                                       placeholder="Cari Data blok ..." 
                                        value="{{ request('search') }}">
 
                                 <a href="/admin/kelas/add" class="btn btn-success btn-mm ms-2">
@@ -82,7 +82,7 @@
                                     </svg>
                                 </th>
                                 <th>Nama Prodi</th>
-                                <th>Nama Kelas</th>
+                                <th>Nama Blok</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>

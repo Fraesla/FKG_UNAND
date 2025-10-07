@@ -79,6 +79,7 @@ class JadDosenController extends Controller
     }
 
     public function add(){
+
         $jadmakul = DB::table('jadwal_makul')
             ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')
             ->join('ruangan', 'jadwal_makul.id_ruangan', '=', 'ruangan.id')
@@ -97,6 +98,10 @@ class JadDosenController extends Controller
     }
 
     public function create(Request $request){
+        $request->validate([
+            'id_jadwal_makul' => 'required|string|max:100',
+            'id_dosen' => 'required|string|max:100',
+        ]);
         DB::table('jadwal_dosen')->insert([  
             'id_jadwal_makul' => $request->id_jadwal_makul,
             'id_dosen' => $request->id_dosen
@@ -126,6 +131,10 @@ class JadDosenController extends Controller
     }
 
     public function update(Request $request, $id) {
+        $request->validate([
+            'id_jadwal_makul' => 'required|string|max:100',
+            'id_dosen' => 'required|string|max:100',
+        ]);
         DB::table('jadwal_dosen')  
             ->where('id', $id)
             ->update([

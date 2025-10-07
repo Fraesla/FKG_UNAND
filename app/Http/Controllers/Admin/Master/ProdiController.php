@@ -58,6 +58,13 @@ class ProdiController extends Controller
     }
 
     public function create(Request $request){
+        $request->validate([
+            'id_jurusan' => 'required|exists:jurusan,id',
+            'nama' => 'required|string|max:100',
+        ],[
+            'id_jurusan.exists' => 'Jurusan yang dipilih tidak valid..',
+            'nama.required' => 'Nama prodi wajib diisi.',
+        ]);
         DB::table('prodi')->insert([  
             'id_jurusan' => $request->id_jurusan,
             'nama' => $request->nama]);
@@ -73,6 +80,13 @@ class ProdiController extends Controller
     }
 
     public function update(Request $request, $id) {
+        $request->validate([
+            'id_jurusan' => 'required|exists:jurusan,id',
+            'nama' => 'required|string|max:100',
+        ],[
+            'id_jurusan.exists' => 'Jurusan yang dipilih tidak valid..',
+            'nama.required' => 'Nama prodi wajib diisi.',
+        ]);
         DB::table('prodi')  
             ->where('id', $id)
             ->update([

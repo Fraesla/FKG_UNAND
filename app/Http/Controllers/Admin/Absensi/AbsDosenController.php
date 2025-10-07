@@ -95,6 +95,14 @@ class AbsDosenController extends Controller
     }
 
     public function create(Request $request){
+        $request->validate([
+            'tgl' => 'required|string|max:100',
+            'jam_masuk' => 'required|string|max:100',
+            'jam_selesai' => 'required|string|max:100',
+            'id_dosen' => 'required|string|max:100',
+            'id_jadwal_dosen' => 'required|string|max:100',
+            'status' => 'required|string|max:100',
+        ]);
         DB::table('absen_dosen')->insert([  
             'tgl' => $request->tgl,
             'jam_masuk' => $request->jam_masuk,
@@ -130,6 +138,14 @@ class AbsDosenController extends Controller
     }
 
     public function update(Request $request, $id) {
+        $request->validate([
+            'tgl' => 'required|string|max:100',
+            'jam_masuk' => 'required|string|max:100',
+            'jam_selesai' => 'required|string|max:100',
+            'id_dosen' => 'required|string|max:100',
+            'id_jadwal_dosen' => 'required|string|max:100',
+            'status' => 'required|string|max:100',
+        ]);
         DB::table('absen_dosen')  
             ->where('id', $id)
             ->update([

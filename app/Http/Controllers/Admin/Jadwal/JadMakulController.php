@@ -11,39 +11,54 @@ class JadMakulController extends Controller
 {
     public function read(Request $request){
 
-        // $jadmakul = DB::table('jadwal_makul')->orderBy('id','DESC')->get();
         $entries = $request->input('entries', 5);
 
-        $jadmakul = DB::table('jadwal_makul')
-            ->join('tahun_ajaran', 'jadwal_makul.id_tahun_ajaran', '=', 'tahun_ajaran.id')
+        // Data blok (kelas) untuk select option
+        $blok = DB::table('kelas')->orderBy('id','DESC')->get();
+
+        // Query jadwal_makul
+        $query = DB::table('jadwal_makul')
+            ->join('kelas', 'jadwal_makul.id_kelas', '=', 'kelas.id')
             ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')
             ->join('ruangan', 'jadwal_makul.id_ruangan', '=', 'ruangan.id')
             ->select(
                 'jadwal_makul.id',
-                'tahun_ajaran.nama as tahun_ajaran',
+                'kelas.nama as kelas',
+                'jadwal_makul.minggu',
                 'jadwal_makul.hari',
                 'jadwal_makul.jam_mulai',
                 'jadwal_makul.jam_selesai',
                 'makul.nama as makul',
                 'ruangan.nama as ruangan'
             )
-            ->orderBy('jadwal_makul.id', 'DESC')
-            ->paginate($entries);
+            ->orderBy('jadwal_makul.id', 'DESC');
 
+        // Filter berdasarkan blok (id_kelas) kalau dipilih
+        if ($request->filled('id_kelas')) {
+            $query->where('jadwal_makul.id_kelas', $request->id_kelas);
+        }
+
+        // Pagination
+        $jadmakul = $query->paginate($entries);
         $jadmakul->appends($request->all());
 
-        return view('admin.jadwal.makul.index',['jadmakul'=>$jadmakul]);
-    }
+        return view('admin.jadwal.makul.index', [
+            'jadmakul' => $jadmakul,
+            'blok'     => $blok
+        ]);
+    } 
 
     public function feature(Request $request)
     {
+        $blok = DB::table('kelas')->orderBy('id','DESC')->get();
         $query = DB::table('jadwal_makul')
-            ->join('tahun_ajaran', 'jadwal_makul.id_tahun_ajaran', '=', 'tahun_ajaran.id')
+            ->join('kelas', 'jadwal_makul.id_kelas', '=', 'kelas.id')
             ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')
             ->join('ruangan', 'jadwal_makul.id_ruangan', '=', 'ruangan.id')
             ->select(
                 'jadwal_makul.id',
-                'tahun_ajaran.nama as tahun_ajaran',
+                'kelas.nama as kelas',
+                'jadwal_makul.minggu',
                 'jadwal_makul.hari',
                 'jadwal_makul.jam_mulai',
                 'jadwal_makul.jam_selesai',
@@ -55,7 +70,7 @@ class JadMakulController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('jadwal_makul.id', 'like', "%{$search}%")
-                  ->orWhere('tahun_ajaran.nama', 'like', "%{$search}%")
+                  ->orWhere('kelas.nama', 'like', "%{$search}%")
                   ->orWhere('jadwal_makul.hari', 'like', "%{$search}%")
                   ->orWhere('jadwal_makul.jam_mulai', 'like', "%{$search}%")
                   ->orWhere('jadwal_makul.jam_selesai', 'like', "%{$search}%")
@@ -73,19 +88,20 @@ class JadMakulController extends Controller
         // Supaya pagination tetap bawa query string (search / entries)
         $jadmakul->appends($request->all());
 
-        return view('admin.jadwal.makul.index', compact('jadmakul'));
+        return view('admin.jadwal.makul.index', compact('jadmakul','blok'));
     }
 
     public function add(){
-        $tahunajar = DB::table('tahun_ajaran')->orderBy('id','DESC')->get();
+        $blok = DB::table('kelas')->orderBy('id','DESC')->get();
         $makul = DB::table('makul')->orderBy('id','DESC')->get();
         $ruangan = DB::table('ruangan')->orderBy('id','DESC')->get();
-        return view('admin.jadwal.makul.create',['tahunajar'=>$tahunajar,'makul'=>$makul,'ruangan'=>$ruangan]);
+        return view('admin.jadwal.makul.create',['blok'=>$blok,'makul'=>$makul,'ruangan'=>$ruangan]);
     }
 
     public function create(Request $request){
         DB::table('jadwal_makul')->insert([  
-            'id_tahun_ajaran' => $request->id_tahun_ajaran,
+            'id_kelas' => $request->id_kelas,
+            'minggu' => $request->minggu,
             'hari' => $request->hari,
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
@@ -98,18 +114,19 @@ class JadMakulController extends Controller
 
     public function edit($id){
         $jadmakul = DB::table('jadwal_makul')->where('id',$id)->first();
-        $tahun_ajaran = DB::table('tahun_ajaran')->orderBy('id','DESC')->get();
+        $blok = DB::table('kelas')->orderBy('id','DESC')->get();
         $makul = DB::table('makul')->orderBy('id','DESC')->get();
         $ruangan = DB::table('ruangan')->orderBy('id','DESC')->get();
         
-        return view('admin.jadwal.makul.edit',['jadmakul'=>$jadmakul,'tahunajar'=>$tahun_ajaran,'makul'=>$makul,'ruangan'=>$ruangan]);
+        return view('admin.jadwal.makul.edit',['jadmakul'=>$jadmakul,'blok'=>$blok,'makul'=>$makul,'ruangan'=>$ruangan]);
     }
 
     public function update(Request $request, $id) {
         DB::table('jadwal_makul')  
             ->where('id', $id)
             ->update([
-            'id_tahun_ajaran' => $request->id_tahun_ajaran,
+            'id_kelas' => $request->id_kelas,
+            'minggu' => $request->minggu,
             'hari' => $request->hari,
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,

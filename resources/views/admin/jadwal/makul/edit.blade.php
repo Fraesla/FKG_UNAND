@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
 'activePage' => 'jadwal',
-'activeDrop' => 'makul',
+'activeDrop' => 'jadmakul',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -10,7 +10,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Jadwal Mata Kuliah</h2>
+                  <h2 class="page-title">Data Jadwal Mata Kuliah (Data Blok)</h2>
               </div>
               <!-- Page title actions -->
       </div>
@@ -25,27 +25,49 @@
                 <div class="row row-cards">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header d-flex justify-content-between align-items-center">
                                 <h3 class="card-title">
-                                    Pengeditan Jadwal Data Mata Kuliah
+                                    Pengeditan Jadwal Data Mata Kuliah (Data Blok)
                                 </h3>
+                                <a href="/admin/jadmakul/" class="btn btn-secondary btn-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
+                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                         class="icon icon-tabler icon-tabler-arrow-left">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M5 12l14 0" />
+                                        <path d="M5 12l6 6" />
+                                        <path d="M5 12l6 -6" />
+                                    </svg>
+                                    Back
+                                </a>
                             </div>
                             <div class="card-body">
                                 <form action="/admin/jadmakul/update/{{$jadmakul->id}}" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
                                         <div>
-                                            <label class="form-label">Tahun Ajaran</label>
-                                             <select class="form-select" name="id_tahun_ajaran">
+                                            <label class="form-label">Blok</label>
+                                             <select class="form-select" name="id_kelas">
                                                 <option>
-                                                    Pilih Tahun Ajaran
+                                                    Pilih Blok
                                                 </option>
-                                                @foreach($tahunajar as $data)
-                                                <option value="{{$data->id}}" 
-                                                    {{ $jadmakul->id_tahun_ajaran == $data->id ? 'selected' : '' }}>
+                                                @foreach($blok as $data)
+                                                <option value="{{$data->id}}" {{ $jadmakul->id_kelas == $blok ? 'selected' : '' }}>
                                                     {{$data->nama}}
                                                 </option>
                                                 @endforeach
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="form-label">Minggu Ke-</label>
+                                            <select name="minggu" class="form-select">
+                                                <option value="0" {{ $jadmakul->minggu == 0 ? 'selected' : '' }}> Pilih minggu
+                                                @for($no=1; $no<=6; $no++)
+                                                    <option value="{{ $no }}" {{ $jadmakul->minggu == $no ? 'selected' : '' }}>
+                                                        Minggu ke- {{ $no }}
+                                                    </option>
+                                                @endfor
                                             </select>
                                         </div>
                                         <div>

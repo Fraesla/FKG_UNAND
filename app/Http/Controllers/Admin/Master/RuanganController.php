@@ -51,6 +51,11 @@ class RuanganController extends Controller
     }
 
     public function create(Request $request){
+        $request->validate([
+            'nama' => 'required|string|max:100',
+        ],[
+            'nama.required' => 'Nama Ruangan wajib diisi.',
+        ]);
         DB::table('ruangan')->insert([  
             'nama' => $request->nama]);
 
@@ -64,6 +69,11 @@ class RuanganController extends Controller
     }
 
     public function update(Request $request, $id) {
+        $request->validate([
+            'nama' => 'required|string|max:100',
+        ],[
+            'nama.required' => 'Nama Ruangan wajib diisi.',
+        ]);
         DB::table('ruangan')  
             ->where('id', $id)
             ->update([

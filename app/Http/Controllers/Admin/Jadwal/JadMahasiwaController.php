@@ -111,6 +111,10 @@ class JadMahasiwaController extends Controller
     }
 
     public function create(Request $request){
+        $request->validate([
+            'id_jadwal_makul' => 'required|string|max:100',
+            'id_mahasiwa' => 'required|string|max:100',
+        ]);
         DB::table('jadwal_mahasiswa')->insert([  
             'id_jadwal_makul' => $request->id_jadwal_makul,
             'id_mahasiwa' => $request->id_mahasiwa
@@ -142,6 +146,10 @@ class JadMahasiwaController extends Controller
     }
 
     public function update(Request $request, $id) {
+        $request->validate([
+            'id_jadwal_makul' => 'required|string|max:100',
+            'id_mahasiwa' => 'required|string|max:100',
+        ]);
         DB::table('jadwal_mahasiswa')  
             ->where('id', $id)
             ->update([

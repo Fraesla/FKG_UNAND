@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
 'activePage' => 'jadwal',
-'activeDrop' => 'makul',
+'activeDrop' => 'jadmakul',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -10,7 +10,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Jadwal Mata Kuliah</h2>
+                  <h2 class="page-title">Data Jadwal Mata Kuliah (Data Blok)</h2>
               </div>
               <!-- Page title actions -->
       </div>
@@ -25,26 +25,47 @@
                 <div class="row row-cards">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header d-flex justify-content-between align-items-center">
                                 <h3 class="card-title">
-                                    Penambahan Data Jadwal Mata Kuliah
+                                    Penambahan Data Jadwal Mata Kuliah (Data Blok)
                                 </h3>
+                                <a href="/admin/jadmakul/" class="btn btn-secondary btn-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
+                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                         class="icon icon-tabler icon-tabler-arrow-left">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M5 12l14 0" />
+                                        <path d="M5 12l6 6" />
+                                        <path d="M5 12l6 -6" />
+                                    </svg>
+                                    Back
+                                </a>
                             </div>
                             <div class="card-body">
                                 <form action="/admin/jadmakul/create" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
                                         <div>
-                                            <label class="form-label">Tahun Ajaran</label>
-                                             <select class="form-select" name="id_tahun_ajaran">
+                                            <label class="form-label">Blok</label>
+                                             <select class="form-select" name="id_kelas">
                                                 <option>
-                                                    Pilih Tahun Ajaran
+                                                    Pilih Blok
                                                 </option>
-                                                @foreach($tahunajar as $data)
+                                                @foreach($blok as $data)
                                                 <option value="{{$data->id}}">
                                                     {{$data->nama}}
                                                 </option>
                                                 @endforeach
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="form-label">Minggu ke-</label>
+                                            <select class="form-select" name="minggu">
+                                                <option value="0">Pilih Minggu ke-
+                                                @for($no=1; $no<=6; $no++)
+                                                    <option value="{{ $no }}">Minggu Ke-{{ $no }}</option>
+                                                @endfor
                                             </select>
                                         </div>
                                         <div>
@@ -71,14 +92,13 @@
                                         <div>
                                             <label class="form-label">Mata Kuliah</label>
                                              <select class="form-select" name="id_makul">
-                                                <option>
-                                                    Pilih Mata Kuliah
-                                                </option>
+                                                <option>Pilih Mata Kuliah</option>
                                                 @foreach($makul as $data)
                                                 <option value="{{$data->id}}">
                                                     {{$data->nama}}
                                                 </option>
                                                 @endforeach
+                                                <option value="Libur">Libur</option>
                                             </select>
                                         </div>
                                         <div>

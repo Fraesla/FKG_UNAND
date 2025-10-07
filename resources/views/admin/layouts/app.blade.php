@@ -894,7 +894,8 @@
                       <a class="dropdown-item @if ($activeDrop == 'fakultas') active @endif" href="/admin/fakultas"> Fakultas </a>
                       <a class="dropdown-item @if ($activeDrop == 'jurusan') active @endif" href="/admin/jurusan"> Jurusan </a>
                       <a class="dropdown-item @if ($activeDrop == 'prodi') active @endif" href="/admin/prodi"> Prodi </a>
-                      <a class="dropdown-item @if ($activeDrop == 'kelas') active @endif" href="/admin/kelas"> Kelas </a>
+                      <a class="dropdown-item @if ($activeDrop == 'kelas') active @endif" href="/admin/kelas"> Blok </a>
+                      <a class="dropdown-item @if ($activeDrop == 'nilai') active @endif" href="/admin/nilai"> Nilai </a>
                       <a class="dropdown-item @if ($activeDrop == 'ruangan') active @endif" href="/admin/ruangan"> Ruangan </a>
                       <a class="dropdown-item @if ($activeDrop == 'makul') active @endif" href="/admin/makul"> Mata Kuliah </a>
                       <a class="dropdown-item @if ($activeDrop == 'tahun') active @endif" href="/admin/tahunajar"> Tahun Ajaran </a>
@@ -937,9 +938,10 @@
                         Bimbingan Akademik
                         <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
                       </a> -->
-                      <a class="dropdown-item @if ($activeDrop == 'jadmakul') active @endif" href="/admin/jadmakul"> Jadwal Mata Kuliah </a>
-                      <a class="dropdown-item @if ($activeDrop == 'jaddosen') active @endif" href="/admin/jaddosen"> Jadwal Dosen </a>
-                      <a class="dropdown-item @if ($activeDrop == 'jadmahasiswa') active @endif" href="/admin/jadmahasiswa"> Jadwal Mahasiswa </a>
+                      <a class="dropdown-item @if ($activeDrop == 'jadmakul') active @endif" href="/admin/jadmakul"> Jadwal Mata Kuliah (Data Blok)</a>
+                      <a class="dropdown-item @if ($activeDrop == 'jadmetopen') active @endif" href="/admin/jadmetopen"> Jadwal Mata Kuliah (Data Metopen)</a>
+                      <!-- <a class="dropdown-item @if ($activeDrop == 'jaddosen') active @endif" href="/admin/jaddosen"> Jadwal Dosen </a>
+                      <a class="dropdown-item @if ($activeDrop == 'jadmahasiswa') active @endif" href="/admin/jadmahasiswa"> Jadwal Mahasiswa </a> -->
                     </div>
                   </div>
                 </div>
@@ -984,49 +986,7 @@
                   </div>
                 </div>
               </li>
-              <li class="nav-item dropdown @if ($activePage == 'akun') active @endif">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#navbar-layout"
-                  data-bs-toggle="dropdown"
-                  data-bs-auto-close="false"
-                  role="button"
-                  aria-expanded="true"
-                >
-                  <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/layout-2 -->
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="icon icon-1"
-                    >
-                      <path d="M4 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
-                      <path d="M4 13m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
-                      <path d="M14 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
-                      <path d="M14 15m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg
-                  ></span>
-                  <span class="nav-link-title"> Data Account </span>
-                </a>
-                <div class="dropdown-menu">
-                  <div class="dropdown-menu-columns">
-                    <div class="dropdown-menu-column">
-                      <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
-                        Bimbingan Akademik
-                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                      </a> -->
-                      <a class="dropdown-item @if ($activeDrop == 'mahasiswa') active @endif" href="/admin/mahasiswa"> Mahasiswa </a>
-                      <a class="dropdown-item @if ($activeDrop == 'dosen') active @endif" href="/admin/dosen"> Dosen </a>
-                    </div>
-                  </div>
-                </div>
-              </li>
+               
               <li class="nav-item @if ($activePage == 'ta') active @endif">
                 <a class="nav-link" href="/admin/ta">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
@@ -3098,6 +3058,36 @@
         });
         checkItems();
       });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = [
+            {id: 'alert-success', bar: 'progress-bar-success'},
+            {id: 'alert-error', bar: 'progress-bar-error'}
+        ];
+        const duration = 4000; // 4 detik
+
+        alerts.forEach(({id, bar}) => {
+            const alertEl = document.getElementById(id);
+            if (alertEl) {
+                const barEl = document.getElementById(bar);
+                animateProgress(barEl, duration);
+                setTimeout(() => alertEl.classList.add('fade'), duration);
+                setTimeout(() => alertEl.remove(), duration + 600);
+            }
+        });
+
+        function animateProgress(bar, time) {
+            if (!bar) return;
+            let width = 100;
+            const step = 10;
+            const interval = setInterval(() => {
+                width -= (step / time) * 100;
+                bar.style.width = width + "%";
+                if (width <= 0) clearInterval(interval);
+            }, step);
+        }
+    });
     </script>
     <!-- END PAGE SCRIPTS -->
   </body>

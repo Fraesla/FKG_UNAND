@@ -11,6 +11,21 @@
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
                   <h2 class="page-title">Data Fakultas</h2>
+                  {{-- Flash Message Error (Validasi) --}}
+                    @if ($errors->any())
+                    <div id="alert-error" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
+                        <strong>⚠️ Terjadi Kesalahan pada Pengisian Formulir:</strong>
+                        <ul class="mb-0 mt-2">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <div class="progress position-absolute bottom-0 start-0 w-100" style="height: 3px;">
+                            <div id="progress-bar-error" class="progress-bar bg-danger" role="progressbar"></div>
+                        </div>
+                    </div>
+                    @endif
               </div>
               <!-- Page title actions -->
       </div>
@@ -25,10 +40,22 @@
                 <div class="row row-cards">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header d-flex justify-content-between align-items-center">
                                 <h3 class="card-title">
                                     Pengeditan Data Fakultas
                                 </h3>
+                                <a href="/admin/fakultas/" class="btn btn-secondary btn-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
+                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                         class="icon icon-tabler icon-tabler-arrow-left">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M5 12l14 0" />
+                                        <path d="M5 12l6 6" />
+                                        <path d="M5 12l6 -6" />
+                                    </svg>
+                                    Back
+                                </a>
                             </div>
                             <div class="card-body">
                                 <form action="/admin/fakultas/update/{{$fakultas->id}}" method="POST" enctype="multipart/form-data">
@@ -37,6 +64,9 @@
                                         <div>
                                             <label class="form-label">Nama Fakultas</label>
                                             <input type="text" placeholder="Masukkan Nama Fakultas" class="form-control" name="nama" value="{{$fakultas->nama}}" />
+                                            @error('nama')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

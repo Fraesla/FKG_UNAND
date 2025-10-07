@@ -896,6 +896,14 @@
                   <span class="nav-link-title"> Data Absensi</span>
                 </a>
               </li>
+              <li class="nav-item @if ($activePage == 'blokmahasiswa') active @endif">
+                <a class="nav-link" href="/mahasiswa/blokmahasiswa">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"
+                    ><!-- Download SVG icon from http://tabler.io/icons/icon/puzzle -->
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-trello"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M7 7h3v10h-3z" /><path d="M14 7h3v6h-3z" /></svg></span>
+                  <span class="nav-link-title"> Blok Mahasiswa </span>
+                </a>
+              </li>
               <li class="nav-item @if ($activePage == 'profile') active @endif">
                 <a class="nav-link" href="/mahasiswa/profile">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tahun_ajaran', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->int('semester');
             $table->enum('status',['0','1'])->default('1');
             $table->timestamps();
         });

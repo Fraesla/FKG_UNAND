@@ -42,11 +42,11 @@ class LoginController extends Controller
 
                 // Redirect sesuai level
                 if ($user->level === 'mahasiswa') {
-                    return redirect()->intended('/mahasiswa/dashboard');
+                    return redirect()->intended('/mahasiswa/dashboard')->with("success", "Anda Telah Masuk akun mahasiswa !");
                 } elseif ($user->level === 'dosen') {
-                    return redirect()->intended('/dosen/dashboard');
+                    return redirect()->intended('/dosen/dashboard')->with("success", "Anda Telah Masuk akun dosen !");
                 } else {
-                    return redirect()->intended('/admin/dashboard');
+                    return redirect()->intended('/admin/dashboard')->with("success", "Anda Telah Masuk akun admin !");
                 }
             } else {
                 return redirect()->route('login')->with("error", "Password salah!");
@@ -54,7 +54,7 @@ class LoginController extends Controller
         }
 
         return redirect()->route('login')->with("error", "Username tidak ditemukan!");
-    } 
+    }
 
     public function logout(Request $request)
     {
