@@ -20,6 +20,7 @@ class JadMetopenController extends Controller
         $query = DB::table('jadwal_metopen')
             ->join('makul', 'jadwal_metopen.id_makul', '=', 'makul.id')
             ->join('ruangan', 'jadwal_metopen.id_ruangan', '=', 'ruangan.id')
+            ->join('dosen', 'jadwal_metopen.id_dosen', '=', 'dosen.id')
             ->select(
                 'jadwal_metopen.id',
                 'jadwal_metopen.minggu',
@@ -27,6 +28,7 @@ class JadMetopenController extends Controller
                 'jadwal_metopen.jam_mulai',
                 'jadwal_metopen.jam_selesai',
                 'makul.nama as makul',
+                'dosen.nama as dosen',
                 'ruangan.nama as ruangan'
             )
             ->orderBy('jadwal_metopen.id', 'DESC');
@@ -52,6 +54,7 @@ class JadMetopenController extends Controller
         $query = DB::table('jadwal_metopen')
             ->join('makul', 'jadwal_metopen.id_makul', '=', 'makul.id')
             ->join('ruangan', 'jadwal_metopen.id_ruangan', '=', 'ruangan.id')
+            ->join('dosen', 'jadwal_metopen.id_dosen', '=', 'dosen.id')
             ->select(
                 'jadwal_metopen.id',
                 'jadwal_metopen.minggu',
@@ -59,6 +62,7 @@ class JadMetopenController extends Controller
                 'jadwal_metopen.jam_mulai',
                 'jadwal_metopen.jam_selesai',
                 'makul.nama as makul',
+                'dosen.nama as dosen',
                 'ruangan.nama as ruangan'
             );
 
@@ -71,6 +75,7 @@ class JadMetopenController extends Controller
                   ->orWhere('jadwal_metopen.jam_mulai', 'like', "%{$search}%")
                   ->orWhere('jadwal_metopen.jam_selesai', 'like', "%{$search}%")
                   ->orWhere('makul.nama', 'like', "%{$search}%")
+                  ->orWhere('dosen.nama', 'like', "%{$search}%")
                   ->orWhere('ruangan.nama', 'like', "%{$search}%");
             });
         }
@@ -90,17 +95,42 @@ class JadMetopenController extends Controller
     public function add(){
         $blok = DB::table('kelas')->orderBy('id','DESC')->get();
         $makul = DB::table('makul')->orderBy('id','DESC')->get();
+        $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
         $ruangan = DB::table('ruangan')->orderBy('id','DESC')->get();
-        return view('admin.jadwal.metopen.create',['blok'=>$blok,'makul'=>$makul,'ruangan'=>$ruangan]);
+        return view('admin.jadwal.metopen.create',['blok'=>$blok,'dosen'=>$dosen,'makul'=>$makul,'ruangan'=>$ruangan]);
     }
 
     public function create(Request $request){
+        // Validasi input
+        $request->validate([
+            'minggu' => 'required|integer|min:1|max:6',
+            'hari' => 'required|string|max:255',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+            'id_makul' => 'required|exists:makul,id',
+            'id_dosen' => 'required|exists:dosen,id',
+            'id_ruangan' => 'required|exists:ruangan,id',
+        ],[
+            'minggu.required' => 'Minggu ke- wajib diisi.',
+            'minggu.integer' => 'Minggu ke- yang dipilih tidak valid.',
+            'hari.required' => 'Hari wajib diisi.',
+            'jam_mulai.required' => 'Jam Mulai wajib diisi.',
+            'jam_mulai.date_format' => 'Format Jam Mulai tidak valid (gunakan format HH:MM).',
+            'jam_selesai.required' => 'Jam Selesai wajib diisi.',
+            'jam_selesai.date_format' => 'Format Jam Selesai tidak valid (gunakan format HH:MM).',
+            'jam_selesai.after' => 'Jam Selesai harus setelah Jam Mulai.',
+            'id_makul.exists' => 'Mata Kuliah yang dipilih tidak valid..',
+            'id_dosen.exists' => 'Dosen yang dipilih tidak valid..',
+            'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
+        ]);
+
         DB::table('jadwal_metopen')->insert([  
             'minggu' => $request->minggu,
             'hari' => $request->hari,
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
             'id_makul' => $request->id_makul,
+            'id_dosen' => $request->id_dosen,
             'id_ruangan' => $request->id_ruangan
         ]);
 
@@ -111,12 +141,37 @@ class JadMetopenController extends Controller
         $jadmetopen = DB::table('jadwal_metopen')->where('id',$id)->first();
         $blok = DB::table('kelas')->orderBy('id','DESC')->get();
         $makul = DB::table('makul')->orderBy('id','DESC')->get();
+        $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
         $ruangan = DB::table('ruangan')->orderBy('id','DESC')->get();
         
-        return view('admin.jadwal.metopen.edit',['jadmetopen'=>$jadmetopen,'blok'=>$blok,'makul'=>$makul,'ruangan'=>$ruangan]);
+        return view('admin.jadwal.metopen.edit',['jadmetopen'=>$jadmetopen,'blok'=>$blok,'dosen'=>$dosen,'makul'=>$makul,'ruangan'=>$ruangan]);
     }
 
     public function update(Request $request, $id) {
+        // Validasi input
+        $request->validate([
+            'minggu' => 'required|integer|min:1|max:6',
+            'hari' => 'required|string|max:255',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+            'id_makul' => 'required|exists:makul,id',
+            'id_dosen' => 'required|exists:dosen,id',
+            'id_ruangan' => 'required|exists:ruangan,id',
+        ],[
+            'minggu.required' => 'Minggu ke- wajib diisi.',
+            'minggu.integer' => 'Minggu ke- yang dipilih tidak valid.',
+            'minggu.min' => 'Minggu ke- yang dipilih tidak valid.',
+            'hari.required' => 'Hari wajib diisi.',
+            'jam_mulai.required' => 'Jam Mulai wajib diisi.',
+            'jam_mulai.date_format' => 'Format Jam Mulai tidak valid (gunakan format HH:MM).',
+            'jam_selesai.required' => 'Jam Selesai wajib diisi.',
+            'jam_selesai.date_format' => 'Format Jam Selesai tidak valid (gunakan format HH:MM).',
+            'jam_selesai.after' => 'Jam Selesai harus setelah Jam Mulai.',
+            'id_makul.exists' => 'Mata Kuliah yang dipilih tidak valid..',
+            'id_dosen.exists' => 'Dosen yang dipilih tidak valid..',
+            'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
+        ]);
+
         DB::table('jadwal_metopen')  
             ->where('id', $id)
             ->update([
@@ -125,6 +180,7 @@ class JadMetopenController extends Controller
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
             'id_makul' => $request->id_makul,
+            'id_dosen' => $request->id_dosen,
             'id_ruangan' => $request->id_ruangan
         ]);
 

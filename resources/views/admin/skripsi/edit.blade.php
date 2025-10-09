@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
 'activePage' => 'gigi',
-'activeDrop' => 'jadmakul',
+'activeDrop' => 'skripsi',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -10,7 +10,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Jadwal Mata Kuliah (Data Blok)</h2>
+                  <h2 class="page-title">Data Skripsi</h2>
                   @if ($errors->any())
                     <div id="alert-error" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
                         <strong>⚠️ Terjadi Kesalahan pada Pengisian Formulir:</strong>
@@ -41,9 +41,9 @@
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h3 class="card-title">
-                                    Penambahan Data Jadwal Mata Kuliah (Data Blok)
+                                    Pengeditan Skripsi
                                 </h3>
-                                <a href="/admin/jadmakul/" class="btn btn-secondary btn-sm">
+                                <a href="/admin/skripsi/" class="btn btn-secondary btn-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -57,79 +57,66 @@
                                 </a>
                             </div>
                             <div class="card-body">
-                                <form action="/admin/jadmakul/create" method="POST" enctype="multipart/form-data">
+                                <form action="/admin/skripsi/update/{{$skripsi->id}}" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
+                                        
                                         <div>
-                                            <label class="form-label">Blok</label>
-                                             <select class="form-select" name="id_kelas">
-                                                <option>
-                                                    Pilih Blok
-                                                </option>
-                                                @foreach($blok as $data)
-                                                <option value="{{$data->id}}">
-                                                    {{$data->nama}}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                            @error('id_kelas')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Minggu ke-</label>
-                                            <select class="form-select" name="minggu">
-                                                <option value="">Pilih Minggu ke-</option>
-                                                @for ($no = 1; $no <= 6; $no++)
-                                                    <option value="{{ $no }}" {{ old('minggu') == $no ? 'selected' : '' }}>
-                                                        Minggu Ke-{{ $no }}
+                                            <label class="form-label">Minggu Ke-</label>
+                                            <select name="minggu" class="form-select">
+                                                <option value="0" {{ $skripsi->minggu == 0 ? 'selected' : '' }}> Pilih minggu
+                                                @for($no=1; $no<=6; $no++)
+                                                    <option value="{{ $no }}" {{ $skripsi->minggu == $no ? 'selected' : '' }}>
+                                                        Minggu ke- {{ $no }}
                                                     </option>
                                                 @endfor
                                             </select>
-                                            @error('minggu')
+                                             @error('minggu')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Hari</label>
-                                            <select class="form-select" name="hari">
+                                             <select class="form-select" name="hari">
                                                 <option value="">Pilih Hari</option>
-                                                <option value="Senin" {{ old('hari') == 'Senin' ? 'selected' : '' }}>Senin</option>
-                                                <option value="Selasa" {{ old('hari') == 'Selasa' ? 'selected' : '' }}>Selasa</option>
-                                                <option value="Rabu" {{ old('hari') == 'Rabu' ? 'selected' : '' }}>Rabu</option>
-                                                <option value="Kamis" {{ old('hari') == 'Kamis' ? 'selected' : '' }}>Kamis</option>
-                                                <option value="Jum\'at" {{ old('hari') == "Jum'at" ? 'selected' : '' }}>Jum'at</option>
+                                                <option value="Senin"  {{ $skripsi->hari == 'Senin' ? 'selected' : '' }}>Senin</option>
+                                                <option value="Selasa" {{ $skripsi->hari == 'Selasa' ? 'selected' : '' }}>Selasa</option>
+                                                <option value="Rabu"   {{ $skripsi->hari == 'Rabu' ? 'selected' : '' }}>Rabu</option>
+                                                <option value="Kamis"  {{ $skripsi->hari == 'Kamis' ? 'selected' : '' }}>Kamis</option>
+                                                <option value="Jum\'at" {{ $skripsi->hari == "Jum'at" ? 'selected' : '' }}>Jum'at</option>
                                             </select>
-                                            @error('hari')
+                                             @error('hari')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Jam Mulai</label>
-                                            <input type="text" name="jam_mulai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00"  value="{{ old('jam_mulai') }}"  autocomplete="off">
-                                            @error('jam_mulai')
+                                            <input type="text" name="jam_mulai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off" value="{{$skripsi->jam_mulai}}">
+                                             @error('jam_mulai')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Jam Selesai</label>
-                                            <input type="text" name="jam_selesai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00"  value="{{ old('jam_selesai') }}" autocomplete="off">
-                                            @error('jam_selesai')
+                                            <input type="text" name="jam_selesai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off" value="{{$skripsi->jam_selesai}}">
+                                             @error('jam_selesai')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Mata Kuliah</label>
                                              <select class="form-select" name="id_makul">
-                                                <option>Pilih Mata Kuliah</option>
+                                                <option>
+                                                    Pilih Mata Kuliah
+                                                </option>
                                                 @foreach($makul as $data)
-                                                <option value="{{$data->id}}">
-                                                    {{$data->nama}}
+                                                <option value="{{$data->id}}" 
+                                                    {{ $skripsi->id_makul == $data->id ? 'selected' : '' }}>
+                                                    {{$data->nama}} 
                                                 </option>
                                                 @endforeach
-                                                <option value="Libur">Libur</option>
                                             </select>
-                                            @error('id_makul')
+                                             @error('id_makul')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>
@@ -140,12 +127,13 @@
                                                     Pilih Dosen
                                                 </option>
                                                 @foreach($dosen as $data)
-                                                <option value="{{$data->id}}">
+                                                <option value="{{$data->id}}"
+                                                    {{ $skripsi->id_dosen == $data->id ? 'selected' : '' }}>
                                                     {{$data->nama}}
                                                 </option>
                                                 @endforeach
                                             </select>
-                                            @error('id_dosen')
+                                             @error('id_dosen')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>
@@ -156,12 +144,13 @@
                                                     Pilih Ruangan
                                                 </option>
                                                 @foreach($ruangan as $data)
-                                                <option value="{{$data->id}}">
+                                                <option value="{{$data->id}}"
+                                                    {{ $skripsi->id_ruangan == $data->id ? 'selected' : '' }}>
                                                     {{$data->nama}}
                                                 </option>
                                                 @endforeach
                                             </select>
-                                            @error('id_ruangan')
+                                             @error('id_ruangan')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>

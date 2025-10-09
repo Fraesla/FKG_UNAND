@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\Akun\DosenController;
 use App\Http\Controllers\Mahasiswa\JadwalController;
 use App\Http\Controllers\Mahasiswa\BlokMahasiswaController;
 use App\Http\Controllers\Admin\TaController;
+use App\Http\Controllers\Admin\SkripsiController;
 use App\Http\Controllers\Admin\SuratIzinController;
 use App\Http\Controllers\Admin\PengajuanController;
 use App\Http\Controllers\Admin\SeminarProposalController;
@@ -467,6 +468,21 @@ Route::prefix('admin/absdosen')
     ->name('admin.absensi.dosen.')
     ->middleware(['auth', 'checkrole:admin'])
     ->controller(AbsDosenController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Data Skripsi
+Route::prefix('admin/skripsi')
+    ->name('admin.skripsi.')
+    ->middleware(['auth', 'checkrole:admin'])
+    ->controller(SkripsiController::class)
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');

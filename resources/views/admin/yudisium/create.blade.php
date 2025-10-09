@@ -52,7 +52,7 @@
                                                 <option>Pilih Data Mahasiswa</option>
                                                 @foreach($mahasiswa as $data)
                                                     <option value="{{$data->id}}">
-                                                        No.BP: {{$data->nim}} | Nama Mahasiswa: {{$data->nama}} 
+                                                        No.BP: {{$data->nobp}} | Nama Mahasiswa: {{$data->nama}} 
                                                     </option>
                                                 @endforeach
                                             </select>

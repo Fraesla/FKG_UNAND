@@ -54,7 +54,7 @@ class TahunAjaranController extends Controller
     public function create(Request $request){
        $request->validate([
             'nama' => 'required|string|max:100',
-            'semester' => 'required|integer|min:1|max:8',
+            'semester' => 'required|string|max:100',
             'status' => 'required|string|max:100',
         ],[
             'nama.required' => 'Nama Tahun Ajaran wajib diisi.',
@@ -78,14 +78,11 @@ class TahunAjaranController extends Controller
     public function update(Request $request, $id) {
         $request->validate([
             'nama' => 'required|string|max:100',
-            'semester' => 'required|integer|min:1|max:8',
+            'semester' => 'required|string|max:100',
             'status' => 'required|string|max:100',
         ],[
             'nama.required' => 'Nama Tahun Ajaran wajib diisi.',
             'semester.required' => 'Semester wajib diisi.',
-            'semester.integer'  => 'Semester tidak valid.',
-            'semester.min'      => 'Semester yang dipilih tidak valid.',
-            'semester.max'      => 'Semester yang dipilih tidak valid.',
             'status.required' => 'Status wajib diisi.',
         ]);
         DB::table('tahun_ajaran')  

@@ -21,8 +21,7 @@ class PengajuanController extends Controller
             ->select(
                 'pengajuan.*',
                 'mahasiswa.nama',
-                'mahasiswa.nim',
-                'mahasiswa.no_hp'
+                'mahasiswa.nobp',
             )
             ->orderBy('pengajuan.id', 'DESC')
             ->paginate($entries);
@@ -40,8 +39,7 @@ class PengajuanController extends Controller
             ->select(
                 'pengajuan.*',
                 'mahasiswa.nama',
-                'mahasiswa.nim',
-                'mahasiswa.no_hp'
+                'mahasiswa.nobp',
             );
 
         // Search
@@ -50,8 +48,7 @@ class PengajuanController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('pengajuan.id', 'like', "%{$search}%")
                   ->orWhere('mahasiswa.nama', 'like', "%{$search}%")
-                  ->orWhere('mahasiswa.nim', 'like', "%{$search}%")
-                  ->orWhere('mahasiswa.no_hp', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.nobp', 'like', "%{$search}%")
                   ->orWhere('pengajuan.dosen_pembimbing_1', 'like', "%{$search}%")
                   ->orWhere('pengajuan.dosen_pembimbing_2', 'like', "%{$search}%")
                   ->orWhere('pengajuan.judul', 'like', "%{$search}%");
@@ -79,9 +76,20 @@ class PengajuanController extends Controller
     public function create(Request $request){
 
          $request->validate([
-        'surat_pengajuan' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        'krs' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'id_mahasiswa' => 'required|exists:mahasiswa,id',
+            'dosen_pembimbing_1' => 'required|exists:dosen,nama',
+            'dosen_pembimbing_2' => 'required|exists:dosen,nama',
+            'surat_pengajuan' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'krs' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'judul' => 'required|string|max:255',
         // tambahkan validasi field lain
+        ],[
+            'id_mahasiswa.exists' => 'Mahasiswa yang dipilih tidak valid..',
+            'dosen_pembimbing_1.exists' => 'Dosen Bimbingan 1 yang dipilih tidak valid..',
+            'dosen_pembimbing_2.exists' => 'Dosen Bimbingan 2 yang dipilih tidak valid..',
+            'surat_pengajuan.required' => 'Surat_pengajuan wajib diisi.',
+            'krs.required' => 'KRS wajib diisi.',
+            'judul.required' => 'Judul wajib diisi.',
         ]);
 
         // Simpan file ke storage/pengajuan
@@ -110,15 +118,19 @@ class PengajuanController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'id_mahasiswa' => 'required|string|max:255',
-            'dosen_pembimbing_1' => 'nullable|string|max:255',
-            'dosen_pembimbing_2' => 'nullable|string|max:255',
+         $request->validate([
+            'id_mahasiswa' => 'required|exists:mahasiswa,id',
+            'dosen_pembimbing_1' => 'required|exists:dosen,nama',
+            'dosen_pembimbing_2' => 'required|exists:dosen,nama',
+            'surat_pengajuan' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'krs' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
             'judul' => 'required|string|max:255',
-
-            // file rules
-            'surat_pengajuan' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048',
-            'krs' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048',
+        // tambahkan validasi field lain
+        ],[
+            'id_mahasiswa.exists' => 'Mahasiswa yang dipilih tidak valid..',
+            'dosen_pembimbing_1.exists' => 'Dosen Bimbingan 1 yang dipilih tidak valid..',
+            'dosen_pembimbing_2.exists' => 'Dosen Bimbingan 2 yang dipilih tidak valid..',
+            'judul.required' => 'Judul wajib diisi.',
         ]);
 
         // ambil data lama

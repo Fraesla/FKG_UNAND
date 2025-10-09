@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
-'activePage' => 'seminarhasil',
-'activeDrop' => '',
+'activePage' => 'gigi',
+'activeDrop' => 'seminarhasil',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -52,7 +52,7 @@
                                                 <option>Pilih Data Mahasiswa</option>
                                                 @foreach($mahasiswa as $data)
                                                     <option value="{{$data->id}}">
-                                                        No.BP: {{$data->nim}} | Nama Mahasiswa: {{$data->nama}} 
+                                                        No.BP: {{$data->nobp}} | Nama Mahasiswa: {{$data->nama}} 
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -63,7 +63,7 @@
                                                 <option>Pilih Data Dosen</option>
                                                 @foreach($dosen as $data)
                                                     <option value="{{$data->nama}}">
-                                                        NIDM: {{$data->nidm}} | Nama Dosen : {{$data->nama}} 
+                                                        NIP: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -74,7 +74,7 @@
                                                 <option>Pilih Data Dosen</option>
                                                 @foreach($dosen as $data)
                                                     <option value="{{$data->nama}}">
-                                                        NIDM: {{$data->nidm}} | Nama Dosen : {{$data->nama}} 
+                                                        NIP: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
                                                     </option>
                                                 @endforeach
                                             </select>

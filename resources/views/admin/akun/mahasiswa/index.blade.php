@@ -83,13 +83,13 @@
                                     </svg>
                                 </th>
                                 <th>Foto</th>
-                                <th>NIM</th>
-                                <th>Nama Mahasiswa</th>
-                                <th>Gender</th>
-                                <th>Tanggal Lahir</th>
-                                <th>Alamat</th>
-                                <th>No.HP</th>
-                                <th>Gmail</th>
+                                <th>Nama Lengkap</th>
+                                <th>NO.BP</th>
+                                <th>Jenis Kelamin</th>
+                                <th>Level UKT</th>
+                                <th>Tahun Ajaran</th>
+                                <th>Semester</th>
+                                <th>Status</th>
                                 <th class="text-center" colspan="2">Action</th>
                             </tr>
                         </thead>
@@ -105,15 +105,23 @@
                                     <span class="text-secondary"> {{$no++}}</span>
                                 </td>
                                 <td class="text-secondary">
-                                    <img src="{{ asset('storage/'.$data->foto) }}" width="50" height="50" class="rounded-circle">
+                                    @if ($data->foto && file_exists(public_path('storage/' . $data->foto)))
+                                        <img src="{{ asset('storage/' . $data->foto) }}" width="50" height="50" class="rounded-circle">
+                                    @else
+                                        <img src="{{ asset('images/default-user.png') }}" width="50" height="50" class="rounded-circle">
+                                    @endif
                                 </td>
-                                <td class="text-secondary">{{$data->nim}}</td>
                                 <td class="text-secondary">{{$data->nama}}</td>
+                                <td class="text-secondary">{{$data->nobp}}</td>
                                 <td class="text-secondary">{{$data->gender}}</td>
-                                <td class="text-secondary">{{$data->tgl_lahir}}</td>
-                                <td class="text-secondary">{{$data->alamat}}</td>
-                                <td class="text-secondary">{{$data->no_hp}}</td>
-                                <td class="text-secondary">{{$data->gmail}}</td>
+                                <td class="text-secondary">{{$data->ukt}}</td>
+                                <td class="text-secondary">{{$data->tahun_ajaran}}</td>
+                                <td class="text-secondary">{{$data->semester}}</td>
+                                @if ($data->status=="1")
+                                    <td class="text-secondary">Aktif</td>
+                                @else
+                                    <td class="text-secondary">Noaktif</td>
+                                @endif
                                 <td class="w-0">
                                     <div class="d-flex gap-1">
                                         <!-- Tombol Edit -->
@@ -162,7 +170,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="9" class="text-center">Data tidak ditemukan</td>
+                                <td colspan="10" class="text-center">Data tidak ditemukan</td>
                             </tr>
                             @endforelse
                         </tbody>

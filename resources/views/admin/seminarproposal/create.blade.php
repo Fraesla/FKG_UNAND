@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
-'activePage' => 'seminarproposal',
-'activeDrop' => '',
+'activePage' => 'gigi',
+'activeDrop' => 'seminarproposal',
 ])
 @section('content')
 
@@ -47,7 +47,7 @@
                                         <option>Pilih Data Mahasiswa</option>
                                         @foreach($mahasiswa as $data)
                                             <option value="{{$data->id}}">
-                                                No.BP: {{$data->nim}} | Nama Mahasiswa: {{$data->nama}} 
+                                                No.BP: {{$data->nobp}} | Nama Mahasiswa: {{$data->nama}} 
                                             </option>
                                         @endforeach
                                     </select>
@@ -58,7 +58,7 @@
                                         <option>Pilih Data Dosen</option>
                                         @foreach($dosen as $data)
                                             <option value="{{$data->nama}}">
-                                                NIDM: {{$data->nidm}} | Nama Dosen : {{$data->nama}} 
+                                                NIP: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
                                             </option>
                                         @endforeach
                                     </select>
@@ -69,14 +69,23 @@
                                         <option>Pilih Data Dosen</option>
                                         @foreach($dosen as $data)
                                             <option value="{{$data->nama}}">
-                                                NIDM: {{$data->nidm}} | Nama Dosen : {{$data->nama}} 
+                                                NIP: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <input type="text" name="penguji_1" class="form-control mb-2" placeholder="Penguji 1">
-                                <input type="text" name="penguji_2" class="form-control mb-2" placeholder="Penguji 2">
-                                <input type="text" name="penguji_3" class="form-control mb-2" placeholder="Penguji 3">
+                                <div>
+                                    <label class="form-label">Penguji 1</label>
+                                    <input type="text" name="penguji_1" class="form-control mb-2" placeholder="Penguji 1">
+                                </div>
+                                <div>
+                                    <label class="form-label">Penguji 2</label>
+                                    <input type="text" name="penguji_2" class="form-control mb-2" placeholder="Penguji 2">
+                                </div>
+                                <div>
+                                    <label class="form-label">Penguji 3</label>
+                                    <input type="text" name="penguji_3" class="form-control mb-2" placeholder="Penguji 3">
+                                </div>
                             </div>
 
                             <!-- Upload file tunggal tapi multi -->

@@ -863,7 +863,7 @@
                   aria-expanded="false"
                 >
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/package -->
+                    >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -887,7 +887,7 @@
                 <div class="dropdown-menu">
                   <div class="dropdown-menu-columns">
                     <div class="dropdown-menu-column">
-                      <!-- <a class="dropdown-item" href="/admin/akademik">
+                     <!--  <a class="dropdown-item" href="/admin/akademik">
                         Bimbingan Akademik
                         <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
                       </a> -->
@@ -903,7 +903,7 @@
                   </div>
                 </div>
               </li>
-              <li class="nav-item dropdown @if ($activePage == 'jadwal') active @endif">
+              <!-- <li class="nav-item dropdown @if ($activePage == 'jadwal') active @endif">
                 <a
                   class="nav-link dropdown-toggle"
                   href="#navbar-form"
@@ -912,8 +912,7 @@
                   role="button"
                   aria-expanded="false"
                 >
-                  <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/checkbox -->
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -934,14 +933,14 @@
                 <div class="dropdown-menu">
                   <div class="dropdown-menu-columns">
                     <div class="dropdown-menu-column">
-                      <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
+                      <a class="dropdown-item" href="/mahasiswa/akademik">
                         Bimbingan Akademik
                         <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                      </a> -->
+                      </a>
                       <a class="dropdown-item @if ($activeDrop == 'jadmakul') active @endif" href="/admin/jadmakul"> Jadwal Mata Kuliah (Data Blok)</a>
                       <a class="dropdown-item @if ($activeDrop == 'jadmetopen') active @endif" href="/admin/jadmetopen"> Jadwal Mata Kuliah (Data Metopen)</a>
-                      <!-- <a class="dropdown-item @if ($activeDrop == 'jaddosen') active @endif" href="/admin/jaddosen"> Jadwal Dosen </a>
-                      <a class="dropdown-item @if ($activeDrop == 'jadmahasiswa') active @endif" href="/admin/jadmahasiswa"> Jadwal Mahasiswa </a> -->
+                      <a class="dropdown-item @if ($activeDrop == 'jaddosen') active @endif" href="/admin/jaddosen"> Jadwal Dosen </a>
+                      <a class="dropdown-item @if ($activeDrop == 'jadmahasiswa') active @endif" href="/admin/jadmahasiswa"> Jadwal Mahasiswa </a>
                     </div>
                   </div>
                 </div>
@@ -956,7 +955,7 @@
                   aria-expanded="false"
                 >
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/star -->
+                    >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -976,19 +975,53 @@
                 <div class="dropdown-menu">
                   <div class="dropdown-menu-columns">
                     <div class="dropdown-menu-column">
-                      <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
+                      <a class="dropdown-item" href="/mahasiswa/akademik">
                         Bimbingan Akademik
                         <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                      </a> -->
+                      </a>
                       <a class="dropdown-item @if ($activeDrop == 'absdosen') active @endif" href="/admin/absdosen"> Absensi Dosen </a>
                       <a class="dropdown-item @if ($activeDrop == 'absmahasiswa') active @endif" href="/admin/absmahasiswa"> Absensi Mahasiswa </a>
                     </div>
                   </div>
                 </div>
-              </li>
-               
-              <li class="nav-item @if ($activePage == 'ta') active @endif">
-                <a class="nav-link" href="/admin/ta">
+              </li> -->
+
+              <li class="nav-item dropdown @if ($activePage == 'gigi') active @endif">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#navbar-extra"
+                  data-bs-toggle="dropdown"
+                  data-bs-auto-close="false"
+                  role="button"
+                  aria-expanded="false"
+                >
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"
+                    ><!-- Download SVG icon from http://tabler.io/icons/icon/star -->
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dental"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5.5c-1.074 -.586 -2.583 -1.5 -4 -1.5c-2.1 0 -4 1.247 -4 5c0 4.899 1.056 8.41 2.671 10.537c.573 .756 1.97 .521 2.567 -.236c.398 -.505 .819 -1.439 1.262 -2.801c.292 -.771 .892 -1.504 1.5 -1.5c.602 0 1.21 .737 1.5 1.5c.443 1.362 .864 2.295 1.262 2.8c.597 .759 2 .993 2.567 .237c1.615 -2.127 2.671 -5.637 2.671 -10.537c0 -3.74 -1.908 -5 -4 -5c-1.423 0 -2.92 .911 -4 1.5z" /><path d="M12 5.5l3 1.5" /></svg>
+                  </span>
+                  <span class="nav-link-title"> Kedokteran Gigi</span>
+                </a>
+                <div class="dropdown-menu">
+                  <div class="dropdown-menu-columns">
+                    <div class="dropdown-menu-column">
+                      <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
+                        Bimbingan Akademik
+                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                      </a> -->
+                      <a class="dropdown-item @if ($activeDrop == 'jadmakul') active @endif" href="/admin/jadmakul"> Blok </a>
+                      <a class="dropdown-item @if ($activeDrop == 'jadmetopen') active @endif" href="/admin/jadmetopen"> Metopen</a>
+                      <a class="dropdown-item @if ($activeDrop == 'skripsi') active @endif" href="/admin/skripsi"> Skripsi</a>
+                      <a class="dropdown-item @if ($activeDrop == 'ta') active @endif" href="/admin/ta">Bimbingan Tugas Akhir </a>
+                      <a class="dropdown-item @if ($activeDrop == 'suratizin') active @endif" href="/admin/suratizin">Surat Izin Penelitian </a>
+                      <a class="dropdown-item @if ($activeDrop == 'pengajuan') active @endif" href="/admin/pengajuan">Pengajuan & Penguji </a>
+                      <a class="dropdown-item @if ($activeDrop == 'seminarproposal') active @endif" href="/admin/seminarproposal">Permohonan Seminar Proposal</a>
+                      <a class="dropdown-item @if ($activeDrop == 'seminarhasil') active @endif" href="/admin/seminarhasil">Permohonan Seminar Hasil </a>
+                    </div>
+                  </div>
+                </div>
+
+                <li class="nav-item @if ($activePage == 'ta') active @endif">
+                <a class="nav-link" href="#">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
                     ><!-- Download SVG icon from http://tabler.io/icons/icon/puzzle -->
                     <svg
@@ -1007,22 +1040,46 @@
                         d="M4 7h3a1 1 0 0 0 1 -1v-1a2 2 0 0 1 4 0v1a1 1 0 0 0 1 1h3a1 1 0 0 1 1 1v3a1 1 0 0 0 1 1h1a2 2 0 0 1 0 4h-1a1 1 0 0 0 -1 1v3a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-1a2 2 0 0 0 -4 0v1a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h1a2 2 0 0 0 0 -4h-1a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1"
                       /></svg
                   ></span>
-                  <span class="nav-link-title"> Data Bimbingan Tugas Akhir </span>
+                  <span class="nav-link-title"> Bimbingan Akademik </span>
                 </a>
               </li>
-              <li class="nav-item @if ($activePage == 'suratizin') active @endif">
+               
+              <!-- <li class="nav-item @if ($activePage == 'ta') active @endif">
+                <a class="nav-link" href="/admin/ta">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"
+                    >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="icon icon-1"
+                    >
+                      <path
+                        d="M4 7h3a1 1 0 0 0 1 -1v-1a2 2 0 0 1 4 0v1a1 1 0 0 0 1 1h3a1 1 0 0 1 1 1v3a1 1 0 0 0 1 1h1a2 2 0 0 1 0 4h-1a1 1 0 0 0 -1 1v3a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-1a2 2 0 0 0 -4 0v1a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h1a2 2 0 0 0 0 -4h-1a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1"
+                      /></svg
+                  ></span>
+                  <span class="nav-link-title"> Data Bimbingan Tugas Akhir </span>
+                </a>
+              </li> -->
+             <!--  <li class="nav-item @if ($activePage == 'suratizin') active @endif">
                 <a class="nav-link" href="/admin/suratizin">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/puzzle -->
+                    >
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-layout-bottombar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M4 15l16 0" /></svg>
                     </span>
                   <span class="nav-link-title"> Data Surat Izin Penelitian </span>
                 </a>
-              </li>
-              <li class="nav-item @if ($activePage == 'pengajuan') active @endif">
+              </li> -->
+              <!-- <li class="nav-item @if ($activePage == 'pengajuan') active @endif">
                 <a class="nav-link" href="/admin/pengajuan">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/puzzle -->
+                    >
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-license"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 21h-9a3 3 0 0 1 -3 -3v-1h10v2a2 2 0 0 0 4 0v-14a2 2 0 1 1 2 2h-2m2 -4h-11a3 3 0 0 0 -3 3v11" /><path d="M9 7l4 0" /><path d="M9 11l4 0" /></svg></span>
                   <span class="nav-link-title"> Data Pengajuan & Penguji </span>
                 </a>
@@ -1030,7 +1087,7 @@
               <li class="nav-item @if ($activePage == 'seminarproposal') active @endif">
                 <a class="nav-link" href="/admin/seminarproposal">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/puzzle -->
+                    >
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-microwave"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 6m0 1a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1z" /><path d="M15 6v12" /><path d="M18 12h.01" /><path d="M18 15h.01" /><path d="M18 9h.01" /><path d="M6.5 10.5c1 -.667 1.5 -.667 2.5 0c.833 .347 1.667 .926 2.5 0" /><path d="M6.5 13.5c1 -.667 1.5 -.667 2.5 0c.833 .347 1.667 .926 2.5 0" /></svg></span>
                   <span class="nav-link-title"> Data Seminar Proposal </span>
                 </a>
@@ -1038,35 +1095,62 @@
               <li class="nav-item @if ($activePage == 'seminarhasil') active @endif">
                 <a class="nav-link" href="/admin/seminarhasil">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/puzzle -->
+                    >
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-mug"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4.083 5h10.834a1.08 1.08 0 0 1 1.083 1.077v8.615c0 2.38 -1.94 4.308 -4.333 4.308h-4.334c-2.393 0 -4.333 -1.929 -4.333 -4.308v-8.615a1.08 1.08 0 0 1 1.083 -1.077" /><path d="M16 8h2.5c1.38 0 2.5 1.045 2.5 2.333v2.334c0 1.288 -1.12 2.333 -2.5 2.333h-2.5" /></svg></span>
                   <span class="nav-link-title"> Data Seminar Hasil </span>
+                </a>
+              </li> -->
+              <li class="nav-item @if ($activePage == 'surataktifkuliah') active @endif">
+                <a class="nav-link" href="/admin/surataktifkuliah">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"
+                    >
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-notification"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 6h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" /><path d="M17 7m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /></svg></span>
+                  <span class="nav-link-title"> Data Surat Aktif Kuliah </span>
                 </a>
               </li>
               <li class="nav-item @if ($activePage == 'yudisium') active @endif">
                 <a class="nav-link" href="/admin/yudisium">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/puzzle -->
+                    >
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-nfc"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11 20a3 3 0 0 1 -3 -3v-11l5 5" /><path d="M13 4a3 3 0 0 1 3 3v11l-5 -5" /><path d="M4 4m0 3a3 3 0 0 1 3 -3h10a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-10a3 3 0 0 1 -3 -3z" /></svg></span>
-                  <span class="nav-link-title"> Data Yudisium </span>
-                </a>
-              </li>
-              <li class="nav-item @if ($activePage == 'surataktifkuliah') active @endif">
-                <a class="nav-link" href="/admin/surataktifkuliah">
-                  <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/puzzle -->
-                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-notification"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 6h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" /><path d="M17 7m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /></svg></span>
-                  <span class="nav-link-title"> Data Surat Aktif Kuliah </span>
+                  <span class="nav-link-title"> Daftar Yudisium </span>
                 </a>
               </li>
               <li class="nav-item @if ($activePage == 'saps') active @endif">
                 <a class="nav-link" href="/admin/saps">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/puzzle -->
+                    >
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-packages"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 16.5l-5 -3l5 -3l5 3v5.5l-5 3z" /><path d="M2 13.5v5.5l5 3" /><path d="M7 16.545l5 -3.03" /><path d="M17 16.5l-5 -3l5 -3l5 3v5.5l-5 3z" /><path d="M12 19l5 3" /><path d="M17 16.5l5 -3" /><path d="M12 13.5v-5.5l-5 -3l5 -3l5 3v5.5" /><path d="M7 5.03v5.455" /><path d="M12 8l5 -3" /></svg></span>
-                  <span class="nav-link-title"> Data SAPS </span>
+                  <span class="nav-link-title"> SAPS </span>
                 </a>
               </li>
+              <li class="nav-item dropdown @if ($activePage == 'akun') active @endif">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#navbar-extra"
+                  data-bs-toggle="dropdown"
+                  data-bs-auto-close="false"
+                  role="button"
+                  aria-expanded="false"
+                >
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"
+                    ><!-- Download SVG icon from http://tabler.io/icons/icon/star -->
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-address-book"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 6v12a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2z" /><path d="M10 16h6" /><path d="M13 11m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M4 8h3" /><path d="M4 12h3" /><path d="M4 16h3" /></svg>
+                  </span>
+                  <span class="nav-link-title"> Data Akun</span>
+                </a>
+                <div class="dropdown-menu">
+                  <div class="dropdown-menu-columns">
+                    <div class="dropdown-menu-column">
+                      <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
+                        Bimbingan Akademik
+                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                      </a> -->
+                      <a class="dropdown-item @if ($activeDrop == 'mahasiswa') active @endif" href="/admin/mahasiswa"> Mahasiswa </a>
+                      <a class="dropdown-item @if ($activeDrop == 'dosen') active @endif" href="/admin/dosen"> Dosen</a>
+                    </div>
+                  </div>
+                </div>
               <li class="nav-item">
                 <form id="logout-form" action="{{ route('logout') }}" method="POST">
                 <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();

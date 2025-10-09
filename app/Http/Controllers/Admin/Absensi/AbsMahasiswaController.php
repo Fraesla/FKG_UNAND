@@ -95,14 +95,14 @@ class AbsMahasiswaController extends Controller
     }
 
     public function create(Request $request){
-        $request->validate([
-            'tgl' => 'required|string|max:100',
-            'jam_masuk' => 'required|string|max:100',
-            'jam_selesai' => 'required|string|max:100',
-            'id_mahasiswa' => 'required|string|max:100',
-            'id_jadwal_mahasiswa' => 'required|string|max:100',
-            'status' => 'required|string|max:100',
-        ]);
+        // $request->validate([
+        //     'tgl' => 'required|string|max:100',
+        //     'jam_masuk' => 'required|string|max:100',
+        //     'jam_selesai' => 'required|string|max:100',
+        //     'id_mahasiswa' => 'required|string|max:100',
+        //     'id_jadwal_mahasiswa' => 'required|string|max:100',
+        //     'status' => 'required|string|max:100',
+        // ]);
         DB::table('absen_mahasiswa')->insert([  
             'tgl' => $request->tgl,
             'jam_masuk' => $request->jam_masuk,
@@ -138,14 +138,14 @@ class AbsMahasiswaController extends Controller
     }
 
     public function update(Request $request, $id) {
-        $request->validate([
-            'tgl' => 'required|string|max:100',
-            'jam_masuk' => 'required|string|max:100',
-            'jam_selesai' => 'required|string|max:100',
-            'id_mahasiswa' => 'required|string|max:100',
-            'id_jadwal_mahasiswa' => 'required|string|max:100',
-            'status' => 'required|string|max:100',
-        ]);
+        // $request->validate([
+        //     'tgl' => 'required|string|max:100',
+        //     'jam_masuk' => 'required|string|max:100',
+        //     'jam_selesai' => 'required|string|max:100',
+        //     'id_mahasiswa' => 'required|string|max:100',
+        //     'id_jadwal_mahasiswa' => 'required|string|max:100',
+        //     'status' => 'required|string|max:100',
+        // ]);
         DB::table('absen_mahasiswa')  
             ->where('id', $id)
             ->update([

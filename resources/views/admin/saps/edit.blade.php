@@ -53,7 +53,7 @@
                                                 @foreach($mahasiswa as $data)
                                                     <option value="{{$data->id}}"
                                                         {{ $saps->id_mahasiswa == $data->id ? 'selected' : '' }}>
-                                                        No.BP : {{$data->nim}} | Nama Mahasiswa : {{$data->nama}}  
+                                                        No.BP : {{$data->nobp}} | Nama Mahasiswa : {{$data->nama}}  
                                                     </option>
                                                 @endforeach
                                             </select>

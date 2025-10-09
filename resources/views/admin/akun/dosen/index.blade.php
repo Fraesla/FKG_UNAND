@@ -83,12 +83,18 @@
                                     </svg>
                                 </th>
                                 <th>Foto</th>
-                                <th>NIDM/NIP</th>
                                 <th>Nama Dosen</th>
-                                <th>Gender</th>
-                                <th>Tanggal Lahir</th>
-                                <th>Alamat</th>
-                                <th>No.HP</th>
+                                <th>NIP</th>
+                                <th>NIDN</th>
+                                <th>Jenis Kelamin</th>
+                                <th>Pangkat / Golongan</th>
+                                <th>Naik Pangkat Terakhir</th>
+                                <th>Naik Pangkat Berikutnya</th>
+                                <th>JF</th>
+                                <th>JS</th>
+                                <th>Naik Jabatan Terakhir</th>
+                                <th>Pendidikan Terakhir</th>
+                                <th>Keterangan</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -106,12 +112,18 @@
                                 <td class="text-secondary">
                                     <img src="{{ asset('storage/'.$data->foto) }}" width="50" height="50" class="rounded-circle">
                                 </td>
-                                <td class="text-secondary">{{$data->nidm}}</td>
                                 <td class="text-secondary">{{$data->nama}}</td>
+                                <td class="text-secondary">{{$data->nip}}</td>
+                                <td class="text-secondary">{{$data->nidn}}</td>
                                 <td class="text-secondary">{{$data->gender}}</td>
-                                <td class="text-secondary">{{$data->tgl_lahir}}</td>
-                                <td class="text-secondary">{{$data->alamat}}</td>
-                                <td class="text-secondary">{{$data->no_hp}}</td>
+                                <td class="text-secondary">{{$data->pangol}}</td>
+                                <td class="text-secondary">{{$data->napater}}</td>
+                                <td class="text-secondary">{{$data->napaber}}</td>
+                                <td class="text-secondary">{{$data->jf}}</td>
+                                <td class="text-secondary">{{$data->js}}</td>
+                                <td class="text-secondary">{{$data->najater}}</td>
+                                <td class="text-secondary">{{$data->penter}}</td>
+                                <td class="text-secondary">{{$data->keterangan}}</td>
                                 <td class="w-0">
                                     <div class="d-flex gap-1">
                                         <!-- Tombol Edit -->
@@ -160,7 +172,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="9" class="text-center">Data tidak ditemukan</td>
+                                <td colspan="15" class="text-center">Data tidak ditemukan</td>
                             </tr>
                             @endforelse
                         </tbody>

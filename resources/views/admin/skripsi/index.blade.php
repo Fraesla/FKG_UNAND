@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
 'activePage' => 'gigi',
-'activeDrop' => 'jadmakul',
+'activeDrop' => 'skripsi',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -10,7 +10,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Jadwal Mata Kuliah (Data Blok)</h2>
+                  <h2 class="page-title">Data Skripsi</h2>
                   @include('components.alert')
               </div>
               <!-- Page title actions -->
@@ -24,8 +24,8 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">Tabel Jadwal Mata Kuliah (Data Blok)</h3>
-                    <div class="d-flex align-items-center ms-auto">
+                    <h3 class="card-title">Tabel Skripsi</h3>
+                    <!-- <div class="d-flex align-items-center ms-auto">
                         <label class="form-label me-2 mb-0">Blok</label>
                         <select class="form-select"  name="id_kelas" style="min-width: 200px;" onchange="window.location.href='{{ route('admin.jadwal.makul.read') }}?id_kelas='+this.value">
                             <option value="">-- Pilih Blok --</option>
@@ -35,9 +35,9 @@
                                 </option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> -->
                 </div>
-                <form action="/admin/jadmakul/feature" method="GET">
+                <form action="/admin/skripsi/feature" method="GET">
                     <div class="card-body border-bottom py-3">
                         <div class="d-flex align-items-center">
                             <!-- Show Entries -->
@@ -57,12 +57,12 @@
                             <div class="ms-auto text-secondary d-flex align-items-center">
                                 <span class="me-2">Search:</span>
                                 <input type="text" class="form-control form-control-mm" 
-                                       aria-label="Search data Jadwal Mata Kuliah (Data Blok)" 
+                                       aria-label="Search data Jadwal Mata Kuliah (Data Metopen)" 
                                        name="search" 
-                                       placeholder="Cari Data Jadwal Mata Kuliah (Data Blok)..." 
+                                       placeholder="Cari Data Jadwal Mata Kuliah (Data Metopen) ..." 
                                        value="{{ request('search') }}">
 
-                                <a href="/admin/jadmakul/add" class="btn btn-success btn-mm ms-2">
+                                <a href="/admin/skripsi/add" class="btn btn-success btn-mm ms-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -104,7 +104,7 @@
                         </thead>
                         <tbody>
                             <?php $no = 1; ?>
-                            @forelse($jadmakul as $data)
+                            @forelse($skripsi as $data)
                             <tr>
                                <!--  <td>
                                     <input class="form-check-input m-0 align-middle table-selectable-check"
@@ -136,7 +136,7 @@
                                                 </a>
 
                                                 <!-- Edit -->
-                                                <a href="/admin/jadmakul/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
+                                                <a href="/admin/skripsi/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -190,8 +190,13 @@
                                                     </svg>
                                                 </a>
 
+                                                <!-- Berita Acara -->
+                                                <a href="#" class="btn btn-secondary btn-sm p-1">
+                                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-news"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 6h3a1 1 0 0 1 1 1v11a2 2 0 0 1 -4 0v-13a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1v12a3 3 0 0 0 3 3h11" /><path d="M8 8l4 0" /><path d="M8 12l4 0" /><path d="M8 16l4 0" /></svg>
+                                                </a>
+
                                                 <!-- Edit -->
-                                                <a href="/admin/jadmakul/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
+                                                <a href="/admin/skripsi/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -248,16 +253,16 @@
                         <div class="col-auto d-flex align-items-center">
                             <p class="m-0 text-secondary">
                                 Showing
-                                <strong>{{ $jadmakul->firstItem() }}</strong>
+                                <strong>{{ $skripsi->firstItem() }}</strong>
                                 to
-                                <strong>{{ $jadmakul->lastItem() }}</strong>
+                                <strong>{{ $skripsi->lastItem() }}</strong>
                                 of
-                                <strong>{{ $jadmakul->total() }}</strong>
+                                <strong>{{ $skripsi->total() }}</strong>
                                 entries
                             </p>
                         </div>
                         <div class="col-auto">
-                            {{ $jadmakul->links('pagination::bootstrap-5') }}
+                            {{ $skripsi->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
@@ -279,7 +284,7 @@ function deleteData(id) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = "/admin/jadmakul/delete/" + id;
+            window.location.href = "/admin/skripsi/delete/" + id;
         }
     })
 }

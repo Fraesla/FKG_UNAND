@@ -82,7 +82,7 @@
                                         <path d="M6 15l6 -6l6 6"></path>
                                     </svg>
                                 </th>
-                                <th>NIM</th>
+                                <th>NO.BP</th>
                                 <th>Nama</th>
                                 <th>Jumlah Point A</th>
                                 <th>Jumlah Point B</th>
@@ -103,7 +103,7 @@
                                 <td>
                                     <span class="text-secondary"> {{$no++}}</span>
                                 </td>
-                                <td class="text-secondary">{{$data->nim}}</td>
+                                <td class="text-secondary">{{$data->nobp}}</td>
                                 <td class="text-secondary">{{$data->nama}}</td>
                                 <td class="text-secondary">{{$data->jml_point_a}}</td>
                                 <td class="text-secondary">{{$data->jml_point_b}}</td>

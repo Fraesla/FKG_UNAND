@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
-'activePage' => 'suratizin',
-'activeDrop' => '',
+'activePage' => 'gigi',
+'activeDrop' => 'suratizin',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -85,9 +85,6 @@
                                 <th>Jenis</th>
                                 <th>Nama Mahasiswa</th>
                                 <th>NO.BP</th>
-                                <th>Alamat</th>
-                                <th>Gmail</th>
-                                <th>No.HP</th>
                                 <th>Judul Penelitan</th>
                                 <th>Dosen Pembimbing 1</th>
                                 <th>Dosen Pembimbing 2</th>
@@ -108,10 +105,7 @@
                                 </td>
                                 <td class="text-secondary">{{$data->jenis}}</td>
                                 <td class="text-secondary">{{$data->nama}}</td>
-                                <td class="text-secondary">{{$data->nim}}</td>
-                                <td class="text-secondary">{{$data->alamat}}</td>
-                                <td class="text-secondary">{{$data->gmail}}</td>
-                                <td class="text-secondary">{{$data->no_hp}}</td>
+                                <td class="text-secondary">{{$data->nobp}}</td>
                                 <td class="text-secondary">{{$data->judul_penelitian}}</td>
                                 <td class="text-secondary">{{$data->dosen_pembimbing_1}}</td>
                                 <td class="text-secondary">{{$data->dosen_pembimbing_2}}</td>

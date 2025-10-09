@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
 'activePage' => 'gigi',
-'activeDrop' => 'jadmakul',
+'activeDrop' => 'skripsi',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -10,7 +10,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Jadwal Mata Kuliah (Data Blok)</h2>
+                  <h2 class="page-title">Data Skripsi</h2>
                   @if ($errors->any())
                     <div id="alert-error" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
                         <strong>⚠️ Terjadi Kesalahan pada Pengisian Formulir:</strong>
@@ -41,9 +41,9 @@
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h3 class="card-title">
-                                    Penambahan Data Jadwal Mata Kuliah (Data Blok)
+                                    Penambahan Data Skripsi
                                 </h3>
-                                <a href="/admin/jadmakul/" class="btn btn-secondary btn-sm">
+                                <a href="/admin/skripsi/" class="btn btn-secondary btn-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -57,10 +57,10 @@
                                 </a>
                             </div>
                             <div class="card-body">
-                                <form action="/admin/jadmakul/create" method="POST" enctype="multipart/form-data">
+                                <form action="/admin/skripsi/create" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
-                                        <div>
+                                        <!-- <div>
                                             <label class="form-label">Blok</label>
                                              <select class="form-select" name="id_kelas">
                                                 <option>
@@ -72,18 +72,13 @@
                                                 </option>
                                                 @endforeach
                                             </select>
-                                            @error('id_kelas')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
+                                        </div> -->
                                         <div>
                                             <label class="form-label">Minggu ke-</label>
                                             <select class="form-select" name="minggu">
-                                                <option value="">Pilih Minggu ke-</option>
-                                                @for ($no = 1; $no <= 6; $no++)
-                                                    <option value="{{ $no }}" {{ old('minggu') == $no ? 'selected' : '' }}>
-                                                        Minggu Ke-{{ $no }}
-                                                    </option>
+                                                <option value="0">Pilih Minggu ke-
+                                                @for($no=1; $no<=6; $no++)
+                                                    <option value="{{ $no }}">Minggu Ke-{{ $no }}</option>
                                                 @endfor
                                             </select>
                                             @error('minggu')
@@ -92,13 +87,15 @@
                                         </div>
                                         <div>
                                             <label class="form-label">Hari</label>
-                                            <select class="form-select" name="hari">
-                                                <option value="">Pilih Hari</option>
-                                                <option value="Senin" {{ old('hari') == 'Senin' ? 'selected' : '' }}>Senin</option>
-                                                <option value="Selasa" {{ old('hari') == 'Selasa' ? 'selected' : '' }}>Selasa</option>
-                                                <option value="Rabu" {{ old('hari') == 'Rabu' ? 'selected' : '' }}>Rabu</option>
-                                                <option value="Kamis" {{ old('hari') == 'Kamis' ? 'selected' : '' }}>Kamis</option>
-                                                <option value="Jum\'at" {{ old('hari') == "Jum'at" ? 'selected' : '' }}>Jum'at</option>
+                                             <select class="form-select" name="hari">
+                                                <option value="">
+                                                    Pilih Hari
+                                                </option>
+                                                <option value="Senin">Senin</option>
+                                                <option value="Selasa">Selasa</option>
+                                                <option value="Rabu">Rabu</option>
+                                                <option value="Kamis">Kamis</option>
+                                                <option value="Jum'at">Jum'at</option>
                                             </select>
                                             @error('hari')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
@@ -106,14 +103,14 @@
                                         </div>
                                         <div>
                                             <label class="form-label">Jam Mulai</label>
-                                            <input type="text" name="jam_mulai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00"  value="{{ old('jam_mulai') }}"  autocomplete="off">
+                                            <input type="text" name="jam_mulai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off">
                                             @error('jam_mulai')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Jam Selesai</label>
-                                            <input type="text" name="jam_selesai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00"  value="{{ old('jam_selesai') }}" autocomplete="off">
+                                            <input type="text" name="jam_selesai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off">
                                             @error('jam_selesai')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->time('jam_mulai');
             $table->time('jam_selesai');
             $table->string('id_makul');
+            $table->string('id_dosen');
             $table->string('id_ruangan');
             $table->timestamps();
         });

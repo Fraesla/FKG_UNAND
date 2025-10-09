@@ -19,7 +19,7 @@ class SAPSController extends Controller
                     ->join('mahasiswa', 'saps.id_mahasiswa', '=', 'mahasiswa.id')
                     ->select(
                         'saps.*',
-                        'mahasiswa.nim',
+                        'mahasiswa.nobp',
                         'mahasiswa.nama'
                     )
                     ->orderBy('saps.id', 'DESC')
@@ -37,7 +37,7 @@ class SAPSController extends Controller
                     ->join('mahasiswa', 'saps.id_mahasiswa', '=', 'mahasiswa.id')
                     ->select(
                         'saps.*',
-                        'mahasiswa.nim',
+                        'mahasiswa.nobp',
                         'mahasiswa.nama'
                     );
 
@@ -47,7 +47,7 @@ class SAPSController extends Controller
 
             $query->where(function ($q) use ($search) {
                 $q->where('saps.id', 'like', "%{$search}%")
-                  ->orWhere('mahasiswa.nim', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.nobp', 'like', "%{$search}%")
                   ->orWhere('mahasiswa.nama', 'like', "%{$search}%")
                   ->orWhere('saps.jml_point_a', 'like', "%{$search}%")
                   ->orWhere('saps.jml_point_b', 'like', "%{$search}%")

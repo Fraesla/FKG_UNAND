@@ -21,8 +21,7 @@ class SeminarProposalController extends Controller
             ->select(
                 'seminar_proposal.*',
                 'mahasiswa.nama as nama',
-                'mahasiswa.nim',
-                'mahasiswa.no_hp'
+                'mahasiswa.nobp',
             )
             ->orderBy('seminar_proposal.id', 'DESC')
             ->paginate($entries);
@@ -40,8 +39,7 @@ class SeminarProposalController extends Controller
             ->select(
                 'seminar_proposal.*',
                 'mahasiswa.nama as nama',
-                'mahasiswa.nim',
-                'mahasiswa.no_hp'
+                'mahasiswa.nobp',
             );
 
         // Search
@@ -50,8 +48,7 @@ class SeminarProposalController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('seminar_proposal.id', 'like', "%{$search}%")
                   ->orWhere('mahasiswa.nama', 'like', "%{$search}%")
-                  ->orWhere('mahasiswa.nim', 'like', "%{$search}%")
-                  ->orWhere('mahasiswa.no_hp', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.nobp', 'like', "%{$search}%")
                   ->orWhere('seminar_proposal.dosen_pembimbing_1', 'like', "%{$search}%")
                   ->orWhere('seminar_proposal.dosen_pembimbing_2', 'like', "%{$search}%")
                   ->orWhere('seminar_proposal.penguji_1', 'like', "%{$search}%")
@@ -83,11 +80,11 @@ class SeminarProposalController extends Controller
         // Validasi
         $request->validate([
             'id_mahasiswa' => 'required|string|max:255',
-            'dosen_pembimbing_1' => 'nullable|string|max:255',
-            'dosen_pembimbing_2' => 'nullable|string|max:255',
-            'penguji_1' => 'nullable|string|max:255',
-            'penguji_2' => 'nullable|string|max:255',
-            'penguji_3' => 'nullable|string|max:255',
+            'dosen_pembimbing_1' => 'required|string|max:255',
+            'dosen_pembimbing_2' => 'required|string|max:255',
+            'penguji_1' => 'required|string|max:255',
+            'penguji_2' => 'required|string|max:255',
+            'penguji_3' => 'required|string|max:255',
 
             // field file (nullable karena user bisa upload sebagian)
             'surat_proposal' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',

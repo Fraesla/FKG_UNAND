@@ -21,8 +21,7 @@ class SeminarHasilController extends Controller
             ->select(
                 'seminar_hasil.*',
                 'mahasiswa.nama as nama',
-                'mahasiswa.nim',
-                'mahasiswa.no_hp'
+                'mahasiswa.nobp',
             )
             ->orderBy('seminar_hasil.id', 'DESC')
             ->paginate($entries);
@@ -40,8 +39,7 @@ class SeminarHasilController extends Controller
         ->select(
             'seminar_hasil.*',
             'mahasiswa.nama as nama',
-            'mahasiswa.nim',
-            'mahasiswa.no_hp'
+            'mahasiswa.nobp',
         );
 
         // Search berdasarkan field seminar_hasil & mahasiswa
@@ -50,8 +48,7 @@ class SeminarHasilController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('seminar_hasil.id', 'like', "%{$search}%")
                   ->orWhere('mahasiswa.nama', 'like', "%{$search}%")
-                  ->orWhere('mahasiswa.nim', 'like', "%{$search}%")
-                  ->orWhere('mahasiswa.no_hp', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.nobp', 'like', "%{$search}%")
                   ->orWhere('seminar_hasil.dosen_pembimbing_1', 'like', "%{$search}%")
                   ->orWhere('seminar_hasil.dosen_pembimbing_2', 'like', "%{$search}%")
                   ->orWhere('seminar_hasil.penguji_1', 'like', "%{$search}%")

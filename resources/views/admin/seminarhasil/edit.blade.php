@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
-'activePage' => 'seminarhasil',
-'activeDrop' => '',
+'activePage' => 'gigi',
+'activeDrop' => 'seminarhasil',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -53,7 +53,7 @@
                                                 @foreach($mahasiswa as $data)
                                                     <option value="{{$data->id}}"
                                                         {{ $seminar_hasil->id_mahasiswa == $data->id ? 'selected' : '' }}>
-                                                        No.BP : {{$data->nim}} | Nama Mahasiswa : {{$data->nama}}  
+                                                        No.BP : {{$data->nobp}} | Nama Mahasiswa : {{$data->nama}}  
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -65,7 +65,7 @@
                                                 @foreach($dosen as $data)
                                                     <option value="{{$data->nama}}"
                                                         {{ $seminar_hasil->dosen_pembimbing_1 == $data->nama ? 'selected' : '' }}>
-                                                        NIDM : {{$data->nidm}} | Nama Dosen : {{$data->nama}}  
+                                                        NIP : {{$data->nip}} | Nama Dosen : {{$data->nama}}  
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -77,7 +77,7 @@
                                                 @foreach($dosen as $data)
                                                     <option value="{{$data->nama}}"
                                                         {{ $seminar_hasil->dosen_pembimbing_2 == $data->nama ? 'selected' : '' }}>
-                                                        NIDM : {{$data->nidm}} | Nama Dosen : {{$data->nama}}  
+                                                        NIP : {{$data->nip}} | Nama Dosen : {{$data->nama}}  
                                                     </option>
                                                 @endforeach
                                             </select>

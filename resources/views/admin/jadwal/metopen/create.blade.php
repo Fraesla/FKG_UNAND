@@ -1,5 +1,5 @@
 @extends('admin.layouts.app', [
-'activePage' => 'jadwal',
+'activePage' => 'gigi',
 'activeDrop' => 'jadmetopen',
 ])
 @section('content')
@@ -11,6 +11,20 @@
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
                   <h2 class="page-title">Data Jadwal Mata Kuliah (Data Metopen)</h2>
+                  @if ($errors->any())
+                    <div id="alert-error" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
+                        <strong>⚠️ Terjadi Kesalahan pada Pengisian Formulir:</strong>
+                        <ul class="mb-0 mt-2">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <div class="progress position-absolute bottom-0 start-0 w-100" style="height: 3px;">
+                            <div id="progress-bar-error" class="progress-bar bg-danger" role="progressbar"></div>
+                        </div>
+                    </div>
+                    @endif
               </div>
               <!-- Page title actions -->
       </div>
@@ -67,27 +81,37 @@
                                                     <option value="{{ $no }}">Minggu Ke-{{ $no }}</option>
                                                 @endfor
                                             </select>
+                                            @error('minggu')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Hari</label>
-                                             <select class="form-select" name="hari">
-                                                <option>
-                                                    Pilih Hari
-                                                </option>
-                                                <option value="Senin">Senin</option>
-                                                <option value="Selasa">Selasa</option>
-                                                <option value="Rabu">Rabu</option>
-                                                <option value="Kamis">Kamis</option>
-                                                <option value="Jum'at">Jum'at</option>
+                                            <select class="form-select" name="hari">
+                                                <option value="">Pilih Hari</option>
+                                                <option value="Senin" {{ old('hari') == 'Senin' ? 'selected' : '' }}>Senin</option>
+                                                <option value="Selasa" {{ old('hari') == 'Selasa' ? 'selected' : '' }}>Selasa</option>
+                                                <option value="Rabu" {{ old('hari') == 'Rabu' ? 'selected' : '' }}>Rabu</option>
+                                                <option value="Kamis" {{ old('hari') == 'Kamis' ? 'selected' : '' }}>Kamis</option>
+                                                <option value="Jum\'at" {{ old('hari') == "Jum'at" ? 'selected' : '' }}>Jum'at</option>
                                             </select>
+                                            @error('hari')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Jam Mulai</label>
                                             <input type="text" name="jam_mulai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off">
+                                            @error('jam_mulai')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Jam Selesai</label>
                                             <input type="text" name="jam_selesai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off">
+                                            @error('jam_selesai')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Mata Kuliah</label>
@@ -100,6 +124,25 @@
                                                 @endforeach
                                                 <option value="Libur">Libur</option>
                                             </select>
+                                            @error('id_makul')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div>
+                                            <label class="form-label">Dosen</label>
+                                             <select class="form-select" name="id_dosen">
+                                                <option>
+                                                    Pilih Dosen
+                                                </option>
+                                                @foreach($dosen as $data)
+                                                <option value="{{$data->id}}">
+                                                    {{$data->nama}}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                            @error('id_dosen')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Ruangan</label>
@@ -113,6 +156,9 @@
                                                 </option>
                                                 @endforeach
                                             </select>
+                                            @error('id_ruangan')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

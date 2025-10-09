@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
-'activePage' => 'ta',
-'activeDrop' => '',
+'activePage' => 'gigi',
+'activeDrop' => 'ta',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -101,9 +101,9 @@
                                 <td>
                                     <span class="text-secondary"> {{$no++}}</span>
                                 </td>
-                                <td class="text-secondary">{{$data->nim}}</td>
+                                <td class="text-secondary">{{$data->nobp}}</td>
                                 <td class="text-secondary">{{$data->nama}}</td>
-                                <td class="text-secondary">{{$data->dosen_bimbingan}}</td>
+                                <td class="text-secondary">{{$data->dosen}}</td>
                                 <td class="text-secondary">{{$data->tgl_bimbingan}}</td>
                                 <td class="text-secondary">{{$data->catatan}}</td>
                                 <td class="w-0">

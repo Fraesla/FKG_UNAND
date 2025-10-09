@@ -20,10 +20,7 @@ class SuratIzinController extends Controller
             ->select(
                 'surat_izin.*',
                 'mahasiswa.nama',
-                'mahasiswa.nim',
-                'mahasiswa.alamat',
-                'mahasiswa.gmail',
-                'mahasiswa.no_hp'
+                'mahasiswa.nobp'
             )
             ->orderBy('surat_izin.id', 'DESC')
             ->paginate($entries);
@@ -41,10 +38,7 @@ class SuratIzinController extends Controller
         ->select(
             'surat_izin.*',
             'mahasiswa.nama',
-            'mahasiswa.nim',
-            'mahasiswa.alamat',
-            'mahasiswa.gmail',
-            'mahasiswa.no_hp'
+            'mahasiswa.nobp'
         );
 
         // 🔍 Fitur search
@@ -61,10 +55,7 @@ class SuratIzinController extends Controller
                   ->orWhere('surat_izin.isi_surat', 'like', "%{$search}%")
                   // 🔽 Field dari tabel mahasiswa
                   ->orWhere('mahasiswa.nama', 'like', "%{$search}%")
-                  ->orWhere('mahasiswa.nim', 'like', "%{$search}%")
-                  ->orWhere('mahasiswa.alamat', 'like', "%{$search}%")
-                  ->orWhere('mahasiswa.gmail', 'like', "%{$search}%")
-                  ->orWhere('mahasiswa.no_hp', 'like', "%{$search}%");
+                  ->orWhere('mahasiswa.nobp', 'like', "%{$search}%");
             });
         }
 
@@ -87,6 +78,22 @@ class SuratIzinController extends Controller
     }
 
     public function create(Request $request){
+         // Validasi input
+        $request->validate([
+            'jenis' => 'required|string|max:255',
+            'id_mahasiswa' => 'required|exists:mahasiswa,id',
+            'judul_penelitian' => 'required|string|max:255',
+            'dosen_pembimbing_1' => 'required|exists:dosen,nama',
+            'dosen_pembimbing_2' => 'required|exists:dosen,nama',
+            'isi_surat' => 'required|string',
+        ],[
+            'jenis.required' => 'Jenis wajib diisi.',
+            'id_mahasiswa.exists' => 'Mahasiswa yang dipilih tidak valid..',
+            'judul_penelitian.required' => 'Judul Penelitian wajib diisi.',
+            'dosen_pembimbing_1.exists' => 'Dosen Bimbingan 1 yang dipilih tidak valid..',
+            'dosen_pembimbing_2.exists' => 'Dosen Bimbingan 2 yang dipilih tidak valid..',
+            'isi_surat.required' => 'Isi surat wajib diisi.',
+        ]);
         DB::table('surat_izin')->insert([  
             'jenis' => $request->jenis,
             'id_mahasiswa' => $request->id_mahasiswa,
@@ -107,6 +114,22 @@ class SuratIzinController extends Controller
     }
 
     public function update(Request $request, $id) {
+        // Validasi input
+        $request->validate([
+            'jenis' => 'required|string|max:255',
+            'id_mahasiswa' => 'required|exists:mahasiswa,id',
+            'judul_penelitian' => 'required|string|max:255',
+            'dosen_pembimbing_1' => 'required|exists:dosen,nama',
+            'dosen_pembimbing_2' => 'required|exists:dosen,nama',
+            'isi_surat' => 'required|string',
+        ],[
+            'jenis.required' => 'Jenis wajib diisi.',
+            'id_mahasiswa.exists' => 'Mahasiswa yang dipilih tidak valid..',
+            'judul_penelitian.required' => 'Judul Penelitian wajib diisi.',
+            'dosen_pembimbing_1.exists' => 'Dosen Bimbingan 1 yang dipilih tidak valid..',
+            'dosen_pembimbing_2.exists' => 'Dosen Bimbingan 2 yang dipilih tidak valid..',
+            'isi_surat.required' => 'Isi surat wajib diisi.',
+        ]);
         DB::table('surat_izin')  
             ->where('id', $id)
             ->update([

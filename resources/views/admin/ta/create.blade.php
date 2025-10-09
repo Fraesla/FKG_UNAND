@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
-'activePage' => 'ta',
-'activeDrop' => '',
+'activePage' => 'gigi',
+'activeDrop' => 'ta',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -11,6 +11,20 @@
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
                   <h2 class="page-title">Data Bimbingan Tugas Akhir</h2>
+                  @if ($errors->any())
+                    <div id="alert-error" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
+                        <strong>⚠️ Terjadi Kesalahan pada Pengisian Formulir:</strong>
+                        <ul class="mb-0 mt-2">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <div class="progress position-absolute bottom-0 start-0 w-100" style="height: 3px;">
+                            <div id="progress-bar-error" class="progress-bar bg-danger" role="progressbar"></div>
+                        </div>
+                    </div>
+                    @endif
               </div>
               <!-- Page title actions -->
       </div>
@@ -60,21 +74,27 @@
                                                 <option>Pilih Data Mahasiswa</option>
                                                 @foreach($mahasiswa as $data)
                                                     <option value="{{$data->id}}">
-                                                        No.BP: {{$data->nim}} | Nama Mahasiswa: {{$data->nama}} 
+                                                        No.BP: {{$data->nobp}} | Nama Mahasiswa: {{$data->nama}} 
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @error('id_mahasiswa')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Dosen Pembimbing</label>
                                              <select class="form-select" name="dosen_bimbingan">
                                                 <option>Pilih Data Dosen</option>
                                                 @foreach($dosen as $data)
-                                                    <option value="{{$data->nama}}">
-                                                        NIDM: {{$data->nidm}} | Nama Dosen : {{$data->nama}} 
+                                                    <option value="{{$data->id}}">
+                                                        NIP: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @error('dosen_bimbingan')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <!-- <div>
                                             <label class="form-label">Dosen Pembimbing</label>
@@ -93,11 +113,16 @@
                                                     <path d="M12 15v3"></path></svg></span>
                                                 <input class="form-control" placeholder="Masukkan Tanggal Pembimbing" id="datepicker-icon-prepend" name="tgl_bimbingan">
                                             </div>
+                                            @error('tgl_bimbingan')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div class="mb-3">
                                           <label class="form-label">Catatan</label>
                                           <textarea class="form-control" data-bs-toggle="autosize"  placeholder="Masukkan Catatan..." style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 56px;" name="catatan"></textarea>
+                                          
                                         </div>
+
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">
                                                 Simpan

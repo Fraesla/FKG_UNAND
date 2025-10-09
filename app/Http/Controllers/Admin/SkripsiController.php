@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\admin\jadwal;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
 
-class JadMakulController extends Controller
+class SkripsiController extends Controller
 {
     public function read(Request $request){
 
@@ -16,36 +16,34 @@ class JadMakulController extends Controller
         // Data blok (kelas) untuk select option
         $blok = DB::table('kelas')->orderBy('id','DESC')->get();
 
-        // Query jadwal_makul
-        $query = DB::table('jadwal_makul')
-            ->join('kelas', 'jadwal_makul.id_kelas', '=', 'kelas.id')
-            ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')
-            ->join('dosen', 'jadwal_makul.id_dosen', '=', 'dosen.id')
-            ->join('ruangan', 'jadwal_makul.id_ruangan', '=', 'ruangan.id')
+        // Query skripsi
+        $query = DB::table('skripsi')
+            ->join('makul', 'skripsi.id_makul', '=', 'makul.id')
+            ->join('ruangan', 'skripsi.id_ruangan', '=', 'ruangan.id')
+            ->join('dosen', 'skripsi.id_dosen', '=', 'dosen.id')
             ->select(
-                'jadwal_makul.id',
-                'kelas.nama as kelas',
-                'jadwal_makul.minggu',
-                'jadwal_makul.hari',
-                'jadwal_makul.jam_mulai',
-                'jadwal_makul.jam_selesai',
+                'skripsi.id',
+                'skripsi.minggu',
+                'skripsi.hari',
+                'skripsi.jam_mulai',
+                'skripsi.jam_selesai',
                 'makul.nama as makul',
                 'dosen.nama as dosen',
                 'ruangan.nama as ruangan'
             )
-            ->orderBy('jadwal_makul.id', 'DESC');
+            ->orderBy('skripsi.id', 'DESC');
 
         // Filter berdasarkan blok (id_kelas) kalau dipilih
         if ($request->filled('id_kelas')) {
-            $query->where('jadwal_makul.id_kelas', $request->id_kelas);
+            $query->where('skripsi.id_kelas', $request->id_kelas);
         }
 
         // Pagination
-        $jadmakul = $query->paginate($entries);
-        $jadmakul->appends($request->all());
+        $skripsi = $query->paginate($entries);
+        $skripsi->appends($request->all());
 
-        return view('admin.jadwal.makul.index', [
-            'jadmakul' => $jadmakul,
+        return view('admin.skripsi.index', [
+            'skripsi' => $skripsi,
             'blok'     => $blok
         ]);
     } 
@@ -53,33 +51,31 @@ class JadMakulController extends Controller
     public function feature(Request $request)
     {
         $blok = DB::table('kelas')->orderBy('id','DESC')->get();
-        $query = DB::table('jadwal_makul')
-            ->join('kelas', 'jadwal_makul.id_kelas', '=', 'kelas.id')
-            ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')
-            ->join('dosen', 'jadwal_makul.id_dosen', '=', 'dosen.id')
-            ->join('ruangan', 'jadwal_makul.id_ruangan', '=', 'ruangan.id')
+        $query = DB::table('skripsi')
+            ->join('makul', 'skripsi.id_makul', '=', 'makul.id')
+            ->join('ruangan', 'skripsi.id_ruangan', '=', 'ruangan.id')
+            ->join('dosen', 'skripsi.id_dosen', '=', 'dosen.id')
             ->select(
-                'jadwal_makul.id',
-                'kelas.nama as kelas',
-                'jadwal_makul.minggu',
-                'jadwal_makul.hari',
-                'jadwal_makul.jam_mulai',
-                'jadwal_makul.jam_selesai',
-                'dosen.nama as dosen',
+                'skripsi.id',
+                'skripsi.minggu',
+                'skripsi.hari',
+                'skripsi.jam_mulai',
+                'skripsi.jam_selesai',
                 'makul.nama as makul',
+                'dosen.nama as dosen',
                 'ruangan.nama as ruangan'
             );
 
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('jadwal_makul.id', 'like', "%{$search}%")
+                $q->where('skripsi.id', 'like', "%{$search}%")
                   ->orWhere('kelas.nama', 'like', "%{$search}%")
-                  ->orWhere('jadwal_makul.hari', 'like', "%{$search}%")
-                  ->orWhere('jadwal_makul.jam_mulai', 'like', "%{$search}%")
-                  ->orWhere('jadwal_makul.jam_selesai', 'like', "%{$search}%")
-                  ->orWhere('dosen.nama', 'like', "%{$search}%")
+                  ->orWhere('skripsi.hari', 'like', "%{$search}%")
+                  ->orWhere('skripsi.jam_mulai', 'like', "%{$search}%")
+                  ->orWhere('skripsi.jam_selesai', 'like', "%{$search}%")
                   ->orWhere('makul.nama', 'like', "%{$search}%")
+                  ->orWhere('dosen.nama', 'like', "%{$search}%")
                   ->orWhere('ruangan.nama', 'like', "%{$search}%");
             });
         }
@@ -88,12 +84,12 @@ class JadMakulController extends Controller
         $entries = $request->get('entries', 10);
 
         // Ambil data dengan pagination
-        $jadmakul = $query->orderBy('jadwal_makul.id', 'DESC')->paginate($entries);
+        $skripsi = $query->orderBy('skripsi.id', 'DESC')->paginate($entries);
 
         // Supaya pagination tetap bawa query string (search / entries)
-        $jadmakul->appends($request->all());
+        $skripsi->appends($request->all());
 
-        return view('admin.jadwal.makul.index', compact('jadmakul','blok'));
+        return view('admin.skripsi.index', compact('skripsi','blok'));
     }
 
     public function add(){
@@ -101,13 +97,12 @@ class JadMakulController extends Controller
         $makul = DB::table('makul')->orderBy('id','DESC')->get();
         $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
         $ruangan = DB::table('ruangan')->orderBy('id','DESC')->get();
-        return view('admin.jadwal.makul.create',['blok'=>$blok,'makul'=>$makul,'dosen'=>$dosen,'ruangan'=>$ruangan]);
+        return view('admin.skripsi.create',['blok'=>$blok,'dosen'=>$dosen,'makul'=>$makul,'ruangan'=>$ruangan]);
     }
 
     public function create(Request $request){
-         // Validasi input
+        // Validasi input
         $request->validate([
-            'id_kelas' => 'required|exists:kelas,id',
             'minggu' => 'required|integer|min:1|max:6',
             'hari' => 'required|string|max:255',
             'jam_mulai' => 'required|date_format:H:i',
@@ -116,9 +111,9 @@ class JadMakulController extends Controller
             'id_dosen' => 'required|exists:dosen,id',
             'id_ruangan' => 'required|exists:ruangan,id',
         ],[
-            'id_kelas.exists' => 'Blok yang dipilih tidak valid...',
             'minggu.required' => 'Minggu ke- wajib diisi.',
             'minggu.integer' => 'Minggu ke- yang dipilih tidak valid.',
+            'minggu.min' => 'Minggu ke- yang dipilih tidak valid.',
             'hari.required' => 'Hari wajib diisi.',
             'jam_mulai.required' => 'Jam Mulai wajib diisi.',
             'jam_mulai.date_format' => 'Format Jam Mulai tidak valid (gunakan format HH:MM).',
@@ -129,9 +124,7 @@ class JadMakulController extends Controller
             'id_dosen.exists' => 'Dosen yang dipilih tidak valid..',
             'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
         ]);
-
-        DB::table('jadwal_makul')->insert([  
-            'id_kelas' => $request->id_kelas,
+        DB::table('skripsi')->insert([  
             'minggu' => $request->minggu,
             'hari' => $request->hari,
             'jam_mulai' => $request->jam_mulai,
@@ -141,23 +134,22 @@ class JadMakulController extends Controller
             'id_ruangan' => $request->id_ruangan
         ]);
 
-        return redirect('/admin/jadmakul')->with("success","Data Berhasil Ditambah !");
+        return redirect('/admin/skripsi')->with("success","Data Berhasil Ditambah !");
     }
 
     public function edit($id){
-        $jadmakul = DB::table('jadwal_makul')->where('id',$id)->first();
+        $skripsi = DB::table('skripsi')->where('id',$id)->first();
         $blok = DB::table('kelas')->orderBy('id','DESC')->get();
         $makul = DB::table('makul')->orderBy('id','DESC')->get();
         $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
         $ruangan = DB::table('ruangan')->orderBy('id','DESC')->get();
         
-        return view('admin.jadwal.makul.edit',['jadmakul'=>$jadmakul,'blok'=>$blok,'dosen'=>$dosen,'makul'=>$makul,'ruangan'=>$ruangan]);
+        return view('admin.skripsi.edit',['skripsi'=>$skripsi,'blok'=>$blok,'dosen'=>$dosen,'makul'=>$makul,'ruangan'=>$ruangan]);
     }
 
     public function update(Request $request, $id) {
-         // Validasi input
+        // Validasi input
         $request->validate([
-            'id_kelas' => 'required|exists:kelas,id',
             'minggu' => 'required|integer|min:1|max:6',
             'hari' => 'required|string|max:255',
             'jam_mulai' => 'required|date_format:H:i',
@@ -166,10 +158,9 @@ class JadMakulController extends Controller
             'id_dosen' => 'required|exists:dosen,id',
             'id_ruangan' => 'required|exists:ruangan,id',
         ],[
-            'id_kelas.required' => 'Form Blok Silahkan dipilh Dulu...',
-            'id_kelas.exists' => 'Blok yang dipilih tidak valid...',
             'minggu.required' => 'Minggu ke- wajib diisi.',
             'minggu.integer' => 'Minggu ke- yang dipilih tidak valid.',
+            'minggu.min' => 'Minggu ke- yang dipilih tidak valid.',
             'hari.required' => 'Hari wajib diisi.',
             'jam_mulai.required' => 'Jam Mulai wajib diisi.',
             'jam_mulai.date_format' => 'Format Jam Mulai tidak valid (gunakan format HH:MM).',
@@ -180,10 +171,9 @@ class JadMakulController extends Controller
             'id_dosen.exists' => 'Dosen yang dipilih tidak valid..',
             'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
         ]);
-        DB::table('jadwal_makul')  
+        DB::table('skripsi')  
             ->where('id', $id)
             ->update([
-            'id_kelas' => $request->id_kelas,
             'minggu' => $request->minggu,
             'hari' => $request->hari,
             'jam_mulai' => $request->jam_mulai,
@@ -193,13 +183,13 @@ class JadMakulController extends Controller
             'id_ruangan' => $request->id_ruangan
         ]);
 
-        return redirect('/admin/jadmakul')->with("success","Data Berhasil Diupdate !");
+        return redirect('/admin/skripsi')->with("success","Data Berhasil Diupdate !");
     }
 
     public function delete($id)
     {
-        DB::table('jadwal_makul')->where('id',$id)->delete();
+        DB::table('skripsi')->where('id',$id)->delete();
 
-        return redirect('/admin/jadmakul')->with("success","Data Berhasil Dihapus !");
+        return redirect('/admin/skripsi')->with("success","Data Berhasil Dihapus !");
     }
 }

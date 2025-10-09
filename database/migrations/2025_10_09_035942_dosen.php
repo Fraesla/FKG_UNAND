@@ -13,12 +13,18 @@ return new class extends Migration
     {
         Schema::create('dosen', function (Blueprint $table) {
             $table->id();
-            $table->string('nidm')->unique();
-            $table->string('nama');
+            $table->string('nama')->nullable();
+            $table->string('nip')->unique();
+            $table->string('nidn')->unique();
             $table->string('gender')->nullable();
-            $table->date('tgl_lahir')->nullable();
-            $table->text('alamat')->nullable();
-            $table->string('no_hp')->nullable();
+            $table->string('pangol')->nullable();
+            $table->date('napater')->nullable();
+            $table->string('napaber')->nullable();
+            $table->string('jf')->nullable();
+            $table->string('js')->nullable();
+            $table->date('najater')->nullable();
+            $table->string('penter')->nullable();
+            $table->string('keterangan')->nullable();
             $table->text('foto')->nullable();
             $table->timestamps();
         });

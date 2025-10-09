@@ -1,5 +1,5 @@
 @extends('admin.layouts.app', [
-'activePage' => 'jadwal',
+'activePage' => 'gigi',
 'activeDrop' => 'jadmetopen',
 ])
 @section('content')
@@ -97,6 +97,7 @@
                                 <th>Hari</th>
                                 <th class="text-center">Jam</th>
                                 <th>Mata Kuliah</th>
+                                <th>Dosen</th>
                                 <th>Ruangan</th>
                                 <th class="text-center" colspan="2">Action</th>
                             </tr>
@@ -114,6 +115,7 @@
                                 <td>{{ $data->hari }}</td>
                                 <td class="text-center">{{ $data->jam_mulai }} - {{ $data->jam_selesai }}</td>
                                 <td>{{ $data->makul }}</td>
+                                <td>{{ $data->dosen }}</td>
                                 <td>{{ $data->ruangan }}</td>
                                 <td class="w-0">
                                     <div class="d-flex gap-1">

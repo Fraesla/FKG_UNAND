@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
-'activePage' => 'suratizin',
-'activeDrop' => '',
+'activePage' => 'gigi',
+'activeDrop' => 'suratizin',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -11,6 +11,20 @@
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
                   <h2 class="page-title">Data Permohonan Surat Izin Penelitian</h2>
+                  @if ($errors->any())
+                    <div id="alert-error" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
+                        <strong>⚠️ Terjadi Kesalahan pada Pengisian Formulir:</strong>
+                        <ul class="mb-0 mt-2">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <div class="progress position-absolute bottom-0 start-0 w-100" style="height: 3px;">
+                            <div id="progress-bar-error" class="progress-bar bg-danger" role="progressbar"></div>
+                        </div>
+                    </div>
+                    @endif
               </div>
               <!-- Page title actions -->
       </div>
@@ -49,6 +63,9 @@
                                         <div>
                                             <label class="form-label">Jenis</label>
                                             <input type="text" placeholder="Masukkan Jenis" class="form-control" name="jenis" value="{{$suratizin->jenis}}" />
+                                            @error('jenis')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Mahasiswa</label>
@@ -57,14 +74,20 @@
                                                 @foreach($mahasiswa as $data)
                                                     <option value="{{$data->id}}"
                                                         {{ $suratizin->id_mahasiswa == $data->id ? 'selected' : '' }}>
-                                                        No.BP : {{$data->nim}} | Nama Mahasiswa : {{$data->nama}}  
+                                                        No.BP : {{$data->nobp}} | Nama Mahasiswa : {{$data->nama}}  
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @error('id_mahasiswa')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Judul Penelitian</label>
                                             <input type="text" placeholder="Masukkan Judul Penelitian" class="form-control" name="judul_penelitian" value="{{$suratizin->judul_penelitian}}"/>
+                                            @error('judul_penelitian')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                        <div>
                                             <label class="form-label">Dosen Pembimbing 1</label>
@@ -73,10 +96,13 @@
                                                 @foreach($dosen as $data)
                                                     <option value="{{$data->nama}}"
                                                         {{ $suratizin->dosen_pembimbing_1 == $data->nama ? 'selected' : '' }}>
-                                                        NIDM : {{$data->nidm}} | Nama Dosen : {{$data->nama}}  
+                                                        NIDM : {{$data->nip}} | Nama Dosen : {{$data->nama}}  
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @error('dosen_pembimbing_1')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Dosen Pembimbing 2</label>
@@ -85,14 +111,20 @@
                                                 @foreach($dosen as $data)
                                                     <option value="{{$data->nama}}"
                                                         {{ $suratizin->dosen_pembimbing_2 == $data->nama ? 'selected' : '' }}>
-                                                        NIDM : {{$data->nidm}} | Nama Dosen : {{$data->nama}}  
+                                                        NIDM : {{$data->nip}} | Nama Dosen : {{$data->nama}}  
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @error('dosen_pembimbing_2')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div class="mb-3">
                                           <label class="form-label">Isi Surat</label>
                                           <textarea class="form-control" data-bs-toggle="autosize"  placeholder="Masukkan Isi Surat..." style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 56px;" name="isi_surat">{{$suratizin->isi_surat}}</textarea>
+                                          @error('isi_surat')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

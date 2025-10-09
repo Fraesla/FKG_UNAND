@@ -69,17 +69,17 @@
                                         </div>
                                         <div>
                                             <label class="form-label">Semester</label>
-                                            <select class="form-select @error('semester') is-invalid @enderror" name="semester">
-                                                <option value="">Pilih Semester</option>
-                                                @for($no = 1; $no <= 8; $no++)
-                                                    <option value="{{ $no }}" {{ old('semester') == $no ? 'selected' : '' }}>
-                                                        Semester {{ $no }}
-                                                    </option>
-                                                @endfor
-                                            </select>
-
-                                            {{-- Pesan Error --}}
-                                            @error('semester')
+                                            <div>
+                                                <label class="form-check form-check-inline">
+                                                  <input class="form-check-input" type="radio" name="semester" value="Ganjil"> 
+                                                  <span class="form-check-label">Ganjil</span>
+                                                </label>
+                                                <label class="form-check form-check-inline">
+                                                  <input class="form-check-input" type="radio" name="semester" value="Genap">
+                                                  <span class="form-check-label">Genap</span>
+                                                </label>
+                                            </div>
+                                             @error('semester')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>

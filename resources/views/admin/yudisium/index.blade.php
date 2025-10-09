@@ -111,7 +111,7 @@
                                     <span class="text-secondary"> {{$no++}}</span>
                                 </td>
                                 <td class="text-secondary">{{$data->nama}}</td>
-                                <td class="text-secondary">{{$data->nim}}</td>
+                                <td class="text-secondary">{{$data->nobp}}</td>
                                 <td class="text-secondary">{{$data->judul}}</td>
                                 <td class="text-secondary">{{$data->tgl_semi_proposal}}</td>
                                 <td class="text-secondary">{{$data->tgl_semi_hasil}}</td>

@@ -27,12 +27,18 @@ class DosenController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where('id', 'like', "%{$search}%")
-                  ->orWhere('nidm', 'like', "%{$search}%")
                   ->orWhere('nama', 'like', "%{$search}%")
+                  ->orWhere('nip', 'like', "%{$search}%")
+                  ->orWhere('nidn', 'like', "%{$search}%")
                   ->orWhere('gender', 'like', "%{$search}%")
-                  ->orWhere('tgl_lahir', 'like', "%{$search}%")
-                  ->orWhere('alamat', 'like', "%{$search}%")
-                  ->orWhere('no_hp', 'like', "%{$search}%");
+                  ->orWhere('pangol', 'like', "%{$search}%")
+                  ->orWhere('napater', 'like', "%{$search}%")
+                  ->orWhere('napaber', 'like', "%{$search}%")
+                  ->orWhere('jf', 'like', "%{$search}%")
+                  ->orWhere('js', 'like', "%{$search}%")
+                  ->orWhere('najater', 'like', "%{$search}%")
+                  ->orWhere('penter', 'like', "%{$search}%")
+                  ->orWhere('keterangan', 'like', "%{$search}%");
         }
 
         // Show entries (default 10)
@@ -54,31 +60,54 @@ class DosenController extends Controller
     public function create(Request $request){
          // Validasi input
         $request->validate([
-            'nidm' => 'required|string|max:255',
-            'nama' => 'nullable|string|max:255',
-            'gender' => 'nullable|string|max:255',
-            'tgl_lahir' => 'nullable|string|max:255',
-            'alamat' => 'nullable|string|max:255',
-            'no_hp' => 'nullable|string|max:255',
+            'nama' => 'required |string|max:255',
+            'nip' => 'required|string|max:255',
+            'nidn' => 'nullable|string|max:255',
+            'gender' => 'required|string|max:255',
+            'pangol' => 'nullable|string|max:255',
+            'napater' => 'nullable|string|max:255',
+            'napaber' => 'nullable|string|max:255',
+            'jf' => 'nullable|string|max:255',
+            'js' => 'nullable|string|max:255',
+            'najater' => 'nullable|string|max:255',
+            'penter' => 'nullable|string|max:255',
+            'keterangan' => 'nullable|string|max:255',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // maksimal 2MB
+        ],[
+            'nama.required' => 'Nama Dosen wajib diisi.',
+            'nip.required' => 'NIP wajib diisi.',
+            'gender.required' => 'Jenis Kelamin wajib diisi.',
         ]);
 
         // Simpan file ke storage/public/foto_dosen
-        $path = $request->file('foto')->store('foto_dosen', 'public');
+        $path = null;
+        if ($request->hasFile('foto')) {
+            $path = $request->file('foto')->store('foto_dosen', 'public');
+        }
 
         // Simpan ke database
         DB::table('dosen')->insert([  
-            'nidm' => $request->nidm,
             'nama' => $request->nama,
+            'nip' => $request->nip,
+            'nidn' => $request->nidn,
             'gender' => $request->gender,
-            'tgl_lahir' => $request->tgl_lahir,
-            'alamat' => $request->alamat,
-            'no_hp' => $request->no_hp,
+            'pangol' => $request->pangol,
+            'napater' => $request->napater,
+            'napaber' => $request->napaber,
+            'jf' => $request->jf,
+            'js' => $request->js,
+            'najater' => $request->najater,
+            'penter' => $request->penter,
+            'keterangan' => $request->keterangan,
             'foto' => $path
+        ],[
+            'nama.required' => 'Nama Dosen wajib diisi.',
+            'nip.required' => 'NIP wajib diisi.',
+            'gender.required' => 'Jenis Kelamin wajib diisi.',
         ]);
 
         DB::table('user')->insert([  
-            'username' => $request->nidm,
+            'username' => $request->nip,
             'password' => bcrypt('Unand2025'),
             'level' => 'dosen',
             'status' => '0',
@@ -99,25 +128,38 @@ class DosenController extends Controller
 
         // Validasi input
         $request->validate([
-            'nidm' => 'required|string|max:255',
-            'nama' => 'nullable|string|max:255',
-            'gender' => 'nullable|string|max:255',
-            'tgl_lahir' => 'nullable|string|max:255',
-            'alamat' => 'nullable|string|max:255',
-            'no_hp' => 'nullable|string|max:255',
+            'nama' => 'required|string|max:255',
+            'nip' => 'required|string|max:255',
+            'nidn' => 'nullable|string|max:255',
+            'gender' => 'required|string|max:255',
+            'pangol' => 'nullable|string|max:255',
+            'napater' => 'nullable|string|max:255',
+            'napaber' => 'nullable|string|max:255',
+            'jf' => 'nullable|string|max:255',
+            'js' => 'nullable|string|max:255',
+            'najater' => 'nullable|string|max:255',
+            'penter' => 'nullable|string|max:255',
+            'keterangan' => 'nullable|string|max:255',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $dataUpdate = [
-            'nidm' => $request->nidm,
             'nama' => $request->nama,
+            'nip' => $request->nip,
+            'nidn' => $request->nidn,
             'gender' => $request->gender,
-            'tgl_lahir' => $request->tgl_lahir,
-            'alamat' => $request->alamat,
-            'no_hp' => $request->no_hp,
+            'pangol' => $request->pangol,
+            'napater' => $request->napater,
+            'napaber' => $request->napaber,
+            'jf' => $request->jf,
+            'js' => $request->js,
+            'najater' => $request->najater,
+            'penter' => $request->penter,
+            'keterangan' => $request->keterangan,
         ];
 
         // kalau ada upload foto baru
+        $path = null;
         if ($request->hasFile('foto')) {
             if ($dosen->foto && file_exists(storage_path('app/public/'.$dosen->foto))) {
                 unlink(storage_path('app/public/'.$dosen->foto));

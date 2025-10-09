@@ -21,7 +21,7 @@ class YudisiumController extends Controller
                     ->select(
                         'yudisium.*',
                         'mahasiswa.nama as nama',
-                        'mahasiswa.nim'
+                        'mahasiswa.nobp'
                     )
                     ->orderBy('yudisium.id', 'DESC')
                     ->paginate($entries);
@@ -39,7 +39,7 @@ class YudisiumController extends Controller
                     ->select(
                         'yudisium.*',
                         'mahasiswa.nama as namaa',
-                        'mahasiswa.nim'
+                        'mahasiswa.nobp'
                     );
 
         // Search berdasarkan field di yudisium & mahasiswa
@@ -48,7 +48,7 @@ class YudisiumController extends Controller
             $query->where(function($q) use ($search) {
                 $q->where('yudisium.id', 'like', "%{$search}%")
                   ->orWhere('mahasiswa.nama', 'like', "%{$search}%")
-                  ->orWhere('mahasiswa.nim', 'like', "%{$search}%")
+                  ->orWhere('mahasiswa.nobp', 'like', "%{$search}%")
                   ->orWhere('yudisium.judul', 'like', "%{$search}%")
                   ->orWhere('yudisium.tgl_semi_proposal', 'like', "%{$search}%")
                   ->orWhere('yudisium.tgl_semi_hasil', 'like', "%{$search}%");
