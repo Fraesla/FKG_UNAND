@@ -26,6 +26,7 @@
     <link href="{{url('assets')}}/dist/css/tabler-vendors.css?1747674014" rel="stylesheet" />
     <link href="{{url('assets')}}/dist/css/tabler-marketing.css?1747674014" rel="stylesheet" />
     <link href="{{url('assets')}}/dist/css/tabler-themes.css?1747674014" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
     <!-- END PLUGINS STYLES -->
     <!-- BEGIN DEMO STYLES -->
     <link href="{{url('assets')}}//preview/css/demo.css?1747674014" rel="stylesheet" />
@@ -854,7 +855,7 @@
                 </a>
               </li>
               <li class="nav-item @if ($activePage == 'jadwal') active @endif">
-                <a class="nav-link" href="/dosen/ta">
+                <a class="nav-link" href="/dosen/absendosen">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
                     ><!-- Download SVG icon from http://tabler.io/icons/icon/package -->
                     <svg
@@ -1368,6 +1369,7 @@
       </form>
     </div>
     <!-- BEGIN PAGE LIBRARIES -->
+    <script src="{{url('assets')}}/dist/libs/fullcalendar/index.global.min.js?1747674014" defer></script>
     <script src="{{url('assets')}}/dist/libs/apexcharts/dist/apexcharts.min.js?1747674014" defer></script>
     <script src="{{url('assets')}}/dist/libs/jsvectormap/dist/jsvectormap.min.js?1747674014" defer></script>
     <script src="{{url('assets')}}/dist/libs/jsvectormap/dist/maps/world.js?1747674014" defer></script>
@@ -1378,8 +1380,62 @@
     <!-- END GLOBAL MANDATORY SCRIPTS -->
     <!-- BEGIN DEMO SCRIPTS -->
     <script src="{{url('assets')}}/preview/js/demo.min.js?1747674014" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- END DEMO SCRIPTS -->
     <!-- BEGIN PAGE SCRIPTS -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var themeConfig = {
+          theme: "light",
+          "theme-base": "gray",
+          "theme-font": "sans-serif",
+          "theme-primary": "blue",
+          "theme-radius": "1",
+        };
+        var url = new URL(window.location);
+        var form = document.getElementById("offcanvasSettings");
+        var resetButton = document.getElementById("reset-changes");
+        var checkItems = function () {
+          for (var key in themeConfig) {
+            var value = window.localStorage["tabler-" + key] || themeConfig[key];
+            if (!!value) {
+              var radios = form.querySelectorAll(`[name="${key}"]`);
+              if (!!radios) {
+                radios.forEach((radio) => {
+                  radio.checked = radio.value === value;
+                });
+              }
+            }
+          }
+        };
+        form.addEventListener("change", function (event) {
+          var target = event.target,
+            name = target.name,
+            value = target.value;
+          for (var key in themeConfig) {
+            if (name === key) {
+              document.documentElement.setAttribute("data-bs-" + key, value);
+              window.localStorage.setItem("tabler-" + key, value);
+              url.searchParams.set(key, value);
+            }
+          }
+          window.history.pushState({}, "", url);
+        });
+        resetButton.addEventListener("click", function () {
+          for (var key in themeConfig) {
+            var value = themeConfig[key];
+            document.documentElement.removeAttribute("data-bs-" + key);
+            window.localStorage.removeItem("tabler-" + key);
+            url.searchParams.delete(key);
+          }
+          checkItems();
+          window.history.pushState({}, "", url);
+        });
+        checkItems();
+      });
+  </script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         window.ApexCharts &&

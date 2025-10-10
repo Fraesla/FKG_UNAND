@@ -62,11 +62,11 @@
                                         </div>
                                         <div>
                                             <label class="form-label">Jam Masuk</label>
-                                            <input type="text" name="jam_masuk" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off">
+                                            <input type="time" name="jam_masuk" class="form-control">
                                         </div>
                                         <div>
                                             <label class="form-label">Jam Pulang</label>
-                                            <input type="text" name="jam_pulang" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off">
+                                            <input type="time" name="jam_pulang" class="form-control">
                                         </div>
                                         <div>
                                             <label class="form-label">Dosen</label>

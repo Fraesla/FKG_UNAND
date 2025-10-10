@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Dosen\HomeController as DosenHomeController;
+use App\Http\Controllers\Dosen\AbsenController;
 use App\Http\Controllers\Mahasiswa\HomeController as MahasiswaHomeController;
 use App\Http\Controllers\Pimpinan\HomeController as PimpinanHomeController;
 use App\Http\Controllers\Admin\AbsensiController;
@@ -609,6 +610,22 @@ Route::prefix('admin/saps')
         Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Absen Dosen di Akun Dosen
+Route::prefix('dosen/absendosen')
+    ->name('dosen.absen')
+    ->middleware(['auth', 'checkrole:dosen'])
+    ->controller(AbsenController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/add', 'add')->name('add');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::get('/isi/{id}', 'isi')->name('isi');
+        Route::post('/absen/{id}', 'absen')->name('absen');
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/delete/{id}', 'delete')->name('delete');
     });

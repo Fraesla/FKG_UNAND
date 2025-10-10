@@ -26,7 +26,6 @@ class AbsDosenController extends Controller
                 'd.nama as nama_dosen',
                 'm.nama as makul',
                 'r.nama as ruangan',
-                'ad.qr'
             )
             ->orderBy('ad.id', 'DESC')
             ->paginate($entries);
@@ -51,7 +50,6 @@ class AbsDosenController extends Controller
                 'd.nama as nama_dosen',
                 'm.nama as makul',
                 'r.nama as ruangan',
-                'ad.qr'
             );
 
         if ($request->filled('search')) {
@@ -111,7 +109,7 @@ class AbsDosenController extends Controller
             'id_jadwal_dosen' => $request->id_jadwal_dosen,
             'status' => $request->status,
             'keterangan' => '',
-            'qr'=>uniqid()
+            'qr'=>' '
         ]);
 
         return redirect('/admin/absdosen')->with("success","Data Berhasil Ditambah !");
@@ -156,7 +154,7 @@ class AbsDosenController extends Controller
             'id_jadwal_dosen' => $request->id_jadwal_dosen,
             'status' => $request->status,
             'keterangan' => '',
-            'qr'=>uniqid()
+            'qr'=>' '
         ]);
 
         return redirect('/admin/absdosen')->with("success","Data Berhasil Diupdate !");
