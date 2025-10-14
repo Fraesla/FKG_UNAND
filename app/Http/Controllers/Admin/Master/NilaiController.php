@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin\Master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\NilaiExport;
+use App\Imports\NilaiImport;
 use Auth;
 
 class NilaiController extends Controller
@@ -68,6 +71,23 @@ class NilaiController extends Controller
         $nilai->appends($request->all());
 
         return view('admin.master.nilai.index', compact('nilai'));
+    }
+
+    public function export()
+    {
+        $fileName = 'data_nilai' . now()->format('Ymd_His') . '.xlsx';
+        return Excel::download(new NilaiExport, $fileName);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv,xls'
+        ]);
+
+        Excel::import(new NilaiImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Data nilai berhasil diimport!');
     } 
     
     public function add(){

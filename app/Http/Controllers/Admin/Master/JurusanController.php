@@ -5,6 +5,9 @@ namespace App\Http\Controllers\admin\master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\JurusanExport;
+use App\Imports\JurusanImport;
 use Auth;
 
 class JurusanController extends Controller
@@ -54,6 +57,24 @@ class JurusanController extends Controller
 
         return view('admin.master.jurusan.index', compact('jurusan'));
     }
+
+    public function export()
+    {
+        $fileName = 'data_jurusan_' . now()->format('Ymd_His') . '.xlsx';
+        return Excel::download(new JurusanExport, $fileName);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv,xls'
+        ]);
+
+        Excel::import(new JurusanImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Data jurusan berhasil diimport!');
+    }
+
     public function add(){
         $fakultas = DB::table('fakultas')->orderBy('id','DESC')->get();
         return view('admin.master.jurusan.create',['fakultas'=>$fakultas]);

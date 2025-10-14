@@ -120,6 +120,8 @@ Route::prefix('admin/fakultas')
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
         Route::get('/feature', 'feature')->name('feature');
+        Route::get('/export', 'export')->name('export');
+        Route::post('/import', 'import')->name('import');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -135,6 +137,8 @@ Route::prefix('admin/jurusan')
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
         Route::get('/feature', 'feature')->name('feature');
+        Route::get('/export', 'export')->name('export');
+        Route::post('/import', 'import')->name('import');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -179,6 +183,8 @@ Route::prefix('admin/prodi')
         Route::get('/add', 'add')->name('add');
         Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
+        Route::get('/export', 'export')->name('export');
+        Route::post('/import', 'import')->name('import');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/delete/{id}', 'delete')->name('delete');
@@ -278,7 +284,9 @@ Route::prefix('admin/nilai')
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
         Route::get('/feature', 'feature')->name('feature');
+        Route::get('/export', 'export')->name('export');
         Route::post('/create', 'create')->name('create');
+        Route::post('/import', 'import')->name('import');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/delete/{id}', 'delete')->name('delete');

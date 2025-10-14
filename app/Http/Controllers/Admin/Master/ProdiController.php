@@ -5,6 +5,9 @@ namespace App\Http\Controllers\admin\master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ProdiExport;
+use App\Imports\ProdiImport;
 use Auth;
 
 class ProdiController extends Controller
@@ -50,6 +53,23 @@ class ProdiController extends Controller
         $prodi->appends($request->all());
 
         return view('admin.master.prodi.index', compact('prodi'));
+    }
+
+    public function export()
+    {
+        $fileName = 'data_prodi' . now()->format('Ymd_His') . '.xlsx';
+        return Excel::download(new ProdiExport, $fileName);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv,xls'
+        ]);
+
+        Excel::import(new ProdiImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Data prodi berhasil diimport!');
     }
 
     public function add(){

@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\FakultasExport;
+use App\Imports\FakultasImport;
 
 class FakultasController extends Controller
 {
@@ -50,6 +53,23 @@ class FakultasController extends Controller
         $fakultas->appends($request->all());
 
         return view('admin.master.fakultas.index', compact('fakultas'));
+    }
+
+    public function export()
+    {
+        $fileName = 'data_fakultas_' . now()->format('Ymd_His') . '.xlsx';
+        return Excel::download(new FakultasExport, $fileName);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv,xls'
+        ]);
+
+        Excel::import(new FakultasImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Data fakultas berhasil diimport!');
     }
 
     public function add(){
