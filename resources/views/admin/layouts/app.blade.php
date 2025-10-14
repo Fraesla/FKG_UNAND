@@ -891,7 +891,7 @@
                         Bimbingan Akademik
                         <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
                       </a> -->
-                      <!--<a class="dropdown-item @if ($activeDrop == 'fakultas') active @endif" href="/admin/fakultas"> Fakultas </a>-->
+                      <a class="dropdown-item @if ($activeDrop == 'fakultas') active @endif" href="/admin/fakultas"> Fakultas </a>
                       <a class="dropdown-item @if ($activeDrop == 'jurusan') active @endif" href="/admin/jurusan"> Jurusan </a>
                       <a class="dropdown-item @if ($activeDrop == 'prodi') active @endif" href="/admin/prodi"> Prodi </a>
                       <a class="dropdown-item @if ($activeDrop == 'kelas') active @endif" href="/admin/kelas"> Blok </a>
