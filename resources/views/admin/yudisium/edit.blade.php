@@ -10,7 +10,21 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Seminar Hasil</h2>
+                  <h2 class="page-title">Data Yudisium</h2>
+                  @if ($errors->any())
+                    <div id="alert-error" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
+                        <strong>⚠️ Terjadi Kesalahan pada Pengisian Formulir:</strong>
+                        <ul class="mb-0 mt-2">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <div class="progress position-absolute bottom-0 start-0 w-100" style="height: 3px;">
+                            <div id="progress-bar-error" class="progress-bar bg-danger" role="progressbar"></div>
+                        </div>
+                    </div>
+                    @endif
               </div>
               <!-- Page title actions -->
       </div>
@@ -27,7 +41,7 @@
                         <div class="card"> 
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h3 class="card-title">
-                                    Pengeditan Data Seminar Hasil
+                                    Pengeditan Data Yudisium
                                 </h3>
                                 <a href="/admin/yudisium/" class="btn btn-secondary btn-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
@@ -57,10 +71,16 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @error('id_mahasiswa')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Judul</label>
                                             <input type="text" placeholder="Masukkan Judul" class="form-control" name="judul" value="{{$yudisium->judul}}"/>
+                                            @error('judul')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Tanggal Seminar Proposal</label>
@@ -75,6 +95,9 @@
                                                     <path d="M12 15v3"></path></svg></span>
                                                 <input class="form-control" placeholder="Masukkan Tanggal Seminar Proposal" id="datepicker-icon-prepend" name="tgl_semi_proposal" value="{{$yudisium->tgl_semi_proposal}}">
                                             </div>
+                                            @error('tgl_semi_proposal')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Tanggal Seminar Hasil</label>
@@ -89,6 +112,9 @@
                                                     <path d="M12 15v3"></path></svg></span>
                                                 <input class="form-control" placeholder="Masukkan Tanggal Seminar Hasil" id="datepicker-icon-prepend_2" name="tgl_semi_hasil" value="{{$yudisium->tgl_semi_hasil}}">
                                             </div>
+                                            @error('tgl_semi_hasil')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Hasil Turnitin</label>
@@ -110,7 +136,7 @@
                                                 </small>
                                             @endif
                                         </div>
-                                        <div class="mb-3">>
+                                        <div class="mb-3">
                                             <label class="form-label">KHS</label>
                                             <input type="file" name="khs" class="form-control">
                                             @if($yudisium->khs)

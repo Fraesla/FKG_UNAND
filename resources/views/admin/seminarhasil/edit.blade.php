@@ -11,6 +11,20 @@
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
                   <h2 class="page-title">Data Seminar Hasil</h2>
+                  @if ($errors->any())
+                    <div id="alert-error" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
+                        <strong>⚠️ Terjadi Kesalahan pada Pengisian Formulir:</strong>
+                        <ul class="mb-0 mt-2">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <div class="progress position-absolute bottom-0 start-0 w-100" style="height: 3px;">
+                            <div id="progress-bar-error" class="progress-bar bg-danger" role="progressbar"></div>
+                        </div>
+                    </div>
+                    @endif
               </div>
               <!-- Page title actions -->
       </div>
@@ -57,6 +71,9 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @error('id_mahasiswa')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                        <div>
                                             <label class="form-label">Dosen Pembimbing 1</label>
@@ -69,6 +86,9 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @error('dosen_pembimbing_1')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Dosen Pembimbing 2</label>
@@ -81,18 +101,30 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @error('dosen_pembimbing_2')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                          <div>
                                             <label class="form-label">Penguji 1</label>
                                             <input type="text" placeholder="Masukkan Penguji 1" class="form-control" name="penguji_1" value="{{$seminar_hasil->penguji_1}}"/>
+                                            @error('penguji_1')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Penguji 2</label>
                                             <input type="text" placeholder="Masukkan Penguji 2" class="form-control" name="penguji_2" value="{{$seminar_hasil->penguji_2}}"/>
+                                            @error('penguji_2')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div>
                                             <label class="form-label">Penguji 3</label>
                                             <input type="text" placeholder="Masukkan Penguji 3" class="form-control" name="penguji_3" value="{{$seminar_hasil->penguji_3}}"/>
+                                            @error('penguji_3')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <div class="mb-3">
                                             <label>Surat Seminar hasil</label>

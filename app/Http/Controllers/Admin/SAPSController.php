@@ -76,6 +76,18 @@ class SAPSController extends Controller
 
     public function create(Request $request){
 
+        $request->validate([
+            'id_mahasiswa'       => 'required|exists:mahasiswa,id',
+            'jml_point_a'              => 'required|int|max:255',
+            'jml_point_b'              => 'required|int|max:255',
+            'jml_point_c'              => 'required|int|max:255',
+        ],[
+            'id_mahasiswa.exists'       => 'Mahasiswa yang dipilih tidak valid.',
+            'jml_point_a.required'            => 'Jumlah Point A wajib diisi.',
+            'jml_point_b.required'            => 'Jumlah Point B wajib diisi.',
+            'jml_point_c.required'            => 'Jumlah Point C wajib diisi.',
+        ]);
+
         // Hitung total dari point A, B, C
         $total = (int) $request->jml_point_a + (int) $request->jml_point_b + (int) $request->jml_point_c;
 
@@ -109,6 +121,18 @@ class SAPSController extends Controller
     }
 
     public function update(Request $request, $id) {
+
+        $request->validate([
+            'id_mahasiswa'       => 'required|exists:mahasiswa,id',
+            'jml_point_a'              => 'required|int|max:255',
+            'jml_point_b'              => 'required|int|max:255',
+            'jml_point_c'              => 'required|int|max:255',
+        ],[
+            'id_mahasiswa.exists'       => 'Mahasiswa yang dipilih tidak valid.',
+            'jml_point_a.required'            => 'Jumlah Point A wajib diisi.',
+            'jml_point_b.required'            => 'Jumlah Point B wajib diisi.',
+            'jml_point_c.required'            => 'Jumlah Point C wajib diisi.',
+        ]);
 
         // Hitung total dari point A, B, C
         $total = (int) $request->jml_point_a + (int) $request->jml_point_b + (int) $request->jml_point_c;

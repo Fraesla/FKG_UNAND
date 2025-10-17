@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
-'activePage' => 'saps',
-'activeDrop' => '',
+'activePage' => 'master',
+'activeDrop' => 'materi',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -10,8 +10,9 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data SAPS</h2>
-                  @if ($errors->any())
+                  <h2 class="page-title">Data Materi</h2>
+                  {{-- Flash Message Error (Validasi) --}}
+                    @if ($errors->any())
                     <div id="alert-error" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
                         <strong>⚠️ Terjadi Kesalahan pada Pengisian Formulir:</strong>
                         <ul class="mb-0 mt-2">
@@ -41,9 +42,9 @@
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h3 class="card-title">
-                                    Pengeditan Data SAPS
+                                    Pengeditan Data Materi
                                 </h3>
-                                <a href="/admin/saps/" class="btn btn-secondary btn-sm">
+                                <a href="/admin/materi/" class="btn btn-secondary btn-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -57,44 +58,49 @@
                                 </a>
                             </div>
                             <div class="card-body">
-                                <form action="/admin/saps/update/{{$saps->id}}" method="POST" enctype="multipart/form-data">
+                                <form action="/admin/materi/update/{{$materi->id}}" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
                                         <div>
-                                            <label class="form-label">Mahasiswa</label>
-                                             <select class="form-select" name="id_mahasiswa">
-                                                <option>Pilih Data Mahasiswa</option>
-                                                @foreach($mahasiswa as $data)
-                                                    <option value="{{$data->id}}"
-                                                        {{ $saps->id_mahasiswa == $data->id ? 'selected' : '' }}>
-                                                        No.BP : {{$data->nobp}} | Nama Mahasiswa : {{$data->nama}}  
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('id_mahasiswa')
+                                            <label class="form-label">Judul Materi</label>
+                                            <input type="text" placeholder="Masukkan Judul Materi" class="form-control" name="judul" value="{{$materi->judul}}" />
+                                            @error('judul')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>
-                                        <div>
-                                            <label class="form-label">Jumlah Point A</label>
-                                            <input type="text" placeholder="Masukkan Jumlah Point A" class="form-control" name="jml_point_a" value="{{$saps->jml_point_a}}"/>
-                                            @error('jml_point_a')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Jumlah Point B</label>
-                                            <input type="text" placeholder="Masukkan Jumlah Point B" class="form-control" name="jml_point_b" value="{{$saps->jml_point_b}}"/>
-                                            @error('jml_point_b')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Jumlah Point C</label>
-                                            <input type="text" placeholder="Masukkan Jumlah Point C" class="form-control" name="jml_point_c" value="{{$saps->jml_point_c}}"/>
-                                            @error('jml_point_c')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="mb-3">
+                                            <label class="form-label">File Materi</label>
+
+                                            {{-- Jika ada file lama --}}
+                                            @if(!empty($materi->file))
+                                                <div class="mb-2">
+                                                    @php
+                                                        $filePath = 'storage/' . $materi->file;
+                                                        $fileExt  = pathinfo($materi->file, PATHINFO_EXTENSION);
+                                                        $isImage  = in_array(strtolower($fileExt), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+                                                    @endphp
+
+                                                    @if ($isImage)
+                                                        {{-- Preview gambar --}}
+                                                        <img src="{{ asset($filePath) }}" alt="File Materi" width="150" class="img-thumbnail mb-2">
+                                                    @else
+                                                        {{-- Preview non-gambar --}}
+                                                        <div class="p-2 border rounded bg-secondary d-flex align-items-center justify-content-between">
+                                                            <div>
+                                                                <i class="bi bi-file-earmark-text me-2 "></i> 
+                                                                <strong class="text-light">{{ basename($materi->file) }}</strong>
+                                                            </div>
+                                                            <a href="{{ asset($filePath) }}" target="_blank" class="btn btn-sm btn-primary">
+                                                                Lihat / Download
+                                                            </a>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            @endif
+
+                                            {{-- Input upload file baru --}}
+                                            <input type="file" class="form-control" name="file" accept="image/*,.pdf,.doc,.docx,.ppt,.pptx,.zip,.rar">
+                                            <small class="text-muted">Biarkan kosong jika tidak ingin mengganti file.</small>
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

@@ -79,9 +79,9 @@ class SeminarProposalController extends Controller
 
         // Validasi
         $request->validate([
-            'id_mahasiswa' => 'required|string|max:255',
-            'dosen_pembimbing_1' => 'required|string|max:255',
-            'dosen_pembimbing_2' => 'required|string|max:255',
+            'id_mahasiswa' => 'required|exists:mahasiswa,id',
+            'dosen_pembimbing_1' => 'required|exists:dosen,nama',
+            'dosen_pembimbing_2' => 'required|exists:dosen,nama',
             'penguji_1' => 'required|string|max:255',
             'penguji_2' => 'required|string|max:255',
             'penguji_3' => 'required|string|max:255',
@@ -91,6 +91,13 @@ class SeminarProposalController extends Controller
             'file_draft'     => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
             'bukti_izin'     => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
             'lembar_jadwal'  => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+        ],[
+            'id_mahasiswa.exists'       => 'Mahasiswa yang dipilih tidak valid.',
+            'dosen_pembimbing_1.exists' => 'Dosen Bimbingan 1 yang dipilih tidak valid.',
+            'dosen_pembimbing_2.exists' => 'Dosen Bimbingan 2 yang dipilih tidak valid.',
+            'penguji_1.required'            => 'Penguji 1 wajib diisi.',
+            'penguji_2.required'            => 'Penguji 2 wajib diisi.',
+            'penguji_3.required'            => 'Penguji 3 wajib diisi.',
         ]);
 
         // Simpan file jika ada
@@ -99,7 +106,7 @@ class SeminarProposalController extends Controller
             if ($request->hasFile($field)) {
                 $paths[$field] = $request->file($field)->store('seminar_proposal', 'public');
             } else {
-                $paths[$field] = null;
+                $paths[$field] = '';
             }
         }
 
@@ -132,18 +139,25 @@ class SeminarProposalController extends Controller
     public function update(Request $request, $id) {
 
         $request->validate([
-            'id_mahasiswa' => 'required|string|max:255',
-            'dosen_pembimbing_1' => 'required|string|max:255',
-            'dosen_pembimbing_2' => 'nullable|string|max:255',
-            'penguji_1' => 'nullable|string|max:255',
-            'penguji_2' => 'nullable|string|max:255',
-            'penguji_3' => 'nullable|string|max:255',
+            'id_mahasiswa' => 'required|exists:mahasiswa,id',
+            'dosen_pembimbing_1' => 'required|exists:dosen,nama',
+            'dosen_pembimbing_2' => 'required|exists:dosen,nama',
+            'penguji_1' => 'required|string|max:255',
+            'penguji_2' => 'required|string|max:255',
+            'penguji_3' => 'required|string|max:255',
 
-            // file rules
-            'surat_proposal' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048',
-            'file_draft' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048',
-            'bukti_izin' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048',
-            'lembar_jadwal' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048',
+            // field file (nullable karena user bisa upload sebagian)
+            'surat_proposal' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'file_draft'     => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'bukti_izin'     => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'lembar_jadwal'  => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+        ],[
+            'id_mahasiswa.exists'       => 'Mahasiswa yang dipilih tidak valid.',
+            'dosen_pembimbing_1.exists' => 'Dosen Bimbingan 1 yang dipilih tidak valid.',
+            'dosen_pembimbing_2.exists' => 'Dosen Bimbingan 2 yang dipilih tidak valid.',
+            'penguji_1.required'            => 'Penguji 1 wajib diisi.',
+            'penguji_2.required'            => 'Penguji 2 wajib diisi.',
+            'penguji_3.required'            => 'Penguji 3 wajib diisi.',
         ]);
 
         // ambil data lama

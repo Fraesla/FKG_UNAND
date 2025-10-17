@@ -51,7 +51,7 @@
                                        placeholder="Cari Data Absensi Dosen ..." 
                                        value="{{ request('search') }}">
 
-                                <a href="/admin/absdosen/add" class="btn btn-success btn-mm ms-2">
+                                <!-- <a href="/admin/absdosen/add" class="btn btn-success btn-mm ms-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -61,7 +61,7 @@
                                         <path d="M5 12h14" />
                                     </svg>
                                     ADD
-                                </a>
+                                </a> -->
                             </div>
                         </div>
                     </div>
@@ -87,6 +87,7 @@
                                 <th>Nama Dosen</th>
                                 <th>Mata Kuliah</th>
                                 <th>Ruangan</th>
+                                <th>Status</th>
                                 <th class="text-center" >Action</th>
                             </tr>
                         </thead>
@@ -104,6 +105,25 @@
                                 <td>{{ $data->nama_dosen }}</td>
                                 <td>{{ $data->makul }}</td>
                                 <td>{{ $data->ruangan }}</td>
+                                <td>
+                                    @if($data->status == 'hadir')
+                                        <span class="badge bg-success text-white px-3 py-1 rounded-pill">
+                                            {{ ucfirst($data->status) }}
+                                        </span>
+                                    @elseif($data->status == 'izin')
+                                        <span class="badge bg-warning text-white px-3 py-1 rounded-pill">
+                                            {{ ucfirst($data->status) }}
+                                        </span>
+                                    @elseif($data->status == 'alfa')
+                                        <span class="badge bg-danger text-white px-3 py-1 rounded-pill">
+                                            {{ ucfirst($data->status) }}
+                                        </span>
+                                    @else
+                                        <span class="badge bg-secondary text-dark px-3 py-1 rounded-pill">
+                                            {{ ucfirst($data->status) }}
+                                        </span>
+                                    @endif
+                                </td>  
                                 <td class="w-0">
                                     <div class="d-flex gap-1">
                                         <!-- Tombol Edit -->
@@ -153,7 +173,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="7" class="text-center">Data tidak ditemukan</td>
+                                <td colspan="8" class="text-center">Data tidak ditemukan</td>
                             </tr>
                             @endforelse
                         </tbody>

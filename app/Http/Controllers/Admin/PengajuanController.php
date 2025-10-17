@@ -73,39 +73,50 @@ class PengajuanController extends Controller
         return view('admin.pengajuan.create',['mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
     }
 
-    public function create(Request $request){
-
-         $request->validate([
-            'id_mahasiswa' => 'required|exists:mahasiswa,id',
+    public function create(Request $request)
+    {
+        // ✅ Validasi input — file dibuat opsional (nullable)
+        $request->validate([
+            'id_mahasiswa'       => 'required|exists:mahasiswa,id',
             'dosen_pembimbing_1' => 'required|exists:dosen,nama',
             'dosen_pembimbing_2' => 'required|exists:dosen,nama',
-            'surat_pengajuan' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-            'krs' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-            'judul' => 'required|string|max:255',
-        // tambahkan validasi field lain
+            'judul'              => 'required|string|max:255',
+            'surat_pengajuan'    => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'krs'                => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
         ],[
-            'id_mahasiswa.exists' => 'Mahasiswa yang dipilih tidak valid..',
-            'dosen_pembimbing_1.exists' => 'Dosen Bimbingan 1 yang dipilih tidak valid..',
-            'dosen_pembimbing_2.exists' => 'Dosen Bimbingan 2 yang dipilih tidak valid..',
-            'surat_pengajuan.required' => 'Surat_pengajuan wajib diisi.',
-            'krs.required' => 'KRS wajib diisi.',
-            'judul.required' => 'Judul wajib diisi.',
+            'id_mahasiswa.exists'       => 'Mahasiswa yang dipilih tidak valid.',
+            'dosen_pembimbing_1.exists' => 'Dosen Bimbingan 1 yang dipilih tidak valid.',
+            'dosen_pembimbing_2.exists' => 'Dosen Bimbingan 2 yang dipilih tidak valid.',
+            'judul.required'            => 'Judul wajib diisi.',
         ]);
 
-        // Simpan file ke storage/pengajuan
-        $surat = $request->file('surat_pengajuan')->store('pengajuan', 'public');
-        $krs = $request->file('krs')->store('pengajuan', 'public');
+        // ✅ Siapkan variabel default null
+        $surat = '';
+        $krs   = '';
 
-        DB::table('pengajuan')->insert([  
-            'id_mahasiswa' => $request->id_mahasiswa,
+        // ✅ Jika user upload file surat_pengajuan
+        if ($request->hasFile('surat_pengajuan')) {
+            $surat = $request->file('surat_pengajuan')->store('pengajuan', 'public');
+        }
+
+        // ✅ Jika user upload file krs
+        if ($request->hasFile('krs')) {
+            $krs = $request->file('krs')->store('pengajuan', 'public');
+        }
+
+        // ✅ Simpan ke database
+        DB::table('pengajuan')->insert([
+            'id_mahasiswa'       => $request->id_mahasiswa,
             'dosen_pembimbing_1' => $request->dosen_pembimbing_1,
             'dosen_pembimbing_2' => $request->dosen_pembimbing_2,
-            'surat_pengajuan' => $surat,
-            'judul' => $request->judul,
-            'krs' => $krs
+            'judul'              => $request->judul,
+            'surat_pengajuan'    => $surat,
+            'krs'                => $krs,
+            'created_at'         => now(),
+            'updated_at'         => now(),
         ]);
 
-        return redirect('/admin/pengajuan')->with("success","Data Berhasil Ditambah !");
+        return redirect('/admin/pengajuan')->with("success", "Data Berhasil Ditambah!");
     }
 
     public function edit($id){

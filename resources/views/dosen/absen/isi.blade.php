@@ -79,6 +79,13 @@
                                     </svg>
                                     QR Code
                                 </button>
+
+                                {{-- 🔹 Tombol Upload Materi --}}
+                                <button type="button"
+                                    class="btn btn-success btn-sm d-flex align-items-center gap-1"
+                                    id="btnUploadMateri">
+                                    <i class="fa fa-upload"></i> Upload Materi
+                                </button>
                             @endif
                         </div>
                     </td>
@@ -88,14 +95,31 @@
                     <td>{{ $absen->keterangan ?? '-' }}</td>
                 </tr>
             </table>
+
+            {{-- 🔹 TEMPAT TAMPILKAN MATERI SETELAH UPLOAD --}}
+            <div id="materiContainer" style="display:none;" class="mt-4">
+                <h5 class="text-muted">📘 Materi Dosen</h5>
+                <table class="table table-sm table-bordered">
+                    <tr>
+                        <th>Judul Materi</th>
+                        <td id="materiJudul"></td>
+                    </tr>
+                    <tr>
+                        <th>File Materi</th>
+                        <td id="materiFile"></td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 @endsection
 
-
+{{-- SCRIPT --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+
     // Tombol Isi Absen
     const btnIsi = document.getElementById('btnIsiAbsen');
     if (btnIsi) {
@@ -125,28 +149,86 @@ document.addEventListener('DOMContentLoaded', function () {
             const imgUrl = this.getAttribute('data-qrcode');
             Swal.fire({
                 title: 'QR Code Absen',
-                html: `
-                    <img src="${imgUrl}" alt="QR Code" 
+                html: `<img src="${imgUrl}" alt="QR Code" 
                          style="width: 250px; height: 250px; border-radius: 10px; border: 2px solid #ddd;">
-                    <p class="mt-2 text-muted">Tunjukkan QR Code ini untuk verifikasi.</p>
-                `,
-                showConfirmButton: true,
+                        <p class="mt-2 text-muted">Tunjukkan QR Code ini untuk verifikasi.</p>`,
                 confirmButtonText: 'Tutup',
                 confirmButtonColor: '#0d6efd'
             });
         });
     }
-});
-</script>
 
-{{-- Alert sukses setelah submit --}}
-@if(session('success'))
-<script>
-Swal.fire({
-    icon: 'success',
-    title: 'Berhasil!',
-    text: "{{ session('success') }}",
-    confirmButtonColor: '#198754',
+    // 🔹 Tombol Upload Materi
+    const btnUpload = document.getElementById('btnUploadMateri');
+    if (btnUpload) {
+        btnUpload.addEventListener('click', function () {
+            Swal.fire({
+                title: 'Upload Materi',
+                html: `
+                    <form id="formMateri" enctype="multipart/form-data">
+                        <div class="text-start mb-2">
+                            <label class="form-label">Judul Materi</label>
+                            <input type="text" name="judul" class="form-control" placeholder="Masukkan judul materi" required>
+                        </div>
+                        <div class="text-start">
+                            <label class="form-label">File Materi</label>
+                            <input type="file" name="file" class="form-control" required>
+                        </div>
+                    </form>
+                `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Upload',
+                cancelButtonText: 'Batal',
+                preConfirm: () => {
+                    const form = document.getElementById('formMateri');
+                    const formData = new FormData(form);
+
+                    // 🔹 Tambahkan token CSRF ke dalam FormData (bukan header)
+                    formData.append('_token', '{{ csrf_token() }}');
+
+                    // 🔹 Kirim fetch tanpa header manual agar boundary multipart tetap valid
+                    return fetch('{{ url("/dosen/absendosen/materi/" . $absen->id) }}', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(async (res) => {
+                        if (!res.ok) {
+                            // Tangani error non-200
+                            const text = await res.text();
+                            throw new Error(`Server error ${res.status}: ${text}`);
+                        }
+                        return res.json();
+                    })
+                    .then(data => {
+                        if (!data.success) throw new Error(data.message || 'Upload gagal.');
+                        return data;
+                    })
+                    .catch(err => {
+                        Swal.showValidationMessage(`Upload gagal: ${err.message}`);
+                    });
+                }
+            }).then(result => {
+                if (result.isConfirmed && result.value && result.value.data) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Materi berhasil diupload.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                    // 🔹 Tampilkan materi di halaman
+                    const m = result.value.data;
+                    document.getElementById('materiContainer').style.display = 'block';
+                    document.getElementById('materiJudul').innerText = m.judul;
+                    document.getElementById('materiFile').innerHTML = 
+                        `<a href="/storage/${m.file}" target="_blank" class="btn btn-primary btn-sm">
+                            📄 Lihat File
+                        </a>`;
+                }
+            });
+        });
+    }
 });
 </script>
-@endif

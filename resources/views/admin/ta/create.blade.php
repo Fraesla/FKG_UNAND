@@ -120,7 +120,9 @@
                                         <div class="mb-3">
                                           <label class="form-label">Catatan</label>
                                           <textarea class="form-control" data-bs-toggle="autosize"  placeholder="Masukkan Catatan..." style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 56px;" name="catatan"></textarea>
-                                          
+                                          @error('catatan')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                          @enderror
                                         </div>
 
                                         <div>

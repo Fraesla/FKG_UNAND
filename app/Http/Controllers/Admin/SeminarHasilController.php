@@ -76,19 +76,38 @@ class SeminarHasilController extends Controller
     }
 
     public function create(Request $request){
+         // Validasi
         $request->validate([
-        'surat_hasil' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        'file_draft' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        'bukti_izin' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        'lembar_jadwal' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:2048',
-        // tambahkan validasi field lain
+            'id_mahasiswa' => 'required|exists:mahasiswa,id',
+            'dosen_pembimbing_1' => 'required|exists:dosen,nama',
+            'dosen_pembimbing_2' => 'required|exists:dosen,nama',
+            'penguji_1' => 'required|string|max:255',
+            'penguji_2' => 'required|string|max:255',
+            'penguji_3' => 'required|string|max:255',
+
+            // field file (nullable karena user bisa upload sebagian)
+            'surat_hasil' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'file_draft'     => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'bukti_izin'     => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'lembar_jadwal'  => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+        ],[
+            'id_mahasiswa.exists'       => 'Mahasiswa yang dipilih tidak valid.',
+            'dosen_pembimbing_1.exists' => 'Dosen Bimbingan 1 yang dipilih tidak valid.',
+            'dosen_pembimbing_2.exists' => 'Dosen Bimbingan 2 yang dipilih tidak valid.',
+            'penguji_1.required'            => 'Penguji 1 wajib diisi.',
+            'penguji_2.required'            => 'Penguji 2 wajib diisi.',
+            'penguji_3.required'            => 'Penguji 3 wajib diisi.',
         ]);
 
-        // Simpan file ke storage/Seminar Hasil
-        $surat = $request->file('surat_hasil')->store('seminar_hasil', 'public');
-        $draft = $request->file('file_draft')->store('seminar_hasil', 'public');
-        $izin = $request->file('bukti_izin')->store('seminar_hasil', 'public');
-        $lembar = $request->file('lembar_jadwal')->store('seminar_hasil', 'public');
+        // Simpan file jika ada
+        $paths = [];
+        foreach (['surat_hasil','file_draft','bukti_izin','lembar_jadwal'] as $field) {
+            if ($request->hasFile($field)) {
+                $paths[$field] = $request->file($field)->store('seminar_hasil', 'public');
+            } else {
+                $paths[$field] = '';
+            }
+        }
 
         DB::table('seminar_hasil')->insert([  
             'id_mahasiswa' => $request->id_mahasiswa,
@@ -97,10 +116,10 @@ class SeminarHasilController extends Controller
             'penguji_1' => $request->penguji_1,
             'penguji_2' => $request->penguji_2,
             'penguji_3' => $request->penguji_3,
-            'surat_hasil' => $surat,
-            'file_draft' => $draft,
-            'bukti_izin' => $izin,
-            'lembar_jadwal' => $lembar
+            'surat_hasil' => $paths['surat_hasil'],
+            'file_draft' => $paths['file_draft'],
+            'bukti_izin' => $paths['bukti_izin'],
+            'lembar_jadwal' => $paths['lembar_jadwal']
         ]);
 
         return redirect('/admin/seminarhasil')->with("success","Data Berhasil Ditambah !");
@@ -116,19 +135,27 @@ class SeminarHasilController extends Controller
 
     public function update(Request $request, $id) {
 
+        // Validasi
         $request->validate([
-            'id_mahasiswa' => 'required|string|max:255',
-            'dosen_pembimbing_1' => 'nullable|string|max:255',
-            'dosen_pembimbing_2' => 'nullable|string|max:255',
-            'penguji_1' => 'nullable|string|max:255',
-            'penguji_2' => 'nullable|string|max:255',
-            'penguji_3' => 'nullable|string|max:255',
+            'id_mahasiswa' => 'required|exists:mahasiswa,id',
+            'dosen_pembimbing_1' => 'required|exists:dosen,nama',
+            'dosen_pembimbing_2' => 'required|exists:dosen,nama',
+            'penguji_1' => 'required|string|max:255',
+            'penguji_2' => 'required|string|max:255',
+            'penguji_3' => 'required|string|max:255',
 
-            // file rules
-            'surat_hasil' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048',
-            'file_draft' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048',
-            'bukti_izin' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048',
-            'lembar_jadwal' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:2048',
+            // field file (nullable karena user bisa upload sebagian)
+            'surat_hasil' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'file_draft'     => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'bukti_izin'     => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'lembar_jadwal'  => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+        ],[
+            'id_mahasiswa.exists'       => 'Mahasiswa yang dipilih tidak valid.',
+            'dosen_pembimbing_1.exists' => 'Dosen Bimbingan 1 yang dipilih tidak valid.',
+            'dosen_pembimbing_2.exists' => 'Dosen Bimbingan 2 yang dipilih tidak valid.',
+            'penguji_1.required'            => 'Penguji 1 wajib diisi.',
+            'penguji_2.required'            => 'Penguji 2 wajib diisi.',
+            'penguji_3.required'            => 'Penguji 3 wajib diisi.',
         ]);
 
         // ambil data lama

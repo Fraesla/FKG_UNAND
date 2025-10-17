@@ -26,6 +26,7 @@ class JadMakulController extends Controller
                 'jadwal_makul.id',
                 'kelas.nama as kelas',
                 'jadwal_makul.minggu',
+                'jadwal_makul.tgl',
                 'jadwal_makul.hari',
                 'jadwal_makul.jam_mulai',
                 'jadwal_makul.jam_selesai',
@@ -62,6 +63,7 @@ class JadMakulController extends Controller
                 'jadwal_makul.id',
                 'kelas.nama as kelas',
                 'jadwal_makul.minggu',
+                'jadwal_makul.tgl',
                 'jadwal_makul.hari',
                 'jadwal_makul.jam_mulai',
                 'jadwal_makul.jam_selesai',
@@ -75,6 +77,7 @@ class JadMakulController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('jadwal_makul.id', 'like', "%{$search}%")
                   ->orWhere('kelas.nama', 'like', "%{$search}%")
+                  ->orWhere('jadwal_makul.tgl', 'like', "%{$search}%")
                   ->orWhere('jadwal_makul.hari', 'like', "%{$search}%")
                   ->orWhere('jadwal_makul.jam_mulai', 'like', "%{$search}%")
                   ->orWhere('jadwal_makul.jam_selesai', 'like', "%{$search}%")
@@ -109,6 +112,7 @@ class JadMakulController extends Controller
         $request->validate([
             'id_kelas' => 'required|exists:kelas,id',
             'minggu' => 'required|integer|min:1|max:6',
+            'tgl' => 'required|date',
             'hari' => 'required|string|max:255',
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
@@ -119,6 +123,7 @@ class JadMakulController extends Controller
             'id_kelas.exists' => 'Blok yang dipilih tidak valid...',
             'minggu.required' => 'Minggu ke- wajib diisi.',
             'minggu.integer' => 'Minggu ke- yang dipilih tidak valid.',
+            'tgl.required' => 'Tanggal wajib diisi.',
             'hari.required' => 'Hari wajib diisi.',
             'jam_mulai.required' => 'Jam Mulai wajib diisi.',
             'jam_mulai.date_format' => 'Format Jam Mulai tidak valid (gunakan format HH:MM).',
@@ -133,6 +138,7 @@ class JadMakulController extends Controller
         DB::table('jadwal_makul')->insert([  
             'id_kelas' => $request->id_kelas,
             'minggu' => $request->minggu,
+            'tgl' => $request->tgl,
             'hari' => $request->hari,
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
@@ -143,6 +149,73 @@ class JadMakulController extends Controller
 
         return redirect('/admin/jadmakul')->with("success","Data Berhasil Ditambah !");
     }
+
+    public function absen($id)
+    {
+        // Ambil data jadwal berdasarkan ID
+        $jadwal = DB::table('jadwal_makul')->where('id', $id)->first();
+
+        if (!$jadwal) {
+            return redirect()->back()->with('error', 'Data jadwal tidak ditemukan!');
+        }
+
+        // Cek apakah sudah ada absen dengan id_jadwal_dosen yang sama
+        $cekDuplikat = DB::table('absen_dosen')
+            ->where('id_jadwal_dosen', $jadwal->id)
+            ->exists();
+
+        if ($cekDuplikat) {
+            return redirect('/admin/jadmakul')
+                ->with('error', 'Absen untuk jadwal ini sudah ada!');
+        }
+
+        // Simpan data absen baru
+        DB::table('absen_dosen')->insert([
+            'tgl'         => $jadwal->tgl,
+            'jam_masuk'   => $jadwal->jam_mulai,
+            'jam_pulang'  => $jadwal->jam_selesai,
+            'id_dosen'    => $jadwal->id_dosen,
+            'id_jadwal_dosen' => 'B'.$jadwal->id,
+            'status'      => 'belum absen',
+            'keterangan'  => '',
+            'qr'          => '',
+        ]);
+
+        return redirect('/admin/absdosen')
+            ->with('success', 'Absen dosen dari data blok berhasil ditambahkan!');
+    }
+
+    public function materi($id)
+    {
+        // Ambil data jadwal berdasarkan ID
+        $jadwal = DB::table('jadwal_makul')->where('id', $id)->first();
+
+        if (!$jadwal) {
+            return redirect()->back()->with('error', 'Data jadwal tidak ditemukan!');
+        }
+
+        // Cek apakah sudah ada materi dengan id_jadwal_blok yang sama
+        $cekDuplikat = DB::table('materi')
+            ->where('id_jadwal_blok', $jadwal->id)
+            ->exists();
+
+        if ($cekDuplikat) {
+            return redirect('/admin/jadmakul')
+                ->with('error', 'Materi untuk jadwal ini sudah ada!');
+        }
+
+        // Simpan data materi baru
+        DB::table('materi')->insert([
+            'id_jadwal_blok' => $jadwal->id,
+            'id_jadwal_metopen' => '',
+            'id_absen_dosen' => '',
+            'judul' => '',
+            'file' => '',
+        ]);
+
+        return redirect('/admin/materi')->with('success', 'Materi dari data blok berhasil ditambahkan!');
+    } 
+
 
     public function edit($id){
         $jadmakul = DB::table('jadwal_makul')->where('id',$id)->first();
@@ -159,6 +232,7 @@ class JadMakulController extends Controller
         $request->validate([
             'id_kelas' => 'required|exists:kelas,id',
             'minggu' => 'required|integer|min:1|max:6',
+            'tgl' => 'required|date',
             'hari' => 'required|string|max:255',
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
@@ -170,6 +244,7 @@ class JadMakulController extends Controller
             'id_kelas.exists' => 'Blok yang dipilih tidak valid...',
             'minggu.required' => 'Minggu ke- wajib diisi.',
             'minggu.integer' => 'Minggu ke- yang dipilih tidak valid.',
+            'tgl.required' => 'Tanggal wajib diisi.',
             'hari.required' => 'Hari wajib diisi.',
             'jam_mulai.required' => 'Jam Mulai wajib diisi.',
             'jam_mulai.date_format' => 'Format Jam Mulai tidak valid (gunakan format HH:MM).',
@@ -185,6 +260,7 @@ class JadMakulController extends Controller
             ->update([
             'id_kelas' => $request->id_kelas,
             'minggu' => $request->minggu,
+            'tgl' => $request->tgl,
             'hari' => $request->hari,
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,

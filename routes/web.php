@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\Master\ProdiController;
 use App\Http\Controllers\Admin\Master\KelasController;
 use App\Http\Controllers\Admin\Master\RuanganController;
 use App\Http\Controllers\Admin\Master\MakulController;
+use App\Http\Controllers\Admin\Master\MateriController;
 use App\Http\Controllers\Admin\Master\NilaiController;
 use App\Http\Controllers\Admin\Master\TahunAjaranController;
 use App\Http\Controllers\Admin\Jadwal\JadMakulController;
@@ -215,6 +216,8 @@ Route::prefix('admin/kelas')
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
         Route::get('/feature', 'feature')->name('feature');
+        Route::get('/export', 'export')->name('export');
+        Route::post('/import', 'import')->name('import');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -242,6 +245,8 @@ Route::prefix('admin/ruangan')
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
         Route::get('/feature', 'feature')->name('feature');
+        Route::get('/export', 'export')->name('export');
+        Route::post('/import', 'import')->name('import');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -269,6 +274,25 @@ Route::prefix('admin/makul')
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
         Route::get('/feature', 'feature')->name('feature');
+        Route::get('/export', 'export')->name('export');
+        Route::post('/import', 'import')->name('import');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Materi
+Route::prefix('admin/materi')
+    ->name('admin.master.materi.')
+    ->middleware(['auth', 'checkrole:admin'])
+    ->controller(MateriController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::get('/export', 'export')->name('export');
+        Route::post('/import', 'import')->name('import');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -285,8 +309,8 @@ Route::prefix('admin/nilai')
         Route::get('/add', 'add')->name('add');
         Route::get('/feature', 'feature')->name('feature');
         Route::get('/export', 'export')->name('export');
-        Route::post('/create', 'create')->name('create');
         Route::post('/import', 'import')->name('import');
+        Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/delete/{id}', 'delete')->name('delete');
@@ -343,6 +367,8 @@ Route::prefix('admin/jadmakul')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
+        Route::get('/absen/{id}', 'absen')->name('absen');
+        Route::get('/materi/{id}', 'materi')->name('materi');
         Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
@@ -359,6 +385,8 @@ Route::prefix('admin/jadmetopen')
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
         Route::get('/feature', 'feature')->name('feature');
+        Route::get('/absen/{id}', 'absen')->name('absen');
+        Route::get('/materi/{id}', 'materi')->name('materi');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -634,6 +662,7 @@ Route::prefix('dosen/absendosen')
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::get('/isi/{id}', 'isi')->name('isi');
         Route::post('/absen/{id}', 'absen')->name('absen');
+        Route::post('/materi/{id}', 'materi')->name('materi');
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/delete/{id}', 'delete')->name('delete');
     });

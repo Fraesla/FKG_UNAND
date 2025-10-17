@@ -10,10 +10,20 @@ class Kelas extends Model
     use HasFactory;
 
     protected $table = 'kelas';
-    protected $fillable = ['nama']; // tambah kolom lain kalau ada
+    protected $fillable = ['id_prodi','nama']; // tambah kolom lain kalau ada
 
     public function kelas()
     {
-        return $this->hasMany(Nilai::class, 'id_kelas');
+        return $this->hasMany(Kelas::class, 'id_prodi');
+    }
+
+    public function prodi()
+    {
+        return $this->belongsTo(Prodi::class, 'id_prodi');
+    }
+
+    public function nilai()
+    {
+        return $this->belongsTo(Nilai::class, 'id_kelas');
     }
 }

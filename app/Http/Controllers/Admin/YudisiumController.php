@@ -88,18 +88,23 @@ class YudisiumController extends Controller
             'full_skripsi'       => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
             'matriks'            => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
             'toefl'              => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+        ],[
+            'id_mahasiswa.exists'       => 'Mahasiswa yang dipilih tidak valid.',
+            'judul.required'            => 'Judul wajib diisi.',
+            'tgl_semi_proposal.required'            => 'Tanggal Seminar Proposal wajib diisi.',
+            'tgl_semi_hasil.required'            => 'Tanggal Seminar Hasil wajib diisi.',
         ]);
 
         // Simpan file hanya jika ada
-        $hasil      = $request->hasFile('hasil_turnitin') ? $request->file('hasil_turnitin')->store('yudisium', 'public') : null;
-        $bukti      = $request->hasFile('bukti_lunas') ? $request->file('bukti_lunas')->store('yudisium', 'public') : null;
-        $khs        = $request->hasFile('khs') ? $request->file('khs')->store('yudisium', 'public') : null;
-        $kbs        = $request->hasFile('kbs') ? $request->file('kbs')->store('yudisium', 'public') : null;
-        $brsempro   = $request->hasFile('brsempro') ? $request->file('brsempro')->store('yudisium', 'public') : null;
-        $brsemhas   = $request->hasFile('brsemhas') ? $request->file('brsemhas')->store('yudisium', 'public') : null;
-        $skripsi    = $request->hasFile('full_skripsi') ? $request->file('full_skripsi')->store('yudisium', 'public') : null;
-        $matriks    = $request->hasFile('matriks') ? $request->file('matriks')->store('yudisium', 'public') : null;
-        $toefl      = $request->hasFile('toefl') ? $request->file('toefl')->store('yudisium', 'public') : null;
+        $hasil      = $request->hasFile('hasil_turnitin') ? $request->file('hasil_turnitin')->store('yudisium', 'public') : '';
+        $bukti      = $request->hasFile('bukti_lunas') ? $request->file('bukti_lunas')->store('yudisium', 'public') : '';
+        $khs        = $request->hasFile('khs') ? $request->file('khs')->store('yudisium', 'public') : '';
+        $kbs        = $request->hasFile('kbs') ? $request->file('kbs')->store('yudisium', 'public') : '';
+        $brsempro   = $request->hasFile('brsempro') ? $request->file('brsempro')->store('yudisium', 'public') : '';
+        $brsemhas   = $request->hasFile('brsemhas') ? $request->file('brsemhas')->store('yudisium', 'public') : '';
+        $skripsi    = $request->hasFile('full_skripsi') ? $request->file('full_skripsi')->store('yudisium', 'public') : '';
+        $matriks    = $request->hasFile('matriks') ? $request->file('matriks')->store('yudisium', 'public') : '';
+        $toefl      = $request->hasFile('toefl') ? $request->file('toefl')->store('yudisium', 'public') : '';
 
         DB::table('yudisium')->insert([
             'id_mahasiswa'      => $request->id_mahasiswa,
@@ -129,7 +134,7 @@ class YudisiumController extends Controller
 
     public function update(Request $request, $id) {
         $request->validate([
-            'id_mahasiswa' => 'required|string|max:255',
+            'id_mahasiswa' => 'required|exists:mahasiswa,id',
             'judul' => 'required|string|max:255',
             'tgl_semi_proposal' => 'required|string|max:255',
             'tgl_semi_hasil' => 'nullable|string|max:255',
@@ -144,6 +149,11 @@ class YudisiumController extends Controller
             'full_skripsi' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
             'matriks' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
             'toefl' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+        ],[
+            'id_mahasiswa.exists'       => 'Mahasiswa yang dipilih tidak valid.',
+            'judul.required'            => 'Judul wajib diisi.',
+            'tgl_semi_proposal.required'            => 'Tanggal Seminar Proposal wajib diisi.',
+            'tgl_semi_hasil.required'            => 'Tanggal Seminar Hasil wajib diisi.',
         ]);
 
         // ambil data lama

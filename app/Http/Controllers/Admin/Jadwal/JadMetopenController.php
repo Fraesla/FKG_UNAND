@@ -24,6 +24,7 @@ class JadMetopenController extends Controller
             ->select(
                 'jadwal_metopen.id',
                 'jadwal_metopen.minggu',
+                'jadwal_metopen.tgl',
                 'jadwal_metopen.hari',
                 'jadwal_metopen.jam_mulai',
                 'jadwal_metopen.jam_selesai',
@@ -58,6 +59,7 @@ class JadMetopenController extends Controller
             ->select(
                 'jadwal_metopen.id',
                 'jadwal_metopen.minggu',
+                'jadwal_metopen.tgl',
                 'jadwal_metopen.hari',
                 'jadwal_metopen.jam_mulai',
                 'jadwal_metopen.jam_selesai',
@@ -71,6 +73,8 @@ class JadMetopenController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('jadwal_metopen.id', 'like', "%{$search}%")
                   ->orWhere('kelas.nama', 'like', "%{$search}%")
+                  ->orWhere('jadwal_metopen.minggu', 'like', "%{$search}%")
+                  ->orWhere('jadwal_metopen.tgl', 'like', "%{$search}%")
                   ->orWhere('jadwal_metopen.hari', 'like', "%{$search}%")
                   ->orWhere('jadwal_metopen.jam_mulai', 'like', "%{$search}%")
                   ->orWhere('jadwal_metopen.jam_selesai', 'like', "%{$search}%")
@@ -104,6 +108,7 @@ class JadMetopenController extends Controller
         // Validasi input
         $request->validate([
             'minggu' => 'required|integer|min:1|max:6',
+            'tgl' => 'required|date',
             'hari' => 'required|string|max:255',
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
@@ -113,6 +118,7 @@ class JadMetopenController extends Controller
         ],[
             'minggu.required' => 'Minggu ke- wajib diisi.',
             'minggu.integer' => 'Minggu ke- yang dipilih tidak valid.',
+            'tgl.required' => 'Tanggal wajib diisi.',
             'hari.required' => 'Hari wajib diisi.',
             'jam_mulai.required' => 'Jam Mulai wajib diisi.',
             'jam_mulai.date_format' => 'Format Jam Mulai tidak valid (gunakan format HH:MM).',
@@ -126,6 +132,7 @@ class JadMetopenController extends Controller
 
         DB::table('jadwal_metopen')->insert([  
             'minggu' => $request->minggu,
+            'tgl' => $request->tgl,
             'hari' => $request->hari,
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
@@ -136,6 +143,72 @@ class JadMetopenController extends Controller
 
         return redirect('/admin/jadmetopen')->with("success","Data Berhasil Ditambah !");
     }
+
+    public function absen($id)
+    {
+        // Ambil data jadwal berdasarkan ID
+        $jadwal = DB::table('jadwal_metopen')->where('id', $id)->first();
+
+        if (!$jadwal) {
+            return redirect()->back()->with('error', 'Data jadwal tidak ditemukan!');
+        }
+
+        // Cek apakah sudah ada absen dengan id_jadwal_dosen yang sama
+        $cekDuplikat = DB::table('absen_dosen')
+            ->where('id_jadwal_dosen', $jadwal->id)
+            ->exists();
+
+        if ($cekDuplikat) {
+            return redirect('/admin/jadmetopen')
+                ->with('error', 'Absen untuk jadwal ini sudah ada!');
+        }
+
+        // Simpan data absen baru
+        DB::table('absen_dosen')->insert([
+            'tgl'         => $jadwal->tgl,
+            'jam_masuk'   => $jadwal->jam_mulai,
+            'jam_pulang'  => $jadwal->jam_selesai,
+            'id_dosen'    => $jadwal->id_dosen,
+            'id_jadwal_dosen' => 'M'.$jadwal->id,
+            'status'      => 'belum absen',
+            'keterangan'  => '',
+            'qr'          => '',
+        ]);
+
+        return redirect('/admin/absdosen')
+            ->with('success', 'Absen dosen dari data blok berhasil ditambahkan!');
+    }
+
+    public function materi($id)
+    {
+        // Ambil data jadwal berdasarkan ID
+        $jadwal = DB::table('jadwal_metopen')->where('id', $id)->first();
+
+        if (!$jadwal) {
+            return redirect()->back()->with('error', 'Data jadwal tidak ditemukan!');
+        }
+
+        // Cek apakah sudah ada materi dengan id_jadwal_blok yang sama
+        $cekDuplikat = DB::table('materi')
+            ->where('id_jadwal_metopen', $jadwal->id)
+            ->exists();
+
+        if ($cekDuplikat) {
+            return redirect('/admin/jadmetopen')
+                ->with('error', 'Materi untuk jadwal ini sudah ada!');
+        }
+
+        // Simpan data materi baru
+        DB::table('materi')->insert([
+            'id_jadwal_blok' => '',
+            'id_jadwal_metopen' => $jadwal->id,
+            'id_absen_dosen' => '',
+            'judul' => '',
+            'file' => '',
+        ]);
+
+        return redirect('/admin/materi')->with('success', 'Materi dari data blok berhasil ditambahkan!');
+    } 
 
     public function edit($id){
         $jadmetopen = DB::table('jadwal_metopen')->where('id',$id)->first();
@@ -151,6 +224,7 @@ class JadMetopenController extends Controller
         // Validasi input
         $request->validate([
             'minggu' => 'required|integer|min:1|max:6',
+            'tgl' => 'required|date',
             'hari' => 'required|string|max:255',
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
@@ -161,6 +235,7 @@ class JadMetopenController extends Controller
             'minggu.required' => 'Minggu ke- wajib diisi.',
             'minggu.integer' => 'Minggu ke- yang dipilih tidak valid.',
             'minggu.min' => 'Minggu ke- yang dipilih tidak valid.',
+            'tgl.required' => 'Tanggal wajib diisi.',
             'hari.required' => 'Hari wajib diisi.',
             'jam_mulai.required' => 'Jam Mulai wajib diisi.',
             'jam_mulai.date_format' => 'Format Jam Mulai tidak valid (gunakan format HH:MM).',
@@ -176,6 +251,7 @@ class JadMetopenController extends Controller
             ->where('id', $id)
             ->update([
             'minggu' => $request->minggu,
+            'tgl' => $request->tgl,
             'hari' => $request->hari,
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,

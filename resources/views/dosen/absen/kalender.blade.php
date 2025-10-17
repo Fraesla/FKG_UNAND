@@ -4,17 +4,7 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1>📅 Kalender Jadwal Absen Dosen</h1>
-        <!-- <div class="d-flex align-items-center gap-2">
-            <select id="filterDosen" class="form-select form-select-sm" style="width:200px">
-                <option value="">Semua Dosen</option>
-                @foreach($dosen as $d)
-                    <option value="{{ $d->nama }}">{{ $d->nama }}</option>
-                @endforeach
-            </select>
-            <a href="#" class="btn btn-primary btn-sm">
-                + Tambah Absen
-            </a>
-        </div> -->
+        
     </div>
 
     <div id="calendar" style="min-height: 80vh;"></div>

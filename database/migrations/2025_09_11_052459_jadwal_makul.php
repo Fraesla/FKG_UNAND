@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('id_kelas');
             $table->string('minggu');
+            $table->date('tgl');
             $table->string('hari');
             $table->time('jam_mulai');
             $table->time('jam_selesai');

@@ -94,7 +94,16 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <input type="hidden" name="status" value="belum absen">
+                                        <div>
+                                            <label class="form-label">Status</label>
+                                            <select class="form-select" name="status" required>
+                                                <option value="">Pilih Status</option>
+                                                <option value="hadir" {{ $absdosen->status == 'hadir' ? 'selected' : '' }}>Hadir</option>
+                                                <option value="izin" {{ $absdosen->status == 'izin' ? 'selected' : '' }}>Izin</option>
+                                                <option value="alfa" {{ $absdosen->status == 'alfa' ? 'selected' : '' }}>Alfa</option>
+                                                <option value="belum absen" {{ $absdosen->status == 'belum absen' ? 'selected' : '' }}>Belum Absen</option>
+                                            </select>
+                                        </div> 
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">
                                                 Simpan

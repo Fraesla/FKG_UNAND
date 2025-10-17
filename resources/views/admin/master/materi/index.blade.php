@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
 'activePage' => 'master',
-'activeDrop' => 'makul',
+'activeDrop' => 'materi',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -10,7 +10,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Mata Kuliah</h2>
+                  <h2 class="page-title">Data Materi</h2>
                   @include('components.alert')
               </div>
               <!-- Page title actions -->
@@ -24,10 +24,10 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">Tabel Mata Kuliah</h3>
+                    <h3 class="card-title">Tabel Materi</h3>
                     <div class="d-flex gap-2">
                         <!-- Tombol Import -->
-                            <form action="/admin/makul/import" method="POST" enctype="multipart/form-data" class="d-inline-block me-2">
+                            <form action="/admin/materi/import" method="POST" enctype="multipart/form-data" class="d-inline-block me-2">
                                 @csrf
                                 <label class="btn btn-primary btn-mm mb-0">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
@@ -59,7 +59,7 @@
                             </a>
                     </div>
                 </div>
-                <form action="/admin/makul/feature" method="GET">
+                <form action="/admin/materi/feature" method="GET">
                     <div class="card-body border-bottom py-3">
                         <div class="d-flex align-items-center">
                             <!-- Show Entries -->
@@ -79,12 +79,12 @@
                             <div class="ms-auto text-secondary d-flex align-items-center">
                                 <span class="me-2">Search:</span>
                                 <input type="text" class="form-control form-control-mm" 
-                                       aria-label="Search data Makul" 
+                                       aria-label="Search data materi" 
                                        name="search" 
-                                       placeholder="Cari Data Makul ..." 
+                                       placeholder="Cari Data materi ..." 
                                        value="{{ request('search') }}">
 
-                                <a href="/admin/makul/add" class="btn btn-success btn-mm ms-2">
+                                <!-- <a href="/admin/materi/add" class="btn btn-success btn-mm ms-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -94,7 +94,7 @@
                                         <path d="M5 12h14" />
                                     </svg>
                                     ADD
-                                </a>
+                                </a> -->
                             </div>
                         </div>
                     </div>
@@ -115,26 +115,83 @@
                                         <path d="M6 15l6 -6l6 6"></path>
                                     </svg>
                                 </th>
-                                <th>Kode Mata Kuliah</th>
-                                <th>Nama Mata Kuliah</th>
+                                <th>Jadwal</th>
+                                <th>Absensi</th>
+                                <th>Judul Materi</th>
+                                <th>File Materi</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php $no = 1; ?>
-                            @forelse($makul as $data)
+                            @forelse($materi as $data)
                             <tr>
                                <!--  <td>
                                     <input class="form-check-input m-0 align-middle table-selectable-check"
                                     type="checkbox" aria-label="Select invoice">
                                 </td> -->
                                 <td><span class="text-secondary"> {{$no++}}</span></td>
-                                <td class="text-secondary">{{$data->kode}}</td>
-                                <td class="text-secondary">{{$data->nama}}</td>
+                                <td class="text-secondary">
+                                    @if($data->id_jadwal_blok)
+                                        {{-- Jadwal Blok --}}
+                                        <strong>Data {{ $data->blok_kelas ?? '-' }}</strong><br>
+                                        <strong>Minggu ke-{{ $data->blok_minggu ?? '-' }}</strong><br>
+                                        Tanggal : {{ \Carbon\Carbon::parse($data->blok_tgl ?? '')->format('d/m/Y') }}<br>
+                                        Hari : {{ ucfirst($data->blok_hari) ?? '-' }}<br>
+                                        Jam : {{ $data->blok_jam_mulai ?? '-' }} - {{ $data->blok_jam_selesai ?? '-' }}<br>
+                                        <span class="text-info">Mata Kuliah : {{ $data->blok_makul ?? '-' }}</span><br>
+                                        <span class="text-success">Dosen : {{ $data->blok_dosen ?? '-' }}</span><br>
+                                        <span class="text-warning">Ruangan : {{ $data->blok_ruangan ?? '-' }}</span>
+                                    @elseif($data->id_jadwal_metopen)
+                                        {{-- Jadwal Metopen --}}
+                                        <strong>Data Metopen</strong><br>
+                                        <strong>Minggu ke-{{ $data->metopen_minggu ?? '-' }}</strong><br>
+                                        Tanggal : {{ \Carbon\Carbon::parse($data->metopen_tgl ?? '')->format('d/m/Y') }}<br>
+                                        Hari : {{ ucfirst($data->metopen_hari) ?? '-' }}<br>
+                                        Jam : {{ $data->metopen_jam_mulai ?? '-' }} - {{ $data->metopen_jam_selesai ?? '-' }}<br>
+                                        <span class="text-info">Mata Kuliah : {{ $data->metopen_makul ?? '-' }}</span><br>
+                                        <span class="text-success">Dosen : {{ $data->metopen_dosen ?? '-' }}</span><br>
+                                        <span class="text-warning">Ruangan : {{ $data->metopen_ruangan ?? '-' }}</span>
+                                    @else
+                                        <span class="text-danger">Tidak ada jadwal terhubung</span>
+                                    @endif
+                                </td>
+                                {{-- Kolom Absen --}}
+                                <td>
+                                    @if(!empty($data->id_absen_dosen))
+                                        <span class="badge bg-success text-white px-3 py-2 rounded-pill">
+                                            Sudah Absen
+                                        </span>
+                                    @else
+                                        <span class="badge bg-danger text-white px-3 py-2 rounded-pill">
+                                            Belum Mengisi Absen
+                                        </span>
+                                    @endif
+                                </td>
+
+                                {{-- Kolom Judul Materi --}}
+                                <td>
+                                    @if(!empty($data->judul))
+                                        <span class="text-secondary">{{ $data->judul }}</span>
+                                    @else
+                                        <span class="badge bg-warning text-white px-3 py-2 rounded-pill">
+                                            Belum Isi Judul Materi
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="text-secondary">
+                                    @if($data->file)
+                                        <a href="{{ asset('storage/'.$data->file) }}" target="_blank" class="btn btn-sm btn-primary">
+                                            Lihat File Materi
+                                        </a>
+                                    @else
+                                        <span class="text-muted">Belum ada file</span>
+                                    @endif
+                                </td>
                                 <td class="w-0">
                                     <div class="d-flex gap-1">
                                         <!-- Tombol Edit -->
-                                        <a href="/admin/makul/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
+                                        <a href="/admin/materi/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                                  viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -179,7 +236,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="4" class="text-center">Data tidak ditemukan</td>
+                                <td colspan="6" class="text-center">Data tidak ditemukan</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -190,16 +247,16 @@
                         <div class="col-auto d-flex align-items-center">
                             <p class="m-0 text-secondary">
                                 Showing
-                                <strong>{{ $makul->firstItem() }}</strong>
+                                <strong>{{ $materi->firstItem() }}</strong>
                                 to
-                                <strong>{{ $makul->lastItem() }}</strong>
+                                <strong>{{ $materi->lastItem() }}</strong>
                                 of
-                                <strong>{{ $makul->total() }}</strong>
+                                <strong>{{ $materi->total() }}</strong>
                                 entries
                             </p>
                         </div>
                         <div class="col-auto">
-                            {{ $makul->links('pagination::bootstrap-5') }}
+                            {{ $materi->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
@@ -221,7 +278,7 @@ function deleteData(id) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = "/admin/makul/delete/" + id;
+            window.location.href = "/admin/materi/delete/" + id;
         }
     })
 }

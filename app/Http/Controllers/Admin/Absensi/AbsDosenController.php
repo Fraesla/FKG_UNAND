@@ -9,49 +9,66 @@ use Auth;
 
 class AbsDosenController extends Controller
 {
-    public function read(Request $request){
-        // $absdosen = DB::table('absen_dosen')->orderBy('id','DESC')->get();
+    public function read(Request $request)
+    {
         $entries = $request->input('entries', 5);
 
         $absdosen = DB::table('absen_dosen as ad')
             ->join('dosen as d', 'ad.id_dosen', '=', 'd.id')
-            ->join('jadwal_makul as jm', 'ad.id_jadwal_dosen', '=', 'jm.id')
-            ->join('makul as m', 'jm.id_makul', '=', 'm.id')
-            ->join('ruangan as r', 'jm.id_ruangan', '=', 'r.id')
+            ->leftJoin('jadwal_makul as jm', DB::raw("CAST(REPLACE(ad.id_jadwal_dosen, 'B', '') AS UNSIGNED)"), '=', 'jm.id')
+            ->leftJoin('jadwal_metopen as jp', DB::raw("CAST(REPLACE(ad.id_jadwal_dosen, 'M', '') AS UNSIGNED)"), '=', 'jp.id')
+            ->leftJoin('makul as m', function ($join) { 
+                $join->on('jm.id_makul', '=', 'm.id') 
+                    ->orOn('jp.id_makul', '=', 'm.id'); 
+            })
+            ->leftJoin('ruangan as r', function ($join) {
+                $join->on('jm.id_ruangan', '=', 'r.id')
+                     ->orOn('jp.id_ruangan', '=', 'r.id');
+            })
             ->select(
                 'ad.id',
                 'ad.tgl',
                 'ad.jam_masuk',
                 'ad.jam_pulang',
                 'd.nama as nama_dosen',
-                'm.nama as makul',
-                'r.nama as ruangan',
+                DB::raw("COALESCE(m.nama, 'Tidak diketahui') as makul"),
+                DB::raw("COALESCE(r.nama, '-') as ruangan"),
+                'ad.status as status'
             )
             ->orderBy('ad.id', 'DESC')
             ->paginate($entries);
 
         $absdosen->appends($request->all());
 
-        return view('admin.absensi.dosen.index',['absdosen'=>$absdosen]);
+        return view('admin.absensi.dosen.index', ['absdosen' => $absdosen]);
     }
 
     public function feature(Request $request)
     {
         $query = DB::table('absen_dosen as ad')
             ->join('dosen as d', 'ad.id_dosen', '=', 'd.id')
-            ->join('jadwal_makul as jm', 'ad.id_jadwal_dosen', '=', 'jm.id')
-            ->join('makul as m', 'jm.id_makul', '=', 'm.id')
-            ->join('ruangan as r', 'jm.id_ruangan', '=', 'r.id')
+            ->leftJoin('jadwal_makul as jm', DB::raw("CAST(REPLACE(ad.id_jadwal_dosen, 'B', '') AS UNSIGNED)"), '=', 'jm.id')
+            ->leftJoin('jadwal_metopen as jp', DB::raw("CAST(REPLACE(ad.id_jadwal_dosen, 'M', '') AS UNSIGNED)"), '=', 'jp.id')
+            ->leftJoin('makul as m', function ($join) {
+                $join->on('jm.id_makul', '=', 'm.id')
+                     ->orOn('jp.id_makul', '=', 'm.id');
+            })
+            ->leftJoin('ruangan as r', function ($join) {
+                $join->on('jm.id_ruangan', '=', 'r.id')
+                     ->orOn('jp.id_ruangan', '=', 'r.id');
+            })
             ->select(
                 'ad.id',
                 'ad.tgl',
                 'ad.jam_masuk',
                 'ad.jam_pulang',
                 'd.nama as nama_dosen',
-                'm.nama as makul',
-                'r.nama as ruangan',
+                DB::raw("COALESCE(m.nama, '-') as makul"),
+                DB::raw("COALESCE(r.nama, '-') as ruangan"),
+                'ad.status as status'
             );
 
+        // 🔍 Fitur pencarian
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -65,17 +82,15 @@ class AbsDosenController extends Controller
             });
         }
 
-        // Show entries (default 10)
+        // 🔢 Jumlah entri per halaman
         $entries = $request->get('entries', 10);
 
-        // Ambil data dengan pagination
+        // 🔁 Pagination
         $absdosen = $query->orderBy('ad.id', 'DESC')->paginate($entries);
-
-        // Supaya pagination tetap bawa query string (search / entries)
         $absdosen->appends($request->all());
 
         return view('admin.absensi.dosen.index', compact('absdosen'));
-    }
+    } 
 
     public function add(){
         $jadmakul = DB::table('jadwal_makul')
@@ -152,7 +167,6 @@ class AbsDosenController extends Controller
             'jam_pulang' => $request->jam_pulang,
             'id_dosen' => $request->id_dosen,
             'id_jadwal_dosen' => $request->id_jadwal_dosen,
-            'status' => $request->status,
             'keterangan' => '',
             'qr'=>' '
         ]);

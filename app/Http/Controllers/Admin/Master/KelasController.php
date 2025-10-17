@@ -5,6 +5,9 @@ namespace App\Http\Controllers\admin\master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\KelasExport;
+use App\Imports\KelasImport;
 use Auth;
 
 class KelasController extends Controller
@@ -49,6 +52,23 @@ class KelasController extends Controller
         $kelas->appends($request->all());
 
         return view('admin.master.kelas.index', compact('kelas'));
+    }
+
+    public function export()
+    {
+        $fileName = 'data_blok_' . now()->format('Ymd_His') . '.xlsx';
+        return Excel::download(new KelasExport, $fileName);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv,xls'
+        ]);
+
+        Excel::import(new KelasImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Data blok berhasil diimport!');
     }
     
     public function add(){

@@ -853,14 +853,14 @@
                   <span class="nav-link-title"> Home </span>
                 </a>
               </li>
-              <li class="nav-item dropdown @if ($activePage == 'master') active @endif">
+              <li class="nav-item dropdown @if(in_array($activeDrop, ['fakultas', 'jurusan', 'prodi', 'kelas', 'nilai', 'ruangan', 'makul', 'materi', 'tahun'])) show @endif">
                 <a
-                  class="nav-link dropdown-toggle"
+                  class="nav-link dropdown-toggle @if(in_array($activeDrop, ['fakultas', 'jurusan', 'prodi', 'kelas', 'nilai', 'ruangan', 'makul', 'materi', 'tahun'])) active @endif"
                   href="#navbar-base"
                   data-bs-toggle="dropdown"
                   data-bs-auto-close="false"
                   role="button"
-                  aria-expanded="false"
+                  aria-expanded="@if(in_array($activeDrop, ['fakultas', 'jurusan', 'prodi', 'kelas', 'nilai', 'ruangan', 'makul', 'materi', 'tahun']))true @else false @endif"
                 >
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
                     >
@@ -884,7 +884,7 @@
                   ></span>
                   <span class="nav-link-title"> Data Master</span>
                 </a>
-                <div class="dropdown-menu">
+                <div class="dropdown-menu show-menu @if(in_array($activeDrop, ['fakultas', 'jurusan', 'prodi', 'kelas', 'nilai', 'ruangan', 'makul', 'materi', 'tahun'])) show @endif">
                   <div class="dropdown-menu-columns">
                     <div class="dropdown-menu-column">
                      <!--  <a class="dropdown-item" href="/admin/akademik">
@@ -898,6 +898,7 @@
                       <a class="dropdown-item @if ($activeDrop == 'nilai') active @endif" href="/admin/nilai"> Nilai </a>
                       <a class="dropdown-item @if ($activeDrop == 'ruangan') active @endif" href="/admin/ruangan"> Ruangan </a>
                       <a class="dropdown-item @if ($activeDrop == 'makul') active @endif" href="/admin/makul"> Mata Kuliah </a>
+                      <a class="dropdown-item @if ($activeDrop == 'materi') active @endif" href="/admin/materi"> Materi </a>
                       <a class="dropdown-item @if ($activeDrop == 'tahun') active @endif" href="/admin/tahunajar"> Tahun Ajaran </a>
                     </div>
                   </div>
@@ -986,14 +987,14 @@
                 </div>
               </li> -->
 
-              <li class="nav-item dropdown @if ($activePage == 'gigi') active @endif">
+              <li class="nav-item dropdown @if(in_array($activeDrop, ['jadmakul', 'jadmetopen', 'skripsi', 'ta', 'suratizin', 'pengajuan', 'seminarproposal', 'seminarhasil'])) show @endif">
                 <a
-                  class="nav-link dropdown-toggle"
+                  class="nav-link dropdown-toggle @if(in_array($activeDrop, ['jadmakul', 'jadmetopen', 'skripsi', 'ta', 'suratizin', 'pengajuan', 'seminarproposal', 'seminarhasil'])) show @endif"
                   href="#navbar-extra"
                   data-bs-toggle="dropdown"
                   data-bs-auto-close="false"
                   role="button"
-                  aria-expanded="false"
+                  aria-expanded="@if(in_array($activeDrop, ['jadmakul', 'jadmetopen', 'skripsi', 'ta', 'suratizin', 'pengajuan', 'seminarproposal', 'seminarhasil'])) show @endif"
                 >
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
                     ><!-- Download SVG icon from http://tabler.io/icons/icon/star -->
@@ -1001,7 +1002,7 @@
                   </span>
                   <span class="nav-link-title"> Kedokteran Gigi</span>
                 </a>
-                <div class="dropdown-menu">
+                <div class="dropdown-menu show-menu @if(in_array($activeDrop, ['jadmakul', 'jadmetopen', 'skripsi', 'ta', 'suratizin', 'pengajuan', 'seminarproposal', 'seminarhasil'])) show @endif">
                   <div class="dropdown-menu-columns">
                     <div class="dropdown-menu-column">
                       <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
@@ -1020,10 +1021,10 @@
                   </div>
                 </div>
 
-                <li class="nav-item @if ($activePage == 'ta') active @endif">
+                <!-- <li class="nav-item @if ($activePage == 'ta') active @endif">
                 <a class="nav-link" href="#">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/puzzle -->
+                    >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -1042,7 +1043,7 @@
                   ></span>
                   <span class="nav-link-title"> Bimbingan Akademik </span>
                 </a>
-              </li>
+              </li> -->
                
               <!-- <li class="nav-item @if ($activePage == 'ta') active @endif">
                 <a class="nav-link" href="/admin/ta">
@@ -1124,14 +1125,14 @@
                   <span class="nav-link-title"> SAPS </span>
                 </a>
               </li>
-              <li class="nav-item dropdown @if ($activePage == 'akun') active @endif">
+              <li class="nav-item dropdown @if(in_array($activeDrop, ['mahasiswa', 'dosen'])) show @endif">
                 <a
-                  class="nav-link dropdown-toggle"
+                  class="nav-link dropdown-toggle @if(in_array($activeDrop, ['mahasiswa', 'dosen'])) show @endif"
                   href="#navbar-extra"
                   data-bs-toggle="dropdown"
                   data-bs-auto-close="false"
                   role="button"
-                  aria-expanded="false"
+                  aria-expanded="@if(in_array($activeDrop, ['mahasiswa', 'dosen'])) show @endif"
                 >
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
                     ><!-- Download SVG icon from http://tabler.io/icons/icon/star -->
@@ -1139,7 +1140,7 @@
                   </span>
                   <span class="nav-link-title"> Data Akun</span>
                 </a>
-                <div class="dropdown-menu">
+                <div class="dropdown-menu show-menu @if(in_array($activeDrop, ['mahasiswa', 'dosen'])) show @endif">
                   <div class="dropdown-menu-columns">
                     <div class="dropdown-menu-column">
                       <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
@@ -1148,6 +1149,33 @@
                       </a> -->
                       <a class="dropdown-item @if ($activeDrop == 'mahasiswa') active @endif" href="/admin/mahasiswa"> Mahasiswa </a>
                       <a class="dropdown-item @if ($activeDrop == 'dosen') active @endif" href="/admin/dosen"> Dosen</a>
+                    </div>
+                  </div>
+                </div>
+              <li class="nav-item dropdown @if(in_array($activeDrop, ['absmahasiswa', 'absdosen'])) show @endif">
+                <a
+                  class="nav-link dropdown-toggle @if(in_array($activeDrop, ['absmahasiswa', 'absdosen'])) show @endif"
+                  href="#navbar-extra"
+                  data-bs-toggle="dropdown"
+                  data-bs-auto-close="false"
+                  role="button"
+                  aria-expanded="@if(in_array($activeDrop, ['absmahasiswa', 'absdosen'])) show @endif"
+                >
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"
+                    ><!-- Download SVG icon from http://tabler.io/icons/icon/star -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-description"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 17h6" /><path d="M9 13h6" /></svg>
+                  </span>
+                  <span class="nav-link-title"> Data Absensi</span>
+                </a>
+                <div class="dropdown-menu show-menu @if(in_array($activeDrop, ['absmahasiswa', 'absdosen'])) show @endif">
+                  <div class="dropdown-menu-columns">
+                    <div class="dropdown-menu-column">
+                      <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
+                        Bimbingan Akademik
+                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                      </a> -->
+                      <!-- <a class="dropdown-item @if ($activeDrop == 'absmahasiswa') active @endif" href="/admin/absmahasiswa"> Mahasiswa </a> -->
+                      <a class="dropdown-item @if ($activeDrop == 'absdosen') active @endif" href="/admin/absdosen"> Dosen</a>
                     </div>
                   </div>
                 </div>
@@ -3171,6 +3199,21 @@
                 if (width <= 0) clearInterval(interval);
             }, step);
         }
+    });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const activeItem = document.querySelector('.dropdown-item.active');
+      if (activeItem) {
+        const parentMenu = activeItem.closest('.dropdown');
+        if (parentMenu) {
+          parentMenu.classList.add('show');
+          const dropdownToggle = parentMenu.querySelector('.dropdown-toggle');
+          if (dropdownToggle) dropdownToggle.setAttribute('aria-expanded', 'true');
+          const dropdownMenu = parentMenu.querySelector('.dropdown-menu');
+          if (dropdownMenu) dropdownMenu.classList.add('show');
+        }
+      }
     });
     </script>
     <!-- END PAGE SCRIPTS -->

@@ -123,6 +123,7 @@
                                     </svg>
                                 </th>
                                 <th>Minggu Ke</th>
+                                <th>Tanggal</th>
                                 <th>Hari</th>
                                 <th class="text-center">Jam</th>
                                 <th>Mata Kuliah</th>
@@ -141,6 +142,7 @@
                                 </td> -->
                                 <td><span class="text-secondary"> {{$no++}}</span></td>
                                 <td>Minggu Ke-{{ $data->minggu }}</td>
+                                <td>{{ $data->tgl }}</td>
                                 <td>{{ $data->hari }}</td>
                                 <td class="text-center">{{ $data->jam_mulai }} - {{ $data->jam_selesai }}</td>
                                 <td>{{ $data->makul }}</td>
@@ -151,17 +153,25 @@
                                         @switch($data->makul)
                                             @case('Kuliah Pengantar')
                                             @case('Pleno')
-                                                {{-- Hanya tampilkan Absensi --}}
-                                                <a href="/admin/absdosen" class="btn btn-success btn-sm p-1">
-                                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  
-                                                         viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  
-                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"  
+                                                {{-- Tombol Absensi Dosen --}}
+                                                <a href="/admin/jadmakul/absen/{{$data->id}}" 
+                                                   class="btn btn-success btn-sm p-1 btn-absen">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                                          class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-text">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                                         <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
                                                         <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
-                                                        <path d="M9 12h6" /><path d="M9 16h6" />
+                                                        <path d="M9 12h6" />
+                                                        <path d="M9 16h6" />
                                                     </svg>
+                                                </a>
+
+
+                                                <!-- Materi -->
+                                                <a href="/admin/jadmakul/materi/{{$data->id}}" class="btn btn-secondary btn-sm p-1 btn-materi">
+                                                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-book"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg>
                                                 </a>
 
                                                 <!-- Edit -->
@@ -206,8 +216,9 @@
                                                     </svg>
                                                 </a>
 
-                                                <!-- Absensi -->
-                                                <a href="/admin/absdosen" class="btn btn-success btn-sm p-1">
+                                                {{-- Tombol Absensi Dosen --}}
+                                                <a href="/admin/jadmakul/absen/{{$data->id}}" 
+                                                   class="btn btn-success btn-sm p-1 btn-absen">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                          viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -215,8 +226,14 @@
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                                         <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
                                                         <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
-                                                        <path d="M9 12h6" /><path d="M9 16h6" />
+                                                        <path d="M9 12h6" />
+                                                        <path d="M9 16h6" />
                                                     </svg>
+                                                </a>
+
+                                                <!-- Materi -->
+                                                <a href="/admin/jadmakul/materi/{{$data->id}}" class="btn btn-secondary btn-sm p-1 btn-materi">
+                                                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-book"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg>
                                                 </a>
 
                                                 <!-- Edit -->
@@ -312,6 +329,53 @@ function deleteData(id) {
         }
     })
 }
+</script>
+{{-- Script Konfirmasi --}}
+<script>
+document.querySelectorAll('.btn-absen').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.preventDefault(); // cegah langsung pindah halaman
+        const url = this.getAttribute('href');
+
+        Swal.fire({
+            title: 'Konfirmasi Absen Dosen',
+            text: "Apakah Anda yakin ingin mengisi absensi dosen?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, isi absen!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    });
+});
+</script>
+<script>
+document.querySelectorAll('.btn-materi').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.preventDefault(); // cegah langsung pindah halaman
+        const url = this.getAttribute('href');
+
+        Swal.fire({
+            title: 'Konfirmasi Materi',
+            text: "Apakah Anda yakin ingin mengisi materi?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, isi materi!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    });
+});
 </script>
 <!-- END PAGE BODY -->
 @endsection

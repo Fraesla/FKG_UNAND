@@ -5,6 +5,9 @@ namespace App\Http\Controllers\admin\master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RuanganExport;
+use App\Imports\RuanganImport;
 use Auth;
 
 class RuanganController extends Controller
@@ -44,6 +47,17 @@ class RuanganController extends Controller
         $ruangan->appends($request->all());
 
         return view('admin.master.ruangan.index', compact('ruangan'));
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv,xls'
+        ]);
+
+        Excel::import(new RuanganImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Data Ruangan berhasil diimport!');
     }
 
     public function add(){

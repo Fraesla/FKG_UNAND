@@ -68,6 +68,45 @@ class SuratAktifKuliahController extends Controller
     }
 
     public function create(Request $request){
+        // Validasi
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'nip' => 'required|string|max:255',
+            'pango' => 'required|string|max:255',
+            'jabatan' => 'required|string|max:255',
+            'nama_mhs' => 'required|string|max:255',
+            'tmp_lahir_mhs' => 'required|string|max:255',
+            'tgl_lahir_mhs' => 'required|string|max:255',
+            'no_bp' => 'required|string|max:255',
+            'semester' => 'required|string|max:255',
+            'tahun_akademik' => 'required|string|max:255',
+            'nama_ort' => 'required|string|max:255',
+            'tmp_lahir_ort' => 'required|string|max:255',
+            'tgl_lahir_ort' => 'required|string|max:255',
+            'nip_ort' => 'required|string|max:255',
+            'pango_ort' => 'required|string|max:255',
+            'jabatan_ort' => 'required|string|max:255',
+            'instansi_ort' => 'required|string|max:255',
+        ],[
+            'nama.required'            => 'Nama  wajib diisi.',
+            'nip.required'            => 'NIP wajib diisi.',
+            'pango.required'            => 'Pangkat / Golongan wajib diisi.',
+            'jabatan.required'            => 'Jabatan wajib diisi.',
+            'nama_mhs.required'            => 'Nama Mahasiswa wajib diisi.',
+            'tmp_lahir_mhs.required'            => 'Tempat Lahir Mahasiswa wajib diisi.',
+            'tgl_lahir_mhs.required'            => 'Tanggal Lahir Mahasiswa wajib diisi.',
+            'no_bp.required'            => 'No.BP wajib diisi.',
+            'semester.required'            => 'Semester wajib diisi.',
+            'tahun_akademik.required'            => 'Tahun Akademik wajib diisi.',
+            'nama_ort.required'            => 'Nama Orang Tua / Wali wajib diisi.',
+            'tmp_lahir_ort.required'            => 'Tempat Lahir Orang Tua / Wali wajib diisi.',
+            'tgl_lahir_ort.required'            => 'Tanggal Lahir Orang Tua / Wali wajib diisi.',
+            'nip_ort.required'            => 'NIP Orang Tua / Wali wajib diisi.',
+            'pango_ort.required'            => 'Pangkat / Golongan Orang Tua / Wali wajib diisi.',
+            'jabatan_ort.required'            => 'Jabatan Orang Tua / Wali wajib diisi.',
+            'instansi_ort.required'            => 'Instasi Orang Tua / Wali wajib diisi.',
+        ]);
+
         DB::table('surat_aktif_kuliah')->insert([  
             'nama' => $request->nama,
             'nip' => $request->nip,
@@ -98,6 +137,44 @@ class SuratAktifKuliahController extends Controller
     }
 
     public function update(Request $request, $id) {
+        // Validasi
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'nip' => 'required|string|max:255',
+            'pango' => 'required|string|max:255',
+            'jabatan' => 'required|string|max:255',
+            'nama_mhs' => 'required|string|max:255',
+            'tmp_lahir_mhs' => 'required|string|max:255',
+            'tgl_lahir_mhs' => 'required|string|max:255',
+            'no_bp' => 'required|string|max:255',
+            'semester' => 'required|string|max:255',
+            'tahun_akademik' => 'required|string|max:255',
+            'nama_ort' => 'required|string|max:255',
+            'tmp_lahir_ort' => 'required|string|max:255',
+            'tgl_lahir_ort' => 'required|string|max:255',
+            'nip_ort' => 'required|string|max:255',
+            'pango_ort' => 'required|string|max:255',
+            'jabatan_ort' => 'required|string|max:255',
+            'instansi_ort' => 'required|string|max:255',
+        ],[
+            'nama.required'            => 'Nama  wajib diisi.',
+            'nip.required'            => 'NIP wajib diisi.',
+            'pango.required'            => 'Pangkat / Golongan wajib diisi.',
+            'jabatan.required'            => 'Jabatan wajib diisi.',
+            'nama_mhs.required'            => 'Nama Mahasiswa wajib diisi.',
+            'tmp_lahir_mhs.required'            => 'Tempat Lahir Mahasiswa wajib diisi.',
+            'tgl_lahir_mhs.required'            => 'Tanggal Lahir Mahasiswa wajib diisi.',
+            'no_bp.required'            => 'No.BP wajib diisi.',
+            'semester.required'            => 'Semester wajib diisi.',
+            'tahun_akademik.required'            => 'Tahun Akademik wajib diisi.',
+            'nama_ort.required'            => 'Nama Orang Tua / Wali wajib diisi.',
+            'tmp_lahir_ort.required'            => 'Tempat Lahir Orang Tua / Wali wajib diisi.',
+            'tgl_lahir_ort.required'            => 'Tanggal Lahir Orang Tua / Wali wajib diisi.',
+            'nip_ort.required'            => 'NIP Orang Tua / Wali wajib diisi.',
+            'pango_ort.required'            => 'Pangkat / Golongan Orang Tua / Wali wajib diisi.',
+            'jabatan_ort.required'            => 'Jabatan Orang Tua / Wali wajib diisi.',
+            'instansi_ort.required'            => 'Instasi Orang Tua / Wali wajib diisi.',
+        ]);
         DB::table('surat_aktif_kuliah')  
             ->where('id', $id)
             ->update([

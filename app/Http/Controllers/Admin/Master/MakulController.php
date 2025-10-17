@@ -5,6 +5,9 @@ namespace App\Http\Controllers\admin\master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MakulExport;
+use App\Imports\MakulImport;
 use Auth;
 
 class MakulController extends Controller
@@ -46,6 +49,17 @@ class MakulController extends Controller
         $makul->appends($request->all());
 
         return view('admin.master.makul.index', compact('makul'));
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv,xls'
+        ]);
+
+        Excel::import(new MakulImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Data Makul berhasil diimport!');
     }
 
     public function add(){
