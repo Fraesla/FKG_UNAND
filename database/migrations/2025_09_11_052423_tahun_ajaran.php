@@ -14,11 +14,7 @@ return new class extends Migration
         Schema::create('tahun_ajaran', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-<<<<<<< HEAD
-            $table->string('semester');
-=======
             $table->integer('semester');
->>>>>>> e878d26 (Server)
             $table->enum('status',['0','1'])->default('1');
             $table->timestamps();
         });
