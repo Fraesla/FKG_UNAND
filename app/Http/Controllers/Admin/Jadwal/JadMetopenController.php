@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Jadwal;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Auth;
 
 class JadMetopenController extends Controller
@@ -112,7 +113,11 @@ class JadMetopenController extends Controller
             'hari' => 'required|string|max:255',
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
-            'id_makul' => 'required|exists:makul,id',
+            'id_makul' => [
+                'required',
+                'exists:makul,id',
+                Rule::unique('jadwal_metopen', 'id_makul'),
+            ],
             'id_dosen' => 'required|exists:dosen,id',
             'id_ruangan' => 'required|exists:ruangan,id',
         ],[
@@ -126,6 +131,7 @@ class JadMetopenController extends Controller
             'jam_selesai.date_format' => 'Format Jam Selesai tidak valid (gunakan format HH:MM).',
             'jam_selesai.after' => 'Jam Selesai harus setelah Jam Mulai.',
             'id_makul.exists' => 'Mata Kuliah yang dipilih tidak valid..',
+            'id_makul.unique' => 'Mata Kuliah ini sudah terdaftar di jadwal Metopen.',
             'id_dosen.exists' => 'Dosen yang dipilih tidak valid..',
             'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
         ]);
@@ -142,6 +148,37 @@ class JadMetopenController extends Controller
         ]);
 
         return redirect('/admin/jadmetopen')->with("success","Data Berhasil Ditambah !");
+    } 
+
+    public function nilai($id)
+    {
+        // Ambil data jadwal berdasarkan ID
+        $jadwal = DB::table('jadwal_metopen')->where('id', $id)->first();
+
+        if (!$jadwal) {
+            return redirect()->back()->with('error', 'Data jadwal tidak ditemukan!');
+        }
+
+        // // Cek apakah sudah ada absen dengan id_jadwal_dosen yang sama
+        // $cekDuplikat = DB::table('nilai')
+        //     ->where('id_makul', $jadwal->id_makul)
+        //     ->exists();
+
+        // if ($cekDuplikat) {
+        //     return redirect('/admin/jadmetopen')
+        //         ->with('error', 'Data Nilai untuk jadwal Mata Kuliah ini sudah ada!');
+        // }
+
+        // Simpan data absen baru
+        DB::table('nilai')->insert([
+            'id_makul'         => $jadwal->id_makul,
+            'id_dosen'   => $jadwal->id_dosen,
+            'id_mahasiswa'  => '',
+            'nilai'    => 0,
+        ]);
+
+        return redirect('/admin/nilai')
+            ->with('success', 'Data Nilai dari data metopen berhasil ditambahkan!');
     }
 
     public function absen($id)

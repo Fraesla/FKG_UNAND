@@ -77,7 +77,7 @@
                                             <div class="col-md-4">
                                                 <label class="form-label">Minggu ke-</label>
                                                 <select class="form-select" name="minggu">
-                                                    <option value="0">Pilih Minggu ke-
+                                                    <option value="">Pilih Minggu ke-
                                                     @for($no=1; $no<=6; $no++)
                                                         <option value="{{ $no }}">Minggu Ke-{{ $no }}</option>
                                                     @endfor
@@ -105,6 +105,9 @@
                                                         </span>
                                                         <input class="form-control" placeholder="Masukkan Tanggal" id="datepicker-icon-prepend" name="tgl">
                                                     </div>
+                                                    @error('tgl')
+                                                        <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                    @enderror
                                                 </div>
                                             <div class="col-md-4">
                                                 <label class="form-label">Hari</label>

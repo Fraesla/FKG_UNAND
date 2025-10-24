@@ -9,77 +9,103 @@ use Auth;
 
 class JadwalController extends Controller
 {
-    public function read(Request $request){
-        // $absmahasiswa = DB::table('absen_mahasiswa')->orderBy('id','DESC')->get();
-        $entries = $request->input('entries', 5);
-
-        $jadwal = DB::table('absen_mahasiswa as ad')
-            ->join('mahasiswa as d', 'ad.id_mahasiswa', '=', 'd.id')
-            ->join('jadwal_makul as jm', 'ad.id_jadwal_mahasiswa', '=', 'jm.id')
-            ->join('makul as m', 'jm.id_makul', '=', 'm.id')
-            ->join('ruangan as r', 'jm.id_ruangan', '=', 'r.id')
+    public function read()
+    {
+        $absen = DB::table('absen_dosen')
+            ->join('dosen', 'absen_dosen.id_dosen', '=', 'dosen.id')
             ->select(
-                'ad.id',
-                'ad.tgl',
-                'ad.jam_masuk',
-                'ad.jam_pulang',
-                'ad.status',
-                'd.nama as nama_mahasiswa',
-                'm.nama as makul',
-                'r.nama as ruangan',
-                'ad.qr'
+                'absen_dosen.id',
+                'absen_dosen.id_dosen',
+                'absen_dosen.tgl',
+                'absen_dosen.jam_masuk',
+                'absen_dosen.jam_pulang',
+                'absen_dosen.status',
+                'absen_dosen.keterangan',
+                'dosen.nama as nama_dosen'
             )
-            ->orderBy('ad.id', 'DESC')
-            ->paginate($entries);
+            ->orderBy('absen_dosen.tgl', 'asc')
+            ->get();
 
-         $jadwal->appends($request->all());
+        // ✅ Pastikan hasilnya array valid untuk JSON
+        $events = $absen->map(function ($row) {
+            return [
+                'id'    => $row->id,
+                'title' => "{$row->nama_dosen} - " . ucfirst($row->status),
+                'start' => $row->tgl . 'T' . ($row->jam_masuk ?: '00:00:00'),
+                'end'   => $row->tgl . 'T' . ($row->jam_pulang ?: '23:59:59'),
+                'color' => $row->status === 'belum absen' ? '#dc3545' : '#198754',
+                'extendedProps' => [
+                    'nama_dosen' => $row->nama_dosen,
+                    'status'     => $row->status,
+                    'keterangan' => $row->keterangan ?? '-',
+                    'tgl'        => $row->tgl,
+                    'jam_masuk'  => $row->jam_masuk ?? '-',
+                    'jam_pulang' => $row->jam_pulang ?? '-',
+                ],
+            ];
+        })->values()->toArray(); // ✅ pastikan jadi array, bukan Collection
 
-        return view('mahasiswa.jadwal.index',['jadwal'=>$jadwal]);
+        return view('mahasiswa.jadwal.index', compact('events'));
     }
 
-    public function feature(Request $request)
+    public function isi($id)
     {
-        $query = DB::table('absen_mahasiswa as ad')
-            ->join('mahasiswa as d', 'ad.id_mahasiswa', '=', 'd.id')
-            ->join('jadwal_makul as jm', 'ad.id_jadwal_mahasiswa', '=', 'jm.id')
-            ->join('makul as m', 'jm.id_makul', '=', 'm.id')
-            ->join('ruangan as r', 'jm.id_ruangan', '=', 'r.id')
-            ->select(
-                'ad.id',
-                'ad.tgl',
-                'ad.jam_masuk',
-                'ad.jam_pulang',
-                'ad.status',
-                'd.nama as nama_mahasiswa',
-                'm.nama as makul',
-                'r.nama as ruangan',
-                'ad.qr'
-            );
+        $absen = DB::table('absen_dosen')
+            ->join('dosen', 'absen_dosen.id_dosen', '=', 'dosen.id')
+            ->select('absen_dosen.*', 'dosen.nama as nama_dosen')
+            ->where('absen_dosen.id', $id)
+            ->first();
 
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('ad.id', 'like', "%{$search}%")
-                  ->orWhere('ad.tgl', 'like', "%{$search}%")
-                  ->orWhere('ad.jam_masuk', 'like', "%{$search}%")
-                  ->orWhere('ad.jam_pulang', 'like', "%{$search}%")
-                  ->orWhere('d.nama', 'like', "%{$search}%")
-                  ->orWhere('m.nama', 'like', "%{$search}%")
-                  ->orWhere('r.nama', 'like', "%{$search}%");
-            });
+        if (!$absen) {
+            abort(404);
         }
 
-        // Show entries (default 10)
-        $entries = $request->get('entries', 10);
+        return view('mahasiswa.absen.isi', compact('absen'));
+    } 
 
-        // Ambil data dengan pagination
-        $jadwal = $query->orderBy('ad.id', 'DESC')->paginate($entries);
+    // public function feature(Request $request)
+    // {
+    //     $query = DB::table('absen_mahasiswa as ad')
+    //         ->join('mahasiswa as d', 'ad.id_mahasiswa', '=', 'd.id')
+    //         ->join('jadwal_makul as jm', 'ad.id_jadwal_mahasiswa', '=', 'jm.id')
+    //         ->join('makul as m', 'jm.id_makul', '=', 'm.id')
+    //         ->join('ruangan as r', 'jm.id_ruangan', '=', 'r.id')
+    //         ->select(
+    //             'ad.id',
+    //             'ad.tgl',
+    //             'ad.jam_masuk',
+    //             'ad.jam_pulang',
+    //             'ad.status',
+    //             'd.nama as nama_mahasiswa',
+    //             'm.nama as makul',
+    //             'r.nama as ruangan',
+    //             'ad.qr'
+    //         );
 
-        // Supaya pagination tetap bawa query string (search / entries)
-        $jadwal->appends($request->all());
+    //     if ($request->filled('search')) {
+    //         $search = $request->search;
+    //         $query->where(function ($q) use ($search) {
+    //             $q->where('ad.id', 'like', "%{$search}%")
+    //               ->orWhere('ad.tgl', 'like', "%{$search}%")
+    //               ->orWhere('ad.jam_masuk', 'like', "%{$search}%")
+    //               ->orWhere('ad.jam_pulang', 'like', "%{$search}%")
+    //               ->orWhere('d.nama', 'like', "%{$search}%")
+    //               ->orWhere('m.nama', 'like', "%{$search}%")
+    //               ->orWhere('r.nama', 'like', "%{$search}%");
+    //         });
+    //     }
 
-        return view('mahasiswa.jadwal.index', compact('jadwal'));
-    }
+    //     // Show entries (default 10)
+    //     $entries = $request->get('entries', 10);
+
+    //     // Ambil data dengan pagination
+    //     $jadwal = $query->orderBy('ad.id', 'DESC')->paginate($entries);
+
+    //     // Supaya pagination tetap bawa query string (search / entries)
+    //     $jadwal->appends($request->all());
+
+    //     return view('mahasiswa.jadwal.index', compact('jadwal'));
+    // }
 
     // public function add(){
     //     $jadmakul = DB::table('jadwal_makul')

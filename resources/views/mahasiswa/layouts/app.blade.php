@@ -29,6 +29,9 @@
     <!-- END PLUGINS STYLES -->
     <!-- BEGIN DEMO STYLES -->
     <link href="{{url('assets')}}//preview/css/demo.css?1747674014" rel="stylesheet" />
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+
     <!-- END DEMO STYLES -->
     <!-- BEGIN CUSTOM FONT -->
     <style>
@@ -1378,6 +1381,10 @@
     <script src="{{url('assets')}}/dist/libs/jsvectormap/dist/jsvectormap.min.js?1747674014" defer></script>
     <script src="{{url('assets')}}/dist/libs/jsvectormap/dist/maps/world.js?1747674014" defer></script>
     <script src="{{url('assets')}}/dist/libs/jsvectormap/dist/maps/world-merc.js?1747674014" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <!-- END PAGE LIBRARIES -->
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="{{url('assets')}}/dist/js/tabler.min.js?1747674014" defer></script>

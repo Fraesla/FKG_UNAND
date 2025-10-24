@@ -25,8 +25,8 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title">Tabel Jurusan</h3>
-                    <div class="d-flex gap-2">
-                        <!-- Tombol Import -->
+                    <!-- <div class="d-flex gap-2">
+                        Tombol Import
                             <form action="/admin/jurusan/import" method="POST" enctype="multipart/form-data" class="d-inline-block me-2">
                                 @csrf
                                 <label class="btn btn-primary btn-mm mb-0">
@@ -44,7 +44,7 @@
                                 </label>
                             </form>
 
-                            <!-- Tombol Export -->
+                            Tombol Export
                             <a href="/admin/jurusan/export" class="btn btn-info btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -57,7 +57,7 @@
                                 </svg>
                                 Export
                             </a>
-                    </div>
+                    </div> -->
                 </div>
                 <form action="/admin/jurusan/feature" method="GET">
                     <div class="card-body border-bottom py-3">

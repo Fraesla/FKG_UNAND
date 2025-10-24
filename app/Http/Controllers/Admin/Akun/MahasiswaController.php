@@ -5,6 +5,9 @@ namespace App\Http\Controllers\admin\Akun;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MahasiswaExport;
+use App\Imports\MahasiswaImport;
 use Auth;
 
 class MahasiswaController extends Controller
@@ -74,6 +77,17 @@ class MahasiswaController extends Controller
         $mahasiswa->appends($request->all());
 
         return view('admin.akun.mahasiswa.index', compact('mahasiswa'));
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv,xls'
+        ]);
+
+        Excel::import(new MahasiswaImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Data Mahasiswa berhasil diimport!');
     }
 
     public function add(){

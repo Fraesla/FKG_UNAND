@@ -10,7 +10,7 @@ class Mahasiswa extends Model
     use HasFactory;
 
     protected $table = 'mahasiswa';
-    protected $fillable = ['nama']; // tambah kolom lain kalau ada
+    protected $fillable = ['nobp','nama','gender','ukt','id_tahun_ajaran']; // tambah kolom lain kalau ada
 
     public function mahasiswa()
     {

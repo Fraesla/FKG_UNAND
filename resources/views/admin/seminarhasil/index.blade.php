@@ -25,8 +25,8 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title">Tabel Seminar Hasil</h3>
-                    <div class="d-flex gap-2">
-                        <!-- Tombol Import -->
+                    <!-- <div class="d-flex gap-2">
+                        Tombol Import
                             <a href="#" class="btn btn-primary btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -37,10 +37,10 @@
                                     <path d="M7 9l5 -5l5 5" />
                                     <path d="M12 4l0 12" />
                                 </svg>
-                                Import
+                                Upload Data Seminanr Hasil
                             </a>
 
-                            <!-- Tombol Export -->
+                            Tombol Export
                             <a href="#" class="btn btn-info btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -53,7 +53,7 @@
                                 </svg>
                                 Export
                             </a>
-                        </div>
+                        </div> -->
                 </div>
                 <form action="/admin/seminarhasil/feature" method="GET">
                     <div class="card-body border-bottom py-3">
@@ -75,9 +75,9 @@
                             <div class="ms-auto text-secondary d-flex align-items-center">
                                 <span class="me-2">Search:</span>
                                 <input type="text" class="form-control form-control-mm" 
-                                       aria-label="Search Seminar Hasil" 
+                                       aria-label="Search Data Seminar Hasil" 
                                        name="search" 
-                                       placeholder="Cari Seminar Hasil..." 
+                                       placeholder="Cari Data Seminar Hasil..." 
                                        value="{{ request('search') }}">
 
                                 <a href="/admin/seminarhasil/add" class="btn btn-success btn-mm ms-2">

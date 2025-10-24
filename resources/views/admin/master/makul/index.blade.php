@@ -39,12 +39,12 @@
                                         <path d="M7 9l5 -5l5 5" />
                                         <path d="M12 4v12" />
                                     </svg>
-                                    Import
+                                    Upload Data Mata Kuliah
                                     <input type="file" name="file" class="d-none" onchange="this.form.submit()">
                                 </label>
                             </form>
 
-                            <!-- Tombol Export -->
+                            <!-- Tombol Export 
                             <a href="#" class="btn btn-info btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -56,7 +56,7 @@
                                     <path d="M12 4l0 12" />
                                 </svg>
                                 Export
-                            </a>
+                            </a> -->
                     </div>
                 </div>
                 <form action="/admin/makul/feature" method="GET">
@@ -81,7 +81,7 @@
                                 <input type="text" class="form-control form-control-mm" 
                                        aria-label="Search data Makul" 
                                        name="search" 
-                                       placeholder="Cari Data Makul ..." 
+                                       placeholder="Cari Data Mata Kuliah ..." 
                                        value="{{ request('search') }}">
 
                                 <a href="/admin/makul/add" class="btn btn-success btn-mm ms-2">
