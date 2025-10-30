@@ -37,7 +37,7 @@
                                     <path d="M7 9l5 -5l5 5" />
                                     <path d="M12 4l0 12" />
                                 </svg>
-                                Import
+                                Upload Data Seminar Proposal
                             </a>
 
                             Tombol Export
@@ -75,9 +75,9 @@
                             <div class="ms-auto text-secondary d-flex align-items-center">
                                 <span class="me-2">Search:</span>
                                 <input type="text" class="form-control form-control-mm" 
-                                       aria-label="Search Seminar Proposal" 
+                                       aria-label="Search Data Seminar Proposal" 
                                        name="search" 
-                                       placeholder="Cari Seminar Proposal..." 
+                                       placeholder="Cari Data Seminar Proposal..." 
                                        value="{{ request('search') }}">
 
                                 <a href="/admin/seminarproposal/add" class="btn btn-success btn-mm ms-2">

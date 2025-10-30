@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 use App\Exports\NilaiExport;
 use App\Imports\NilaiImport;
 use Auth;
@@ -125,6 +126,7 @@ class NilaiController extends Controller
         $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
         $nilai = DB::table('nilai')->where('id',$id)->first();
         return view('admin.nilai.edit',['nilai'=>$nilai,'makul'=>$makul,'mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
+
     }
 
     public function update(Request $request, $id) {

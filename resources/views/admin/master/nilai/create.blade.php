@@ -62,34 +62,18 @@
                                 {{ csrf_field() }}
                                     <div class="space-y">
                                         <div>
-                                            <label class="form-label">Blok</label>
-                                            <select class="form-select" name="id_kelas">
+                                            <label class="form-label">Mata Kuliah</label>
+                                            <select class="form-select" name="id_makul">
                                                 <option>
-                                                    Pilih Nama Blok
+                                                    Pilih Nama Mata Kuliah
                                                 </option>
-                                                @foreach($blok as $data)
+                                                @foreach($makul as $data)
                                                 <option value="{{$data->id}}">
                                                     {{$data->nama}}
                                                 </option>
                                                 @endforeach
                                             </select>
-                                            @error('id_kelas')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Mahasiswa</label>
-                                            <select class="form-select" name="id_mahasiswa">
-                                                <option>
-                                                    Pilih Nama Mahasiswa
-                                                </option>
-                                                @foreach($mahasiswa as $data)
-                                                <option value="{{$data->id}}">
-                                                    {{$data->nama}}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                            @error('id_mahasiswa')
+                                            @error('id_makul')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>
@@ -106,6 +90,22 @@
                                                 @endforeach
                                             </select>
                                             @error('id_dosen')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div>
+                                            <label class="form-label">Mahasiswa</label>
+                                            <select class="form-select" name="id_mahasiswa">
+                                                <option>
+                                                    Pilih Nama Mahasiswa
+                                                </option>
+                                                @foreach($mahasiswa as $data)
+                                                <option value="{{$data->id}}">
+                                                    {{$data->nama}}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                            @error('id_mahasiswa')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>

@@ -37,10 +37,10 @@
                                     <path d="M7 9l5 -5l5 5" />
                                     <path d="M12 4l0 12" />
                                 </svg>
-                                Import
-                            </a>
-
-                            Tombol Export
+                                Upload Data Bimbingan Tugas Akhir
+                            </a> -->
+                            
+                           Tombol Export
                             <a href="#" class="btn btn-info btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -54,6 +54,7 @@
                                 Export
                             </a>
                         </div> -->
+
                 </div>
                 <form action="/admin/ta/feature" method="GET">
                     <div class="card-body border-bottom py-3">
@@ -77,7 +78,7 @@
                                 <input type="text" class="form-control form-control-mm" 
                                        aria-label="Search Bimbinga Tugas Akhir" 
                                        name="search" 
-                                       placeholder="Cari Bimbinga Tugas Akhir..." 
+                                       placeholder="Cari Data Bimbingan Tugas Akhir..." 
                                        value="{{ request('search') }}">
 
                                 <a href="/admin/ta/add" class="btn btn-success btn-mm ms-2">
