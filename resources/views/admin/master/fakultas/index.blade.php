@@ -25,8 +25,8 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title">Tabel Fakultas</h3>
-                    <div class="d-flex gap-2">
-                        <!-- Tombol Import -->
+                    <!-- <div class="d-flex gap-2">
+                        Tombol Import
                             <form action="/admin/fakultas/import" method="POST" enctype="multipart/form-data" class="d-inline-block me-2">
                                 @csrf
                                 <label class="btn btn-primary btn-mm mb-0">
@@ -39,12 +39,12 @@
                                         <path d="M7 9l5 -5l5 5" />
                                         <path d="M12 4v12" />
                                     </svg>
-                                    Import
+                                    Upload Data Fakultas
                                     <input type="file" name="file" class="d-none" onchange="this.form.submit()">
                                 </label>
                             </form>
 
-                            <!-- Tombol Export -->
+                            Tombol Export
                             <a href="/admin/fakultas/export" class="btn btn-info btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -55,9 +55,9 @@
                                     <path d="M7 11l5 5l5 -5" />
                                     <path d="M12 4l0 12" />
                                 </svg>
-                                Export
+                                Download Data Fakultas
                             </a>
-                    </div>
+                    </div> -->
                 </div>
                 <form action="/admin/fakultas/feature" method="GET">
                     <div class="card-body border-bottom py-3">
