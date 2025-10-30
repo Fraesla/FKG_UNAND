@@ -25,8 +25,8 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title">Tabel Nilai</h3>
-                    <div class="d-flex gap-2">
-                        <!-- Tombol Import -->
+                    <!-- <div class="d-flex gap-2">
+                        Tombol Import
                             <form action="/admin/nilai/import" method="POST" enctype="multipart/form-data" class="d-inline-block me-2">
                                 @csrf
                                 <label class="btn btn-primary btn-mm mb-0">
@@ -44,7 +44,7 @@
                                 </label>
                             </form>
 
-                            <!-- Tombol Export -->
+                            Tombol Export
                             <a href="/admin/nilai/export" class="btn btn-info btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -57,7 +57,7 @@
                                 </svg>
                                 Export
                             </a>
-                    </div>
+                    </div> -->
                 </div>
                 <form action="/admin/nilai/feature" method="GET">
                     <div class="card-body border-bottom py-3">
@@ -115,7 +115,7 @@
                                         <path d="M6 15l6 -6l6 6"></path>
                                     </svg>
                                 </th>
-                                <th>Nama Blok</th>
+                                <th>Nama Mata Kuliah</th>
                                 <th>Nama Mahasiswa</th>
                                 <th>Nama Dosen</th>
                                 <th>Nilai</th>
@@ -131,7 +131,7 @@
                                     type="checkbox" aria-label="Select invoice">
                                 </td> -->
                                 <td><span class="text-secondary"> {{$no++}}</span></td>
-                                <td class="text-secondary">{{$data->blok}}</td>
+                                <td class="text-secondary">{{$data->makul}}</td>
                                 <td class="text-secondary">{{$data->mahasiswa}}</td>
                                 <td class="text-secondary">{{$data->dosen}}</td>
                                 <td class="text-secondary">{{$data->nilai}}</td>

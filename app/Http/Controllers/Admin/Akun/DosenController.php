@@ -5,6 +5,9 @@ namespace App\Http\Controllers\admin\Akun;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DosenExport;
+use App\Imports\DosenImport;
 use Auth;
 
 class DosenController extends Controller
@@ -51,6 +54,17 @@ class DosenController extends Controller
         $dosen->appends($request->all());
 
         return view('admin.akun.dosen.index', compact('dosen'));
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv,xls'
+        ]);
+
+        Excel::import(new DosenImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Data Dosen berhasil diimport!');
     }
 
     public function add(){

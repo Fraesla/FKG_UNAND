@@ -214,8 +214,38 @@ class JadMakulController extends Controller
         ]);
 
         return redirect('/admin/materi')->with('success', 'Materi dari data blok berhasil ditambahkan!');
-    } 
+    }
+     
+    public function nilai($id)
+    {
+        // Ambil data jadwal berdasarkan ID
+        $jadwal = DB::table('jadwal_makul')->where('id', $id)->first();
 
+        if (!$jadwal) {
+            return redirect()->back()->with('error', 'Data jadwal tidak ditemukan!');
+        }
+
+        // // Cek apakah sudah ada absen dengan id_makul yang sama
+        // $cekDuplikat = DB::table('nilai')
+        //     ->where('id_makul', $jadwal->id)
+        //     ->exists();
+
+        // if ($cekDuplikat) {
+        //     return redirect('/admin/jadmakul')
+        //         ->with('error', 'Data Nilai untuk jadwal Mata Kuliah ini sudah ada!');
+        // }
+
+        // Simpan data absen baru
+        DB::table('nilai')->insert([
+            'id_makul'         => $jadwal->id_makul,
+            'id_dosen'   => $jadwal->id_dosen,
+            'id_mahasiswa'  => '',
+            'nilai'    => 0,
+        ]);
+
+        return redirect('/admin/nilai')
+            ->with('success', 'Data Nilai dari data blok berhasil ditambahkan!');
+    }
 
     public function edit($id){
         $jadmakul = DB::table('jadwal_makul')->where('id',$id)->first();

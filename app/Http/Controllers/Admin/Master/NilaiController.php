@@ -16,38 +16,39 @@ class NilaiController extends Controller
     {
         $entries = $request->input('entries', 5);
 
-        $nilai = DB::table('nilai')
-            ->join('kelas', 'nilai.id_kelas', '=', 'kelas.id')
-            ->join('mahasiswa', 'nilai.id_mahasiswa', '=', 'mahasiswa.id')
-            ->join('dosen', 'nilai.id_dosen', '=', 'dosen.id')
-            ->select(
-                'nilai.*',
-                'kelas.nama as blok',
-                'mahasiswa.nama as mahasiswa',
-                'dosen.nama as dosen',
-                'nilai.nilai'
-            )
-            ->orderBy('mahasiswa.nama', 'ASC') // contoh paginate berdasarkan mahasiswa
-            ->paginate($entries);
+       $nilai = DB::table('nilai')
+        ->join('makul', 'nilai.id_makul', '=', 'makul.id')
+        ->join('dosen', 'nilai.id_dosen', '=', 'dosen.id')
+        ->leftJoin('mahasiswa', 'nilai.id_mahasiswa', '=', 'mahasiswa.id')
+        ->select(
+            'nilai.*',
+            'makul.nama as makul',
+            'dosen.nama as dosen',
+            DB::raw('COALESCE(mahasiswa.nama, "-") as mahasiswa'),
+            'nilai.nilai'
+        )
+        ->orderBy('nilai.id', 'DESC')
+        ->paginate($entries);
 
         $nilai->appends($request->all());
 
         return view('admin.master.nilai.index', [
             'nilai' => $nilai
         ]);
-    } 
+    }
 
     public function feature(Request $request)
     {
         $query = DB::table('nilai')
-        ->join('kelas', 'nilai.id_kelas', '=', 'kelas.id')
-        ->join('mahasiswa', 'nilai.id_mahasiswa', '=', 'mahasiswa.id')
+        ->join('makul', 'nilai.id_makul', '=', 'makul.id')
         ->join('dosen', 'nilai.id_dosen', '=', 'dosen.id')
+        ->leftJoin('mahasiswa', 'nilai.id_mahasiswa', '=', 'mahasiswa.id')
         ->select(
             'nilai.*',
-            'kelas.nama as blok',
-            'mahasiswa.nama as mahasiswa',
-            'dosen.nama as dosen'
+            'makul.nama as makul',
+            'dosen.nama as dosen',
+            DB::raw('COALESCE(mahasiswa.nama, "-") as mahasiswa'),
+            'nilai.nilai'
         );
 
         // 🔎 Filter pencarian
@@ -55,7 +56,7 @@ class NilaiController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('mahasiswa.nama', 'like', "%{$search}%")
-                  ->orWhere('kelas.nama', 'like', "%{$search}%")
+                  ->orWhere('makul.nama', 'like', "%{$search}%")
                   ->orWhere('dosen.nama', 'like', "%{$search}%")
                   ->orWhere('nilai.nilai', 'like', "%{$search}%");
             });
@@ -91,26 +92,26 @@ class NilaiController extends Controller
     } 
     
     public function add(){
-        $blok = DB::table('kelas')->orderBy('id','DESC')->get();
+        $makul = DB::table('makul')->orderBy('id','DESC')->get();
         $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
         $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
-        return view('admin.master.nilai.create',['blok'=>$blok,'mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
+        return view('admin.master.nilai.create',['makul'=>$makul,'mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
     }
 
     public function create(Request $request){
         $request->validate([
-            'id_kelas' => 'required|exists:kelas,id',
+            'id_makul' => 'required|exists:makul,id',
             'id_mahasiswa' => 'required|exists:mahasiswa,id',
             'id_dosen' => 'required|exists:dosen,id',
             'nilai' => 'required|string|max:100',
         ],[
-            'id_kelas.exists' => ' Blok yang dipilih tidak valid...',
+            'id_makul.exists' => ' Mata Kuliah yang dipilih tidak valid...',
             'id_mahasiswa.exists' => 'Mahasiswa yang dipilih tidak valid..',
             'id_dosen.exists' => 'Dosen yang dipilih tidak valid..',
             'nilai.required' => 'Nilai wajib diisi.',
         ]);
         DB::table('nilai')->insert([  
-            'id_kelas' => $request->id_kelas,
+            'id_makul' => $request->id_makul,
             'id_mahasiswa' => $request->id_mahasiswa,
             'id_dosen' => $request->id_dosen,
             'nilai' => $request->nilai]);
@@ -119,21 +120,21 @@ class NilaiController extends Controller
     }
 
     public function edit($id){
-        $blok = DB::table('kelas')->orderBy('id','DESC')->get();
+        $makul = DB::table('makul')->orderBy('id','DESC')->get();
         $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
         $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
         $nilai = DB::table('nilai')->where('id',$id)->first();
-        return view('admin.master.nilai.edit',['nilai'=>$nilai,'blok'=>$blok,'mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
+        return view('admin.nilai.edit',['nilai'=>$nilai,'makul'=>$makul,'mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
     }
 
     public function update(Request $request, $id) {
         $request->validate([
-            'id_kelas' => 'required|exists:kelas,id',
+            'id_makul' => 'required|exists:makul,id',
             'id_mahasiswa' => 'required|exists:mahasiswa,id',
             'id_dosen' => 'required|exists:dosen,id',
             'nilai' => 'required|string|max:100',
         ],[
-            'id_kelas.exists' => ' Blok yang dipilih tidak valid...',
+            'id_makul.exists' => ' Mata Kuliah yang dipilih tidak valid...',
             'id_mahasiswa.exists' => 'Mahasiswa yang dipilih tidak valid..',
             'id_dosen.exists' => 'Dosen yang dipilih tidak valid..',
             'nilai.required' => 'Nilai wajib diisi.',
@@ -141,7 +142,7 @@ class NilaiController extends Controller
         DB::table('nilai')  
             ->where('id', $id)
             ->update([
-            'id_kelas' => $request->id_kelas,
+            'id_makul' => $request->id_makul,
             'id_mahasiswa' => $request->id_mahasiswa,
             'id_dosen' => $request->id_dosen,
             'nilai' => $request->nilai]);

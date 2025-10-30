@@ -36,8 +36,8 @@
                             @endforeach
                         </select>
                     </div> -->
-                    <div class="d-flex gap-2">
-                        <!-- Tombol Import -->
+                    <!-- <div class="d-flex gap-2">
+                        Tombol Import
                             <a href="#" class="btn btn-primary btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -51,7 +51,7 @@
                                 Import
                             </a>
 
-                            <!-- Tombol Export -->
+                            Tombol Export
                             <a href="#" class="btn btn-info btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -64,7 +64,7 @@
                                 </svg>
                                 Export
                             </a>
-                        </div>
+                        </div> -->
                 </div>
                 <form action="/admin/jadmetopen/feature" method="GET">
                     <div class="card-body border-bottom py-3">
@@ -204,7 +204,7 @@
                                             @default
                                                 {{-- Default: semua tombol --}}
                                                 <!-- Nilai -->
-                                                <a href="/admin/nilai" class="btn btn-primary btn-sm p-1">
+                                                <a href="/admin/jadmetopen/nilai/{{$data->id}}" class="btn btn-primary btn-sm p-1 btn-nilai">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"  
@@ -346,6 +346,29 @@ document.querySelectorAll('.btn-absen').forEach(button => {
             confirmButtonColor: '#28a745',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Ya, isi absen!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    });
+});
+</script>
+<script>
+document.querySelectorAll('.btn-nilai').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.preventDefault(); // cegah langsung pindah halaman
+        const url = this.getAttribute('href');
+
+        Swal.fire({
+            title: 'Konfirmasi Nilai',
+            text: "Apakah Anda yakin ingin mengisi Data Nilai?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, isi Data Nilai!',
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {

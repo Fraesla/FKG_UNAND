@@ -36,8 +36,8 @@
                             @endforeach
                         </select>
                     </div> -->
-                    <div class="d-flex gap-2">
-                        <!-- Tombol Import -->
+                   <!--  <div class="d-flex gap-2">
+                        Tombol Import
                             <a href="#" class="btn btn-primary btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -51,7 +51,7 @@
                                 Import
                             </a>
 
-                            <!-- Tombol Export -->
+                            Tombol Export
                             <a href="#" class="btn btn-info btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -64,7 +64,7 @@
                                 </svg>
                                 Export
                             </a>
-                        </div>
+                        </div> -->
                 </div>
                 <form action="/admin/skripsi/feature" method="GET">
                     <div class="card-body border-bottom py-3">

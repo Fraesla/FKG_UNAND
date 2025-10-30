@@ -27,20 +27,24 @@
                     <h3 class="card-title">Tabel Mahasiswa</h3>
                     <div class="d-flex gap-2">
                         <!-- Tombol Import -->
-                            <a href="#" class="btn btn-primary btn-mm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
-                                    class="icon icon-tabler icon-tabler-upload me-1">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
-                                    <path d="M7 9l5 -5l5 5" />
-                                    <path d="M12 4l0 12" />
-                                </svg>
-                                Import
-                            </a>
+                            <form action="/admin/mahasiswa/import" method="POST" enctype="multipart/form-data" class="d-inline-block me-2">
+                                @csrf
+                                <label class="btn btn-primary btn-mm mb-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                        class="icon icon-tabler icon-tabler-upload">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                                        <path d="M7 9l5 -5l5 5" />
+                                        <path d="M12 4v12" />
+                                    </svg>
+                                    Upload Data Mahasiswa
+                                    <input type="file" name="file" class="d-none" onchange="this.form.submit()">
+                                </label>
+                            </form>
 
-                            <!-- Tombol Export -->
+                            <!-- Tombol Export
                             <a href="#" class="btn btn-info btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -52,7 +56,7 @@
                                     <path d="M12 4l0 12" />
                                 </svg>
                                 Export
-                            </a>
+                            </a> -->
                         </div>
                 </div>
                 <form action="/admin/mahasiswa/feature" method="GET">
