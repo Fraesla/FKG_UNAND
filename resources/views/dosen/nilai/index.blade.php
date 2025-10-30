@@ -1,5 +1,5 @@
 @extends('dosen.layouts.app', [
-'activePage' => 'ta',
+'activePage' => 'nliai',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -9,7 +9,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Bimbingan Tugas Akhir</h2>
+                  <h2 class="page-title">Data Nilai</h2>
                   @include('components.alert')
               </div>
               <!-- Page title actions -->
@@ -23,24 +23,28 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">Tabel Bimbingan Tugas Akhir</h3>
+                    <h3 class="card-title">Tabel Nilai</h3>
                     <!-- <div class="d-flex gap-2">
                         Tombol Import
-                            <a href="#" class="btn btn-primary btn-mm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
-                                    class="icon icon-tabler icon-tabler-upload me-1">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
-                                    <path d="M7 9l5 -5l5 5" />
-                                    <path d="M12 4l0 12" />
-                                </svg>
-                                Import
-                            </a>
+                            <form action="/dosen/nilai/import" method="POST" enctype="multipart/form-data" class="d-inline-block me-2">
+                                @csrf
+                                <label class="btn btn-primary btn-mm mb-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                        class="icon icon-tabler icon-tabler-upload">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                                        <path d="M7 9l5 -5l5 5" />
+                                        <path d="M12 4v12" />
+                                    </svg>
+                                    Import
+                                    <input type="file" name="file" class="d-none" onchange="this.form.submit()">
+                                </label>
+                            </form>
 
                             Tombol Export
-                            <a href="#" class="btn btn-info btn-mm">
+                            <a href="/dosen/nilai/export" class="btn btn-info btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -52,9 +56,9 @@
                                 </svg>
                                 Export
                             </a>
-                        </div> -->
+                    </div> -->
                 </div>
-                <form action="/dosen/ta/feature" method="GET">
+                <form action="/dosen/nilai/feature" method="GET">
                     <div class="card-body border-bottom py-3">
                         <div class="d-flex align-items-center">
                             <!-- Show Entries -->
@@ -74,12 +78,12 @@
                             <div class="ms-auto text-secondary d-flex align-items-center">
                                 <span class="me-2">Search:</span>
                                 <input type="text" class="form-control form-control-mm" 
-                                       aria-label="Search Bimbinga Tugas Akhir" 
+                                       aria-label="Search data Nilai" 
                                        name="search" 
-                                       placeholder="Cari Bimbinga Tugas Akhir..." 
+                                       placeholder="Cari Data Nilai ..." 
                                        value="{{ request('search') }}">
 
-                                <a href="/dosen/ta/add" class="btn btn-success btn-mm ms-2">
+                                <a href="/dosen/nilai/add" class="btn btn-success btn-mm ms-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -110,34 +114,30 @@
                                         <path d="M6 15l6 -6l6 6"></path>
                                     </svg>
                                 </th>
-                                <th>NO.BP</th>
+                                <th>Nama Mata Kuliah</th>
                                 <th>Nama Mahasiswa</th>
-                                <th>Dosen Pembimbing</th>
-                                <th>Tanggal Pembimbing</th>
-                                <th>Catatan</th>
+                                <th>Nama Dosen</th>
+                                <th>Nilai</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php $no = 1; ?>
-                            @forelse($ta as $data)
+                            @forelse($nilai as $data)
                             <tr>
                                <!--  <td>
                                     <input class="form-check-input m-0 align-middle table-selectable-check"
                                     type="checkbox" aria-label="Select invoice">
                                 </td> -->
-                                <td>
-                                    <span class="text-secondary"> {{$no++}}</span>
-                                </td>
-                                <td class="text-secondary">{{$data->nobp}}</td>
-                                <td class="text-secondary">{{$data->nama}}</td>
+                                <td><span class="text-secondary"> {{$no++}}</span></td>
+                                <td class="text-secondary">{{$data->makul}}</td>
+                                <td class="text-secondary">{{$data->mahasiswa}}</td>
                                 <td class="text-secondary">{{$data->dosen}}</td>
-                                <td class="text-secondary">{{$data->tgl_bimbingan}}</td>
-                                <td class="text-secondary">{{$data->catatan}}</td>
+                                <td class="text-secondary">{{$data->nilai}}</td>
                                 <td class="w-0">
                                     <div class="d-flex gap-1">
                                         <!-- Tombol Edit -->
-                                        <a href="/dosen/ta/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
+                                        <a href="/dosen/nilai/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                                  viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -163,9 +163,6 @@
                                         </button>
                                     </div>
                                 </td>
-                                <!-- <td class="w-0">
-                                    <a href="/dosen/ta/delete/{{$data->id}}" class="btn btn-danger w-10">Delete</a>
-                                </td> -->
                                 <!-- <td class="text-end">
                                     <span class="dropdown">
                                         <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport"
@@ -196,66 +193,16 @@
                         <div class="col-auto d-flex align-items-center">
                             <p class="m-0 text-secondary">
                                 Showing
-                                <strong>{{ $ta->firstItem() }}</strong>
+                                <strong>{{ $nilai->firstItem() }}</strong>
                                 to
-                                <strong>{{ $ta->lastItem() }}</strong>
+                                <strong>{{ $nilai->lastItem() }}</strong>
                                 of
-                                <strong>{{ $ta->total() }}</strong>
+                                <strong>{{ $nilai->total() }}</strong>
                                 entries
                             </p>
                         </div>
                         <div class="col-auto">
-                            <!-- <ul class="pagination m-0 ms-auto">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                        Download SVG icon from http://tabler.io/icons/icon/chevron-left
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" class="icon icon-1">
-                                            <path d="M15 6l-6 6l6 6">
-                                            </path>
-                                        </svg>
-                                    </a>
-                                </li>
-                                <li class="page-item active">
-                                    <a class="page-link" href="#">
-                                        1
-                                    </a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">
-                                        2
-                                    </a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">
-                                        3
-                                    </a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">
-                                        4
-                                    </a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">
-                                        5
-                                    </a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">
-                                        Download SVG icon from http://tabler.io/icons/icon/chevron-right
-                                       
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" class="icon icon-1">
-                                            <path d="M9 6l6 6l-6 6">
-                                            </path>
-                                        </svg>
-                                    </a>
-                                </li>
-                            </ul> -->
-                            {{ $ta->links('pagination::bootstrap-5') }}
+                            {{ $nilai->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
@@ -277,7 +224,7 @@ function deleteData(id) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = "/dosen/ta/delete/" + id;
+            window.location.href = "/dosen/nilai/delete/" + id;
         }
     })
 }

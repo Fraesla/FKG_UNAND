@@ -876,11 +876,59 @@
                       <path d="M12 12l-8 -4.5" />
                       <path d="M16 5.25l-8 4.5" /></svg
                   ></span>
-                  <span class="nav-link-title"> Data Jadwal</span>
+                  <span class="nav-link-title"> Data Absensi</span>
+                </a>
+              </li>
+              <li class="nav-item @if ($activePage == 'blok') active @endif">
+                <a class="nav-link" href="/dosen/blok">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"
+                    ><!-- Download SVG icon from http://tabler.io/icons/icon/package -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-category-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 4h6v6h-6z" /><path d="M4 14h6v6h-6z" /><path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M7 7m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /></svg></span>
+                  <span class="nav-link-title"> Data Blok</span>
+                </a>
+              </li>
+              <li class="nav-item @if ($activePage == 'metopen') active @endif">
+                <a class="nav-link" href="/dosen/metopen">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"
+                    ><!-- Download SVG icon from http://tabler.io/icons/icon/package -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-browser-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 1a1 1 0 0 1 1 -1h14a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-14a1 1 0 0 1 -1 -1z" /><path d="M4 8h16" /><path d="M8 4v4" /><path d="M9.5 14.5l1.5 1.5l3 -3" /></svg></span>
+                  <span class="nav-link-title"> Data Metopen</span>
+                </a>
+              </li>
+              <li class="nav-item @if ($activePage == 'skripsi') active @endif">
+                <a class="nav-link" href="/dosen/skripsi">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"
+                    ><!-- Download SVG icon from http://tabler.io/icons/icon/package -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-box-model-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 8h8v8h-8z" /><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /></svg></span>
+                  <span class="nav-link-title"> Data Skripsi</span>
+                </a>
+              </li>
+              <li class="nav-item @if ($activePage == 'ta') active @endif">
+                <a class="nav-link" href="/dosen/ta">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"
+                    ><!-- Download SVG icon from http://tabler.io/icons/icon/package -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-arch"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l18 0" /><path d="M4 21v-15a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v15" /><path d="M9 21v-8a3 3 0 0 1 6 0v8" /></svg></span>
+                  <span class="nav-link-title"> Data Bimbingan TA</span>
+                </a>
+              </li>
+              <li class="nav-item @if ($activePage == 'suratizin') active @endif">
+                <a class="nav-link" href="/dosen/suratizin">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"
+                    ><!-- Download SVG icon from http://tabler.io/icons/icon/package -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-border-all"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M4 12l16 0" /><path d="M12 4l0 16" /></svg></span>
+                  <span class="nav-link-title"> Data Surat Izin Penelitian</span>
+                </a>
+              </li>
+              <li class="nav-item @if ($activePage == 'suratizin') active @endif">
+                <a class="nav-link" href="#">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"
+                    ><!-- Download SVG icon from http://tabler.io/icons/icon/package -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-book-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 4v16h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12z" /><path d="M19 16h-12a2 2 0 0 0 -2 2" /><path d="M9 8h6" /></svg></span>
+                  <span class="nav-link-title"> Repositori</span>
                 </a>
               </li>
               <li class="nav-item @if ($activePage == 'absesnsi') active @endif ">
-                <a class="nav-link" href="/dosen/dashboard">
+                <a class="nav-link" href="#">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
                     ><!-- Download SVG icon from http://tabler.io/icons/icon/checkbox -->
                     <svg
@@ -898,11 +946,19 @@
                       <path d="M9 11l3 3l8 -8" />
                       <path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9" /></svg
                   ></span>
-                  <span class="nav-link-title"> Data Absensi </span>
+                  <span class="nav-link-title"> Publikasi </span>
+                </a>
+              </li>
+              <li class="nav-item @if ($activePage == 'nilai') active @endif">
+                <a class="nav-link" href="/dosen/nilai">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"
+                    ><!-- Download SVG icon from http://tabler.io/icons/icon/package -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-certificate"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 15m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M13 17.5v4.5l2 -1.5l2 1.5v-4.5" /><path d="M10 19h-5a2 2 0 0 1 -2 -2v-10c0 -1.1 .9 -2 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -1 1.73" /><path d="M6 9l12 0" /><path d="M6 12l3 0" /><path d="M6 15l2 0" /></svg></span>
+                  <span class="nav-link-title"> Data Nilai</span>
                 </a>
               </li>
               <li class="nav-item @if ($activePage == 'profile') active @endif">
-                <a class="nav-link" href="/dosen/ta">
+                <a class="nav-link" href="#">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
                     ><!-- Download SVG icon from http://tabler.io/icons/icon/star -->
                     <svg

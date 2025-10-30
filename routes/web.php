@@ -4,6 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Dosen\HomeController as DosenHomeController;
 use App\Http\Controllers\Dosen\AbsenController;
+use App\Http\Controllers\Dosen\BlokController;
+use App\Http\Controllers\Dosen\MetopenController;
+use App\Http\Controllers\Dosen\SkripsiController as SkripsiDosenController;
+use App\Http\Controllers\Dosen\TaController as TaDosenController;
+use App\Http\Controllers\Dosen\SuratIzinController as SuratIzinDosenController;
+use App\Http\Controllers\Dosen\NilaiController as NilaiDosenController;
 use App\Http\Controllers\Mahasiswa\HomeController as MahasiswaHomeController;
 use App\Http\Controllers\Pimpinan\HomeController as PimpinanHomeController;
 use App\Http\Controllers\Admin\AbsensiController;
@@ -666,3 +672,99 @@ Route::prefix('dosen/absendosen')
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/delete/{id}', 'delete')->name('delete');
     });
+
+// Blok Data dari Dosen
+Route::prefix('dosen/blok')
+    ->name('dosen.blok.')
+    ->middleware(['auth', 'checkrole:dosen'])
+    ->controller(BlokController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/absen/{id}', 'absen')->name('absen');
+        Route::get('/nilai/{id}', 'nilai')->name('nilai');
+        Route::get('/materi/{id}', 'materi')->name('materi');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    }); 
+
+// Metopen Data dari Dosen
+Route::prefix('dosen/metopen')
+    ->name('dosen.metopen.')
+    ->middleware(['auth', 'checkrole:dosen'])
+    ->controller(MetopenController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/absen/{id}', 'absen')->name('absen');
+        Route::get('/nilai/{id}', 'nilai')->name('nilai');
+        Route::get('/materi/{id}', 'materi')->name('materi');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    }); 
+
+// Skripsi Data dari Dosen
+Route::prefix('dosen/skripsi')
+    ->name('dosen.skripsi.')
+    ->middleware(['auth', 'checkrole:dosen'])
+    ->controller(SkripsiDosenController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    }); 
+
+// TA Data dari Dosen
+Route::prefix('dosen/ta')
+    ->name('dosen.ta.')
+    ->middleware(['auth', 'checkrole:dosen'])
+    ->controller(TaDosenController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    }); 
+
+// Surat Izin Data dari Dosen
+Route::prefix('dosen/suratizin')
+    ->name('dosen.suratizin.')
+    ->middleware(['auth', 'checkrole:dosen'])
+    ->controller(SuratIzinDosenController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    }); 
+
+//Nilai Data dari Dosen
+Route::prefix('dosen/nilai')
+    ->name('dosen.nilai.')
+    ->middleware(['auth', 'checkrole:dosen'])
+    ->controller(NilaiDosenController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        Route::get('/add', 'add')->name('add');
+        Route::get('/feature', 'feature')->name('feature');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    }); 

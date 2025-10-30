@@ -1,5 +1,5 @@
 @extends('dosen.layouts.app', [
-'activePage' => 'ta',
+'activePage' => 'suratizin',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -9,7 +9,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Bimbingan Tugas Akhir</h2>
+                  <h2 class="page-title">Data Permohonan Surat Izin Penelitian</h2>
                   @include('components.alert')
               </div>
               <!-- Page title actions -->
@@ -23,7 +23,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">Tabel Bimbingan Tugas Akhir</h3>
+                    <h3 class="card-title">Tabel Permohonan Surat Izin Penelitian</h3>
                     <!-- <div class="d-flex gap-2">
                         Tombol Import
                             <a href="#" class="btn btn-primary btn-mm">
@@ -54,7 +54,7 @@
                             </a>
                         </div> -->
                 </div>
-                <form action="/dosen/ta/feature" method="GET">
+                <form action="/dosen/suratizin/feature" method="GET">
                     <div class="card-body border-bottom py-3">
                         <div class="d-flex align-items-center">
                             <!-- Show Entries -->
@@ -74,12 +74,12 @@
                             <div class="ms-auto text-secondary d-flex align-items-center">
                                 <span class="me-2">Search:</span>
                                 <input type="text" class="form-control form-control-mm" 
-                                       aria-label="Search Bimbinga Tugas Akhir" 
+                                       aria-label="Search Surat Izin" 
                                        name="search" 
-                                       placeholder="Cari Bimbinga Tugas Akhir..." 
+                                       placeholder="Cari Surat Izin..." 
                                        value="{{ request('search') }}">
 
-                                <a href="/dosen/ta/add" class="btn btn-success btn-mm ms-2">
+                                <a href="/dosen/suratizin/add" class="btn btn-success btn-mm ms-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -103,24 +103,26 @@
                                 </th> -->
                                 <th class="w-1">
                                     No.
-                                    <!-- Download SVG icon from http://tabler.io/icons/icon/chevron-up -->
+                                    <!-- Download SVG icon from http://suratizinbler.io/icons/icon/chevron-up -->
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" class="icon icon-sm icon-thick icon-2">
                                         <path d="M6 15l6 -6l6 6"></path>
                                     </svg>
                                 </th>
-                                <th>NO.BP</th>
+                                <th>Jenis</th>
                                 <th>Nama Mahasiswa</th>
-                                <th>Dosen Pembimbing</th>
-                                <th>Tanggal Pembimbing</th>
-                                <th>Catatan</th>
+                                <th>NO.BP</th>
+                                <th>Judul Penelitan</th>
+                                <th>Dosen Pembimbing 1</th>
+                                <th>Dosen Pembimbing 2</th>
+                                <th>Isi Surat</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php $no = 1; ?>
-                            @forelse($ta as $data)
+                            @forelse($suratizin as $data)
                             <tr>
                                <!--  <td>
                                     <input class="form-check-input m-0 align-middle table-selectable-check"
@@ -129,15 +131,17 @@
                                 <td>
                                     <span class="text-secondary"> {{$no++}}</span>
                                 </td>
-                                <td class="text-secondary">{{$data->nobp}}</td>
+                                <td class="text-secondary">{{$data->jenis}}</td>
                                 <td class="text-secondary">{{$data->nama}}</td>
-                                <td class="text-secondary">{{$data->dosen}}</td>
-                                <td class="text-secondary">{{$data->tgl_bimbingan}}</td>
-                                <td class="text-secondary">{{$data->catatan}}</td>
+                                <td class="text-secondary">{{$data->nobp}}</td>
+                                <td class="text-secondary">{{$data->judul_penelitian}}</td>
+                                <td class="text-secondary">{{$data->dosen_pembimbing_1}}</td>
+                                <td class="text-secondary">{{$data->dosen_pembimbing_2}}</td>
+                                <td class="text-secondary">{{$data->isi_surat}}</td>
                                 <td class="w-0">
                                     <div class="d-flex gap-1">
                                         <!-- Tombol Edit -->
-                                        <a href="/dosen/ta/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
+                                        <a href="/dosen/suratizin/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                                  viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -164,7 +168,7 @@
                                     </div>
                                 </td>
                                 <!-- <td class="w-0">
-                                    <a href="/dosen/ta/delete/{{$data->id}}" class="btn btn-danger w-10">Delete</a>
+                                    <a href="/dosen/suratizin/delete/{{$data->id}}" class="btn btn-danger w-10">Delete</a>
                                 </td> -->
                                 <!-- <td class="text-end">
                                     <span class="dropdown">
@@ -185,7 +189,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="6" class="text-center">Data tidak ditemukan</td>
+                                <td colspan="12" class="text-center">Data tidak ditemukan</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -196,11 +200,11 @@
                         <div class="col-auto d-flex align-items-center">
                             <p class="m-0 text-secondary">
                                 Showing
-                                <strong>{{ $ta->firstItem() }}</strong>
+                                <strong>{{ $suratizin->firstItem() }}</strong>
                                 to
-                                <strong>{{ $ta->lastItem() }}</strong>
+                                <strong>{{ $suratizin->lastItem() }}</strong>
                                 of
-                                <strong>{{ $ta->total() }}</strong>
+                                <strong>{{ $suratizin->total() }}</strong>
                                 entries
                             </p>
                         </div>
@@ -208,7 +212,7 @@
                             <!-- <ul class="pagination m-0 ms-auto">
                                 <li class="page-item disabled">
                                     <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                        Download SVG icon from http://tabler.io/icons/icon/chevron-left
+                                        Download SVG icon from http://suratizinbler.io/icons/icon/chevron-left
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round" class="icon icon-1">
@@ -244,7 +248,7 @@
                                 </li>
                                 <li class="page-item">
                                     <a class="page-link" href="#">
-                                        Download SVG icon from http://tabler.io/icons/icon/chevron-right
+                                        Download SVG icon from http://suratizinbler.io/icons/icon/chevron-right
                                        
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -255,7 +259,7 @@
                                     </a>
                                 </li>
                             </ul> -->
-                            {{ $ta->links('pagination::bootstrap-5') }}
+                            {{ $suratizin->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
@@ -277,7 +281,7 @@ function deleteData(id) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = "/dosen/ta/delete/" + id;
+            window.location.href = "/dosen/suratizin/delete/" + id;
         }
     })
 }
