@@ -25,8 +25,8 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title">Tabel Bimbingan Tugas Akhir</h3>
-                    <div class="d-flex gap-2">
-                        <!-- Tombol Import
+                    <!-- <div class="d-flex gap-2">
+                        Tombol Import
                             <a href="#" class="btn btn-primary btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -39,8 +39,8 @@
                                 </svg>
                                 Upload Data Bimbingan Tugas Akhir
                             </a> -->
-
-                            <!-- Tombol Export
+                            
+                           Tombol Export
                             <a href="#" class="btn btn-info btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -52,8 +52,9 @@
                                     <path d="M12 4l0 12" />
                                 </svg>
                                 Export
-                            </a> -->
-                        </div>
+                            </a>
+                        </div> -->
+
                 </div>
                 <form action="/admin/ta/feature" method="GET">
                     <div class="card-body border-bottom py-3">

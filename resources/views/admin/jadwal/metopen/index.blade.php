@@ -356,6 +356,29 @@ document.querySelectorAll('.btn-absen').forEach(button => {
 });
 </script>
 <script>
+document.querySelectorAll('.btn-nilai').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.preventDefault(); // cegah langsung pindah halaman
+        const url = this.getAttribute('href');
+
+        Swal.fire({
+            title: 'Konfirmasi Nilai',
+            text: "Apakah Anda yakin ingin mengisi Data Nilai?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, isi Data Nilai!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    });
+});
+</script>
+<script>
 document.querySelectorAll('.btn-materi').forEach(button => {
     button.addEventListener('click', function(e) {
         e.preventDefault(); // cegah langsung pindah halaman

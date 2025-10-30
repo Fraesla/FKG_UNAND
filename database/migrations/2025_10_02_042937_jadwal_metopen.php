@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('jadwal_metopen', function (Blueprint $table) {
             $table->id();
             $table->string('minggu');
+            $table->date('tgl');
             $table->string('hari');
             $table->time('jam_mulai');
             $table->time('jam_selesai');

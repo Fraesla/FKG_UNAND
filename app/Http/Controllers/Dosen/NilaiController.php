@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Master;
+namespace App\Http\Controllers\Dosen;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Storage;
 use App\Exports\NilaiExport;
 use App\Imports\NilaiImport;
 use Auth;
@@ -33,7 +32,7 @@ class NilaiController extends Controller
 
         $nilai->appends($request->all());
 
-        return view('admin.master.nilai.index', [
+        return view('dosen.nilai.index', [
             'nilai' => $nilai
         ]);
     }
@@ -72,7 +71,7 @@ class NilaiController extends Controller
         // 🚀 Supaya pagination tetap bawa query string (search / entries)
         $nilai->appends($request->all());
 
-        return view('admin.master.nilai.index', compact('nilai'));
+        return view('dosen.nilai.index', compact('nilai'));
     }
 
     public function export()
@@ -96,7 +95,7 @@ class NilaiController extends Controller
         $makul = DB::table('makul')->orderBy('id','DESC')->get();
         $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
         $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
-        return view('admin.master.nilai.create',['makul'=>$makul,'mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
+        return view('dosen.nilai.create',['makul'=>$makul,'mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
     }
 
     public function create(Request $request){
@@ -117,7 +116,7 @@ class NilaiController extends Controller
             'id_dosen' => $request->id_dosen,
             'nilai' => $request->nilai]);
 
-        return redirect('/admin/nilai')->with("success","Data Berhasil Ditambah !");
+        return redirect('/dosen/nilai')->with("success","Data Berhasil Ditambah !");
     }
 
     public function edit($id){
@@ -125,8 +124,7 @@ class NilaiController extends Controller
         $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
         $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
         $nilai = DB::table('nilai')->where('id',$id)->first();
-        return view('admin.nilai.edit',['nilai'=>$nilai,'makul'=>$makul,'mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
-
+        return view('dosen.nilai.edit',['nilai'=>$nilai,'makul'=>$makul,'mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
     }
 
     public function update(Request $request, $id) {
@@ -149,13 +147,13 @@ class NilaiController extends Controller
             'id_dosen' => $request->id_dosen,
             'nilai' => $request->nilai]);
 
-        return redirect('/admin/nilai')->with("success","Data Berhasil Diupdate !");
+        return redirect('/dosen/nilai')->with("success","Data Berhasil Diupdate !");
     }
 
     public function delete($id)
     {
         DB::table('nilai')->where('id',$id)->delete();
 
-        return redirect('/admin/nilai')->with("success","Data Berhasil Dihapus !");
+        return redirect('/dosen/nilai')->with("success","Data Berhasil Dihapus !");
     }
 }

@@ -1,6 +1,5 @@
-@extends('admin.layouts.app', [
-'activePage' => 'gigi',
-'activeDrop' => 'jadmakul',
+@extends('dosen.layouts.app', [
+'activePage' => 'skripsi',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -10,7 +9,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Jadwal Mata Kuliah (Data Blok)</h2>
+                  <h2 class="page-title">Data Skripsi</h2>
                   @include('components.alert')
               </div>
               <!-- Page title actions -->
@@ -24,19 +23,8 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">Tabel Jadwal Mata Kuliah (Data Blok)</h3>
-                    <div class="d-flex align-items-center ms-auto">
-                        <label class="form-label me-2 mb-0">Blok</label>
-                        <select class="form-select"  name="id_kelas" style="min-width: 200px;" onchange="window.location.href='{{ route('admin.jadwal.makul.read') }}?id_kelas='+this.value">
-                            <option value="">-- Pilih Blok --</option>
-                            @foreach($blok as $data)
-                                <option value="{{ $data->id }}" {{ request('id_kelas') == $data->id ? 'selected' : '' }}>
-                                    {{ $data->nama }}
-                                </option>
-                            @endforeach
-                        </select>&nbsp;&nbsp;
-                        
-         <!--  <div class="d-flex gap-2">
+                    <h3 class="card-title">Tabel Skripsi</h3>
+                    <!-- <div class="d-flex gap-2">
                         Tombol Import
                             <a href="#" class="btn btn-primary btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
@@ -65,9 +53,8 @@
                                 Export
                             </a>
                         </div> -->
-                    </div>
                 </div>
-                <form action="/admin/jadmakul/feature" method="GET">
+                <form action="/dosen/skripsi/feature" method="GET">
                     <div class="card-body border-bottom py-3">
                         <div class="d-flex align-items-center">
                             <!-- Show Entries -->
@@ -87,12 +74,12 @@
                             <div class="ms-auto text-secondary d-flex align-items-center">
                                 <span class="me-2">Search:</span>
                                 <input type="text" class="form-control form-control-mm" 
-                                       aria-label="Search data Jadwal Mata Kuliah (Data Blok)" 
+                                       aria-label="Search Data Skripsi" 
                                        name="search" 
-                                       placeholder="Cari Data Jadwal Mata Kuliah (Data Blok)..." 
+                                       placeholder="Cari Data Skripsi ..." 
                                        value="{{ request('search') }}">
 
-                                <a href="/admin/jadmakul/add" class="btn btn-success btn-mm ms-2">
+                                <a href="/dosen/skripsi/add" class="btn btn-success btn-mm ms-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -124,7 +111,6 @@
                                     </svg>
                                 </th>
                                 <th>Minggu Ke</th>
-                                <th>Tanggal</th>
                                 <th>Hari</th>
                                 <th class="text-center">Jam</th>
                                 <th>Mata Kuliah</th>
@@ -135,7 +121,7 @@
                         </thead>
                         <tbody>
                             <?php $no = 1; ?>
-                            @forelse($jadmakul as $data)
+                            @forelse($skripsi as $data)
                             <tr>
                                <!--  <td>
                                     <input class="form-check-input m-0 align-middle table-selectable-check"
@@ -143,7 +129,6 @@
                                 </td> -->
                                 <td><span class="text-secondary"> {{$no++}}</span></td>
                                 <td>Minggu Ke-{{ $data->minggu }}</td>
-                                <td>{{ $data->tgl }}</td>
                                 <td>{{ $data->hari }}</td>
                                 <td class="text-center">{{ $data->jam_mulai }} - {{ $data->jam_selesai }}</td>
                                 <td>{{ $data->makul }}</td>
@@ -154,29 +139,21 @@
                                         @switch($data->makul)
                                             @case('Kuliah Pengantar')
                                             @case('Pleno')
-                                                {{-- Tombol Absensi Dosen --}}
-                                                <a href="/admin/jadmakul/absen/{{$data->id}}" 
-                                                   class="btn btn-success btn-sm p-1 btn-absen">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                {{-- Hanya tampilkan Absensi --}}
+                                               <!--  <a href="#" class="btn btn-success btn-sm p-1">
+                                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  
+                                                         viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  
+                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"  
                                                          class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-text">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                                         <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
                                                         <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
-                                                        <path d="M9 12h6" />
-                                                        <path d="M9 16h6" />
+                                                        <path d="M9 12h6" /><path d="M9 16h6" />
                                                     </svg>
                                                 </a>
-
-
-                                                <!-- Materi -->
-                                                <a href="/admin/jadmakul/materi/{{$data->id}}" class="btn btn-secondary btn-sm p-1 btn-materi">
-                                                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-book"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg>
-                                                </a>
-
+ -->
                                                 <!-- Edit -->
-                                                <a href="/admin/jadmakul/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
+                                                <a href="/dosen/skripsi/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -204,8 +181,8 @@
 
                                             @default
                                                 {{-- Default: semua tombol --}}
-                                                <!-- Nilai -->
-                                                <a href="/admin/jadmakul/nilai/{{$data->id}}" class="btn btn-primary btn-sm p-1 btn-nilai">
+                                                <!-- Nilai
+                                                <a href="#" class="btn btn-primary btn-sm p-1">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"  
@@ -217,9 +194,8 @@
                                                     </svg>
                                                 </a>
 
-                                                {{-- Tombol Absensi Dosen --}}
-                                                <a href="/admin/jadmakul/absen/{{$data->id}}" 
-                                                   class="btn btn-success btn-sm p-1 btn-absen">
+                                                Absensi
+                                                <a href="#" class="btn btn-success btn-sm p-1">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                          viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -227,18 +203,17 @@
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                                         <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
                                                         <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
-                                                        <path d="M9 12h6" />
-                                                        <path d="M9 16h6" />
+                                                        <path d="M9 12h6" /><path d="M9 16h6" />
                                                     </svg>
                                                 </a>
 
-                                                <!-- Materi -->
-                                                <a href="/admin/jadmakul/materi/{{$data->id}}" class="btn btn-secondary btn-sm p-1 btn-materi">
-                                                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-book"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6l0 13" /><path d="M12 6l0 13" /><path d="M21 6l0 13" /></svg>
-                                                </a>
+                                                Berita Acara
+                                                <a href="#" class="btn btn-secondary btn-sm p-1">
+                                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-news"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16 6h3a1 1 0 0 1 1 1v11a2 2 0 0 1 -4 0v-13a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1v12a3 3 0 0 0 3 3h11" /><path d="M8 8l4 0" /><path d="M8 12l4 0" /><path d="M8 16l4 0" /></svg>
+                                                </a> -->
 
                                                 <!-- Edit -->
-                                                <a href="/admin/jadmakul/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
+                                                <a href="/dosen/skripsi/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -295,16 +270,16 @@
                         <div class="col-auto d-flex align-items-center">
                             <p class="m-0 text-secondary">
                                 Showing
-                                <strong>{{ $jadmakul->firstItem() }}</strong>
+                                <strong>{{ $skripsi->firstItem() }}</strong>
                                 to
-                                <strong>{{ $jadmakul->lastItem() }}</strong>
+                                <strong>{{ $skripsi->lastItem() }}</strong>
                                 of
-                                <strong>{{ $jadmakul->total() }}</strong>
+                                <strong>{{ $skripsi->total() }}</strong>
                                 entries
                             </p>
                         </div>
                         <div class="col-auto">
-                            {{ $jadmakul->links('pagination::bootstrap-5') }}
+                            {{ $skripsi->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
@@ -326,80 +301,10 @@ function deleteData(id) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = "/admin/jadmakul/delete/" + id;
+            window.location.href = "/dosen/skripsi/delete/" + id;
         }
     })
 }
-</script>
-{{-- Script Konfirmasi --}}
-<script>
-document.querySelectorAll('.btn-absen').forEach(button => {
-    button.addEventListener('click', function(e) {
-        e.preventDefault(); // cegah langsung pindah halaman
-        const url = this.getAttribute('href');
-
-        Swal.fire({
-            title: 'Konfirmasi Absen Dosen',
-            text: "Apakah Anda yakin ingin mengisi absensi dosen?",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#28a745',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, isi absen!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = url;
-            }
-        });
-    });
-});
-</script>
-<script>
-document.querySelectorAll('.btn-materi').forEach(button => {
-    button.addEventListener('click', function(e) {
-        e.preventDefault(); // cegah langsung pindah halaman
-        const url = this.getAttribute('href');
-
-        Swal.fire({
-            title: 'Konfirmasi Materi',
-            text: "Apakah Anda yakin ingin mengisi materi?",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#28a745',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, isi materi!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = url;
-            }
-        });
-    });
-});
-</script>
-<script>
-document.querySelectorAll('.btn-nilai').forEach(button => {
-    button.addEventListener('click', function(e) {
-        e.preventDefault(); // cegah langsung pindah halaman
-        const url = this.getAttribute('href');
-
-        Swal.fire({
-            title: 'Konfirmasi Nilai',
-            text: "Apakah Anda yakin ingin mengisi Data Nilai?",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#28a745',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, isi Data Nilai!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = url;
-            }
-        });
-    });
-});
 </script>
 <!-- END PAGE BODY -->
 @endsection

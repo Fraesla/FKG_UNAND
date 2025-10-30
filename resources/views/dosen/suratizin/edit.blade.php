@@ -1,6 +1,5 @@
-@extends('admin.layouts.app', [
-'activePage' => 'gigi',
-'activeDrop' => 'ta',
+@extends('dosen.layouts.app', [
+'activePage' => 'suratizin',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -10,7 +9,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Bimbingan Tugas Akhir</h2>
+                  <h2 class="page-title">Data Permohonan Surat Izin Penelitian</h2>
                   @if ($errors->any())
                     <div id="alert-error" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
                         <strong>⚠️ Terjadi Kesalahan pada Pengisian Formulir:</strong>
@@ -41,9 +40,9 @@
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h3 class="card-title">
-                                    Penambahan Data Bimbingan Tugas Akhir
+                                    Pengeditan Data Permohonan Surat Izin Penelitian
                                 </h3>
-                                <a href="/admin/ta/" class="btn btn-secondary btn-sm">
+                                <a href="/dosen/suratizin/" class="btn btn-secondary btn-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -57,16 +56,24 @@
                                 </a>
                             </div>
                             <div class="card-body">
-                                <form action="/admin/ta/create" method="POST" enctype="multipart/form-data">
+                                <form action="/dosen/suratizin/update/{{$suratizin->id}}" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
+                                        <div>
+                                            <label class="form-label">Jenis</label>
+                                            <input type="text" placeholder="Masukkan Jenis" class="form-control" name="jenis" value="{{$suratizin->jenis}}" />
+                                            @error('jenis')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
+                                        </div>
                                         <div>
                                             <label class="form-label">Mahasiswa</label>
                                              <select class="form-select" name="id_mahasiswa">
                                                 <option>Pilih Data Mahasiswa</option>
                                                 @foreach($mahasiswa as $data)
-                                                    <option value="{{$data->id}}">
-                                                        No.BP: {{$data->nobp}} | Nama Mahasiswa: {{$data->nama}} 
+                                                    <option value="{{$data->id}}"
+                                                        {{ $suratizin->id_mahasiswa == $data->id ? 'selected' : '' }}>
+                                                        No.BP : {{$data->nobp}} | Nama Mahasiswa : {{$data->nama}}  
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -75,44 +82,49 @@
                                             @enderror
                                         </div>
                                         <div>
-                                            <label class="form-label">Dosen Pembimbing</label>
-                                             <select class="form-select" name="dosen_bimbingan">
+                                            <label class="form-label">Judul Penelitian</label>
+                                            <input type="text" placeholder="Masukkan Judul Penelitian" class="form-control" name="judul_penelitian" value="{{$suratizin->judul_penelitian}}"/>
+                                            @error('judul_penelitian')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                       <div>
+                                            <label class="form-label">Dosen Pembimbing 1</label>
+                                             <select class="form-select" name="dosen_pembimbing_1">
                                                 <option>Pilih Data Dosen</option>
                                                 @foreach($dosen as $data)
-                                                    <option value="{{$data->id}}">
-                                                        NIP: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
+                                                    <option value="{{$data->id}}"
+                                                        {{ $suratizin->dosen_pembimbing_1 == $data->nama ? 'selected' : '' }}>
+                                                        NIDM : {{$data->nip}} | Nama Dosen : {{$data->nama}}  
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            @error('dosen_bimbingan')
+                                            @error('dosen_pembimbing_1')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div>
-                                            <label class="form-label">Tanggal Pembimbing</label>
-                                            <div class="input-icon">
-                                                <span class="input-icon-addon"><!-- Download SVG icon from http://tabler.io/icons/icon/calendar -->
-                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
-                                                    <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
-                                                    <path d="M16 3v4"></path>
-                                                    <path d="M8 3v4"></path>
-                                                    <path d="M4 11h16"></path>
-                                                    <path d="M11 15h1"></path>
-                                                    <path d="M12 15v3"></path></svg></span>
-                                                <input class="form-control" placeholder="Masukkan Tanggal Pembimbing" id="datepicker-icon-prepend" name="tgl_bimbingan">
-                                            </div>
-                                            @error('tgl_bimbingan')
+                                            <label class="form-label">Dosen Pembimbing 2</label>
+                                             <select class="form-select" name="dosen_pembimbing_2">
+                                                <option>Pilih Data Dosen</option>
+                                                @foreach($dosen as $data)
+                                                    <option value="{{$data->id}}"
+                                                        {{ $suratizin->dosen_pembimbing_2 == $data->nama ? 'selected' : '' }}>
+                                                        NIDM : {{$data->nip}} | Nama Dosen : {{$data->nama}}  
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('dosen_pembimbing_2')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="mb-3">
-                                          <label class="form-label">Catatan</label>
-                                          <textarea class="form-control" data-bs-toggle="autosize"  placeholder="Masukkan Catatan..." style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 56px;" name="catatan"></textarea>
-                                          @error('catatan')
+                                          <label class="form-label">Isi Surat</label>
+                                          <textarea class="form-control" data-bs-toggle="autosize"  placeholder="Masukkan Isi Surat..." style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 56px;" name="isi_surat">{{$suratizin->isi_surat}}</textarea>
+                                          @error('isi_surat')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                          @enderror
+                                            @enderror
                                         </div>
-
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">
                                                 Simpan

@@ -1,6 +1,5 @@
-@extends('admin.layouts.app', [
-'activePage' => 'gigi',
-'activeDrop' => 'ta',
+@extends('dosen.layouts.app', [
+'activePage' => 'ta',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -43,7 +42,7 @@
                                 <h3 class="card-title">
                                     Penambahan Data Bimbingan Tugas Akhir
                                 </h3>
-                                <a href="/admin/ta/" class="btn btn-secondary btn-sm">
+                                <a href="/dosen/ta/" class="btn btn-secondary btn-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -57,53 +56,41 @@
                                 </a>
                             </div>
                             <div class="card-body">
-                                <form action="/admin/ta/create" method="POST" enctype="multipart/form-data">
+                                <form action="/dosen/ta/create" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
-                                        <div>
-                                            <label class="form-label">Mahasiswa</label>
-                                             <select class="form-select" name="id_mahasiswa">
-                                                <option>Pilih Data Mahasiswa</option>
-                                                @foreach($mahasiswa as $data)
-                                                    <option value="{{$data->id}}">
-                                                        No.BP: {{$data->nobp}} | Nama Mahasiswa: {{$data->nama}} 
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('id_mahasiswa')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Dosen Pembimbing</label>
-                                             <select class="form-select" name="dosen_bimbingan">
-                                                <option>Pilih Data Dosen</option>
-                                                @foreach($dosen as $data)
-                                                    <option value="{{$data->id}}">
-                                                        NIP: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('dosen_bimbingan')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Tanggal Pembimbing</label>
-                                            <div class="input-icon">
-                                                <span class="input-icon-addon"><!-- Download SVG icon from http://tabler.io/icons/icon/calendar -->
-                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
-                                                    <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
-                                                    <path d="M16 3v4"></path>
-                                                    <path d="M8 3v4"></path>
-                                                    <path d="M4 11h16"></path>
-                                                    <path d="M11 15h1"></path>
-                                                    <path d="M12 15v3"></path></svg></span>
-                                                <input class="form-control" placeholder="Masukkan Tanggal Pembimbing" id="datepicker-icon-prepend" name="tgl_bimbingan">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Mahasiswa</label>
+                                                 <select class="form-select" name="id_mahasiswa">
+                                                    <option>Pilih Data Mahasiswa</option>
+                                                    @foreach($mahasiswa as $data)
+                                                        <option value="{{$data->id}}">
+                                                            No.BP: {{$data->nobp}} | Nama Mahasiswa: {{$data->nama}} 
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('id_mahasiswa')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
                                             </div>
-                                            @error('tgl_bimbingan')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                            <div class="col-md-6">
+                                                <label class="form-label">Tanggal Pembimbing</label>
+                                                <div class="input-icon">
+                                                    <span class="input-icon-addon"><!-- Download SVG icon from http://tabler.io/icons/icon/calendar -->
+                                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                                                        <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
+                                                        <path d="M16 3v4"></path>
+                                                        <path d="M8 3v4"></path>
+                                                        <path d="M4 11h16"></path>
+                                                        <path d="M11 15h1"></path>
+                                                        <path d="M12 15v3"></path></svg></span>
+                                                    <input class="form-control" placeholder="Masukkan Tanggal Pembimbing" id="datepicker-icon-prepend" name="tgl_bimbingan">
+                                                </div>
+                                                @error('tgl_bimbingan')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
                                         <div class="mb-3">
                                           <label class="form-label">Catatan</label>
