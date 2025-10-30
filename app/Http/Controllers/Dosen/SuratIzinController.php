@@ -11,21 +11,30 @@ class SuratIzinController extends Controller
 {
     public function read(Request $request)
     {
-        // Ambil parameter entries dari request, default = 5
-        $entries = $request->input('entries', 5);
+         $entries = $request->input('entries', 5);
+        $user = Auth::user();
 
-        // Query dengan join ke tabel mahasiswa
+        // Ambil ID dosen login
+        $id_dosen = $user->id_dosen ?? $user->id;
+
         $suratizin = DB::table('surat_izin')
             ->join('mahasiswa', 'surat_izin.id_mahasiswa', '=', 'mahasiswa.id')
+            ->leftJoin('dosen as dosen1', 'surat_izin.dosen_pembimbing_1', '=', 'dosen1.id')
+            ->leftJoin('dosen as dosen2', 'surat_izin.dosen_pembimbing_2', '=', 'dosen2.id')
             ->select(
                 'surat_izin.*',
-                'mahasiswa.nama',
-                'mahasiswa.nobp'
+                'mahasiswa.nama as nama',
+                'mahasiswa.nobp',
+                'dosen1.nama as dosen_pembimbing_1',
+                'dosen2.nama as dosen_pembimbing_2'
             )
+            ->where(function ($query) use ($id_dosen) {
+                $query->where('surat_izin.dosen_pembimbing_1', $id_dosen)
+                      ->orWhere('surat_izin.dosen_pembimbing_2', $id_dosen);
+            })
             ->orderBy('surat_izin.id', 'DESC')
             ->paginate($entries);
 
-        // Supaya pagination tetap bawa query string (search / entries)
         $suratizin->appends($request->all());
 
         return view('dosen.suratizin.index', compact('suratizin'));
@@ -33,42 +42,57 @@ class SuratIzinController extends Controller
 
     public function feature(Request $request)
     {
+        // Ambil data user login
+        $user = Auth::user();
+
+        // Ambil ID dosen dari user login
+        $id_dosen = $user->id_dosen ?? $user->id;
+
+        // Base query
         $query = DB::table('surat_izin')
-        ->join('mahasiswa', 'surat_izin.id_mahasiswa', '=', 'mahasiswa.id')
-        ->select(
-            'surat_izin.*',
-            'mahasiswa.nama',
-            'mahasiswa.nobp'
-        );
+            ->join('mahasiswa', 'surat_izin.id_mahasiswa', '=', 'mahasiswa.id')
+            ->leftJoin('dosen as dosen1', 'surat_izin.dosen_pembimbing_1', '=', 'dosen1.id')
+            ->leftJoin('dosen as dosen2', 'surat_izin.dosen_pembimbing_2', '=', 'dosen2.id')
+            ->select(
+                'surat_izin.*',
+                'mahasiswa.nama as nama',
+                'mahasiswa.nobp',
+                'dosen1.nama as dosen_pembimbing_1',
+                'dosen2.nama as dosen_pembimbing_2'
+            )
+            ->where(function ($q) use ($id_dosen) {
+                $q->where('surat_izin.dosen_pembimbing_1', $id_dosen)
+                  ->orWhere('surat_izin.dosen_pembimbing_2', $id_dosen);
+            });
 
         // 🔍 Fitur search
-        if ($request->filled('search')) 
-        {
+        if ($request->filled('search')) {
             $search = $request->search;
 
             $query->where(function ($q) use ($search) {
                 $q->where('surat_izin.id', 'like', "%{$search}%")
                   ->orWhere('surat_izin.jenis', 'like', "%{$search}%")
                   ->orWhere('surat_izin.judul_penelitian', 'like', "%{$search}%")
-                  ->orWhere('surat_izin.dosen_pembimbing_1', 'like', "%{$search}%")
-                  ->orWhere('surat_izin.dosen_pembimbing_2', 'like', "%{$search}%")
                   ->orWhere('surat_izin.isi_surat', 'like', "%{$search}%")
-                  // 🔽 Field dari tabel mahasiswa
+                  // 🔽 Kolom dari tabel mahasiswa dan dosen
                   ->orWhere('mahasiswa.nama', 'like', "%{$search}%")
-                  ->orWhere('mahasiswa.nobp', 'like', "%{$search}%");
+                  ->orWhere('mahasiswa.nobp', 'like', "%{$search}%")
+                  ->orWhere('dosen1.nama', 'like', "%{$search}%")
+                  ->orWhere('dosen2.nama', 'like', "%{$search}%");
             });
         }
 
-    // Show entries (default 10)
-    $entries = $request->get('entries', 10);
+        // 🔢 Jumlah data per halaman
+        $entries = $request->get('entries', 10);
 
-    // Ambil data dengan pagination
-    $suratizin = $query->orderBy('surat_izin.id', 'DESC')->paginate($entries);
+        // 🔹 Ambil data dengan pagination
+        $suratizin = $query->orderBy('surat_izin.id', 'DESC')->paginate($entries);
 
-    // Supaya pagination tetap bawa query string
-    $suratizin->appends($request->all());
+        // Bawa query string ke pagination
+        $suratizin->appends($request->all());
 
-    return view('dosen.suratizin.index', compact('suratizin'));
+        // Tampilkan ke view
+        return view('dosen.suratizin.index', compact('suratizin'));
     } 
 
     public function add(){

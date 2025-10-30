@@ -96,7 +96,7 @@
                                                     <option value="Selasa" {{ $jadmetopen->hari == 'Selasa' ? 'selected' : '' }}>Selasa</option>
                                                     <option value="Rabu"   {{ $jadmetopen->hari == 'Rabu' ? 'selected' : '' }}>Rabu</option>
                                                     <option value="Kamis"  {{ $jadmetopen->hari == 'Kamis' ? 'selected' : '' }}>Kamis</option>
-                                                    <option value="Jum\'at" {{ $jadmetopen->hari == "Jum'at" ? 'selected' : '' }}>Jum'at</option>
+                                                    <option value="Jum'at" {{ $jadmetopen->hari == "Jum'at" ? 'selected' : '' }}>Jum'at</option>
                                                 </select>
                                                  @error('hari')
                                                     <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
@@ -120,7 +120,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <label class="form-label">Mata Kuliah</label>
                                                  <select class="form-select" name="id_makul">
                                                     <option>
@@ -137,24 +137,7 @@
                                                     <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                                 @enderror
                                             </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label">Dosen</label>
-                                                 <select class="form-select" name="id_dosen">
-                                                    <option>
-                                                        Pilih Dosen
-                                                    </option>
-                                                    @foreach($dosen as $data)
-                                                    <option value="{{$data->id}}"
-                                                        {{ $jadmetopen->id_dosen == $data->id ? 'selected' : '' }}>
-                                                        {{$data->nama}}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                                 @error('id_dosen')
-                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <label class="form-label">Ruangan</label>
                                                  <select class="form-select" name="id_ruangan">
                                                     <option>

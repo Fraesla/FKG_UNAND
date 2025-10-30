@@ -13,6 +13,12 @@ class BlokController extends Controller
 
         $entries = $request->input('entries', 5);
 
+        // Ambil data user yang sedang login
+        $user = Auth::user();
+        // Ambil ID dosen dari user login
+        // Sesuaikan jika tabel 'users' menyimpan id_dosen langsung, misalnya 'id_dosen' di kolom users
+        $idDosen = $user->id_dosen ?? $user->id;
+
         // Data blok (kelas) untuk select option
         $blok = DB::table('kelas')->orderBy('id','DESC')->get();
 
@@ -34,6 +40,7 @@ class BlokController extends Controller
                 'dosen.nama as dosen',
                 'ruangan.nama as ruangan'
             )
+            ->where('jadwal_makul.id_dosen', $idDosen) // 🔥 filter berdasarkan dosen login
             ->orderBy('jadwal_makul.id', 'DESC');
 
         // Filter berdasarkan blok (id_kelas) kalau dipilih
@@ -49,10 +56,12 @@ class BlokController extends Controller
             'jadmakul' => $jadmakul,
             'blok'     => $blok
         ]);
-    } 
+    }
 
     public function feature(Request $request)
     {
+        $user = Auth::user();
+        $idDosen = $user->id_dosen ?? $user->id;
         $blok = DB::table('kelas')->orderBy('id','DESC')->get();
         $query = DB::table('jadwal_makul')
             ->join('kelas', 'jadwal_makul.id_kelas', '=', 'kelas.id')
@@ -70,7 +79,8 @@ class BlokController extends Controller
                 'dosen.nama as dosen',
                 'makul.nama as makul',
                 'ruangan.nama as ruangan'
-            );
+            )
+            ->where('jadwal_makul.id_dosen', $idDosen);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -108,6 +118,9 @@ class BlokController extends Controller
     }
 
     public function create(Request $request){
+
+        $user = Auth::user();
+        $id_dosen = $user->id_dosen ?? $user->id;
          // Validasi input
         $request->validate([
             'id_kelas' => 'required|exists:kelas,id',
@@ -117,7 +130,6 @@ class BlokController extends Controller
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
             'id_makul' => 'required|exists:makul,id',
-            'id_dosen' => 'required|exists:dosen,id',
             'id_ruangan' => 'required|exists:ruangan,id',
         ],[
             'id_kelas.exists' => 'Blok yang dipilih tidak valid...',
@@ -131,7 +143,6 @@ class BlokController extends Controller
             'jam_selesai.date_format' => 'Format Jam Selesai tidak valid (gunakan format HH:MM).',
             'jam_selesai.after' => 'Jam Selesai harus setelah Jam Mulai.',
             'id_makul.exists' => 'Mata Kuliah yang dipilih tidak valid..',
-            'id_dosen.exists' => 'Dosen yang dipilih tidak valid..',
             'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
         ]);
 
@@ -143,7 +154,7 @@ class BlokController extends Controller
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
             'id_makul' => $request->id_makul,
-            'id_dosen' => $request->id_dosen,
+            'id_dosen' => $id_dosen,
             'id_ruangan' => $request->id_ruangan
         ]);
 
@@ -216,6 +227,37 @@ class BlokController extends Controller
         return redirect('/dosen/materi')->with('success', 'Materi dari data blok berhasil ditambahkan!');
     } 
 
+    public function nilai($id)
+    {
+        // Ambil data jadwal berdasarkan ID
+        $jadwal = DB::table('jadwal_makul')->where('id', $id)->first();
+
+        if (!$jadwal) {
+            return redirect()->back()->with('error', 'Data jadwal tidak ditemukan!');
+        }
+
+        // // Cek apakah sudah ada absen dengan id_makul yang sama
+        // $cekDuplikat = DB::table('nilai')
+        //     ->where('id_makul', $jadwal->id)
+        //     ->exists();
+
+        // if ($cekDuplikat) {
+        //     return redirect('/admin/jadmakul')
+        //         ->with('error', 'Data Nilai untuk jadwal Mata Kuliah ini sudah ada!');
+        // }
+
+        // Simpan data absen baru
+        DB::table('nilai')->insert([
+            'id_makul'         => $jadwal->id_makul,
+            'id_dosen'   => $jadwal->id_dosen,
+            'id_mahasiswa'  => '',
+            'nilai'    => 0,
+        ]);
+
+        return redirect('/dosen/nilai')
+            ->with('success', 'Data Nilai dari data blok berhasil ditambahkan!');
+    }
+
 
     public function edit($id){
         $jadmakul = DB::table('jadwal_makul')->where('id',$id)->first();
@@ -228,6 +270,7 @@ class BlokController extends Controller
     }
 
     public function update(Request $request, $id) {
+
          // Validasi input
         $request->validate([
             'id_kelas' => 'required|exists:kelas,id',
@@ -237,7 +280,6 @@ class BlokController extends Controller
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
             'id_makul' => 'required|exists:makul,id',
-            'id_dosen' => 'required|exists:dosen,id',
             'id_ruangan' => 'required|exists:ruangan,id',
         ],[
             'id_kelas.required' => 'Form Blok Silahkan dipilh Dulu...',
@@ -252,7 +294,6 @@ class BlokController extends Controller
             'jam_selesai.date_format' => 'Format Jam Selesai tidak valid (gunakan format HH:MM).',
             'jam_selesai.after' => 'Jam Selesai harus setelah Jam Mulai.',
             'id_makul.exists' => 'Mata Kuliah yang dipilih tidak valid..',
-            'id_dosen.exists' => 'Dosen yang dipilih tidak valid..',
             'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
         ]);
         DB::table('jadwal_makul')  
@@ -265,7 +306,6 @@ class BlokController extends Controller
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
             'id_makul' => $request->id_makul,
-            'id_dosen' => $request->id_dosen,
             'id_ruangan' => $request->id_ruangan
         ]);
 

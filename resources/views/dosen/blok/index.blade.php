@@ -9,7 +9,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Jadwal Mata Kuliah (Data Blok)</h2>
+                  <h2 class="page-title">Data Blok</h2>
                   @include('components.alert')
               </div>
               <!-- Page title actions -->
@@ -23,7 +23,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">Tabel Jadwal Mata Kuliah (Data Blok)</h3>
+                    <h3 class="card-title">Tabel Data Blok</h3>
                     <div class="d-flex align-items-center ms-auto">
                         <label class="form-label me-2 mb-0">Blok</label>
                         <select class="form-select"  name="id_kelas" style="min-width: 200px;" onchange="window.location.href='{{ route('dosen.blok.read') }}?id_kelas='+this.value">
@@ -85,9 +85,9 @@
                             <div class="ms-auto text-secondary d-flex align-items-center">
                                 <span class="me-2">Search:</span>
                                 <input type="text" class="form-control form-control-mm" 
-                                       aria-label="Search data Jadwal Mata Kuliah (Data Blok)" 
+                                       aria-label="Search Data Blok" 
                                        name="search" 
-                                       placeholder="Cari Data Jadwal Mata Kuliah (Data Blok)..." 
+                                       placeholder="Cari Data Blok..." 
                                        value="{{ request('search') }}">
 
                                 <a href="/dosen/blok/add" class="btn btn-success btn-mm ms-2">
@@ -199,7 +199,7 @@
                                             @default
                                                 {{-- Default: semua tombol --}}
                                                 <!-- Nilai -->
-                                                <a href="/dosen/nilai" class="btn btn-primary btn-sm p-1">
+                                                <a href="/dosen/blok/nilai/{{$data->id}}" class="btn btn-primary btn-sm p-1 btn-nilai">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"  
@@ -358,6 +358,29 @@ document.querySelectorAll('.btn-materi').forEach(button => {
             confirmButtonColor: '#28a745',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Ya, isi materi!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    });
+});
+</script>
+<script>
+document.querySelectorAll('.btn-nilai').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.preventDefault(); // cegah langsung pindah halaman
+        const url = this.getAttribute('href');
+
+        Swal.fire({
+            title: 'Konfirmasi Nilai',
+            text: "Apakah Anda yakin ingin mengisi Data Nilai?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, isi Data Nilai!',
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {

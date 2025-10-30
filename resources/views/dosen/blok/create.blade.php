@@ -9,7 +9,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Jadwal Mata Kuliah (Data Blok)</h2>
+                  <h2 class="page-title">Data Blok</h2>
                   @if ($errors->any())
                     <div id="alert-error" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
                         <strong>⚠️ Terjadi Kesalahan pada Pengisian Formulir:</strong>
@@ -40,7 +40,7 @@
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h3 class="card-title">
-                                    Penambahan Data Jadwal Mata Kuliah (Data Blok)
+                                    Penambahan Data Blok
                                 </h3>
                                 <a href="/dosen/blok/" class="btn btn-secondary btn-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
@@ -56,7 +56,7 @@
                                 </a>
                             </div>
                             <div class="card-body">
-                                <form action="/dosen/jadmakul/create" method="POST" enctype="multipart/form-data">
+                                <form action="/dosen/blok/create" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
                                         <div>
@@ -121,7 +121,7 @@
                                                     <option value="Selasa" {{ old('hari') == 'Selasa' ? 'selected' : '' }}>Selasa</option>
                                                     <option value="Rabu" {{ old('hari') == 'Rabu' ? 'selected' : '' }}>Rabu</option>
                                                     <option value="Kamis" {{ old('hari') == 'Kamis' ? 'selected' : '' }}>Kamis</option>
-                                                    <option value="Jum\'at" {{ old('hari') == "Jum'at" ? 'selected' : '' }}>Jum'at</option>
+                                                    <option value="Jum'at" {{ old('hari') == "Jum'at" ? 'selected' : '' }}>Jum'at</option>
                                                 </select>
                                                 @error('hari')
                                                     <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
@@ -152,7 +152,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <label class="form-label">Mata Kuliah</label>
                                                  <select class="form-select" name="id_makul">
                                                     <option>Pilih Mata Kuliah</option>
@@ -167,23 +167,7 @@
                                                     <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                                 @enderror
                                             </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label">Dosen</label>
-                                                 <select class="form-select" name="id_dosen">
-                                                    <option>
-                                                        Pilih Dosen
-                                                    </option>
-                                                    @foreach($dosen as $data)
-                                                    <option value="{{$data->id}}">
-                                                        {{$data->nama}}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                                @error('id_dosen')
-                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <label class="form-label">Ruangan</label>
                                                  <select class="form-select" name="id_ruangan">
                                                     <option>

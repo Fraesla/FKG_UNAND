@@ -59,99 +59,87 @@
                                 <form action="/dosen/skripsi/update/{{$skripsi->id}}" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
-                                        
-                                        <div>
-                                            <label class="form-label">Minggu Ke-</label>
-                                            <select name="minggu" class="form-select">
-                                                <option value="0" {{ $skripsi->minggu == 0 ? 'selected' : '' }}> Pilih minggu
-                                                @for($no=1; $no<=6; $no++)
-                                                    <option value="{{ $no }}" {{ $skripsi->minggu == $no ? 'selected' : '' }}>
-                                                        Minggu ke- {{ $no }}
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Minggu Ke-</label>
+                                                <select name="minggu" class="form-select">
+                                                    <option value="0" {{ $skripsi->minggu == 0 ? 'selected' : '' }}> Pilih minggu
+                                                    @for($no=1; $no<=6; $no++)
+                                                        <option value="{{ $no }}" {{ $skripsi->minggu == $no ? 'selected' : '' }}>
+                                                            Minggu ke- {{ $no }}
+                                                        </option>
+                                                    @endfor
+                                                </select>
+                                                 @error('minggu')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Hari</label>
+                                                 <select class="form-select" name="hari">
+                                                    <option value="">Pilih Hari</option>
+                                                    <option value="Senin"  {{ $skripsi->hari == 'Senin' ? 'selected' : '' }}>Senin</option>
+                                                    <option value="Selasa" {{ $skripsi->hari == 'Selasa' ? 'selected' : '' }}>Selasa</option>
+                                                    <option value="Rabu"   {{ $skripsi->hari == 'Rabu' ? 'selected' : '' }}>Rabu</option>
+                                                    <option value="Kamis"  {{ $skripsi->hari == 'Kamis' ? 'selected' : '' }}>Kamis</option>
+                                                    <option value="Jum'at" {{ $skripsi->hari == "Jum'at" ? 'selected' : '' }}>Jum'at</option>
+                                                </select>
+                                                 @error('hari')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Jam Mulai</label>
+                                                <input type="time" name="jam_mulai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off" value="{{$skripsi->jam_mulai}}">
+                                                 @error('jam_mulai')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Jam Selesai</label>
+                                                <input type="time" name="jam_selesai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off" value="{{$skripsi->jam_selesai}}">
+                                                 @error('jam_selesai')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Mata Kuliah</label>
+                                                 <select class="form-select" name="id_makul">
+                                                    <option>
+                                                        Pilih Mata Kuliah
                                                     </option>
-                                                @endfor
-                                            </select>
-                                             @error('minggu')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Hari</label>
-                                             <select class="form-select" name="hari">
-                                                <option value="">Pilih Hari</option>
-                                                <option value="Senin"  {{ $skripsi->hari == 'Senin' ? 'selected' : '' }}>Senin</option>
-                                                <option value="Selasa" {{ $skripsi->hari == 'Selasa' ? 'selected' : '' }}>Selasa</option>
-                                                <option value="Rabu"   {{ $skripsi->hari == 'Rabu' ? 'selected' : '' }}>Rabu</option>
-                                                <option value="Kamis"  {{ $skripsi->hari == 'Kamis' ? 'selected' : '' }}>Kamis</option>
-                                                <option value="Jum\'at" {{ $skripsi->hari == "Jum'at" ? 'selected' : '' }}>Jum'at</option>
-                                            </select>
-                                             @error('hari')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Jam Mulai</label>
-                                            <input type="text" name="jam_mulai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off" value="{{$skripsi->jam_mulai}}">
-                                             @error('jam_mulai')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Jam Selesai</label>
-                                            <input type="text" name="jam_selesai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off" value="{{$skripsi->jam_selesai}}">
-                                             @error('jam_selesai')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Mata Kuliah</label>
-                                             <select class="form-select" name="id_makul">
-                                                <option>
-                                                    Pilih Mata Kuliah
-                                                </option>
-                                                @foreach($makul as $data)
-                                                <option value="{{$data->id}}" 
-                                                    {{ $skripsi->id_makul == $data->id ? 'selected' : '' }}>
-                                                    {{$data->nama}} 
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                             @error('id_makul')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Dosen</label>
-                                             <select class="form-select" name="id_dosen">
-                                                <option>
-                                                    Pilih Dosen
-                                                </option>
-                                                @foreach($dosen as $data)
-                                                <option value="{{$data->id}}"
-                                                    {{ $skripsi->id_dosen == $data->id ? 'selected' : '' }}>
-                                                    {{$data->nama}}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                             @error('id_dosen')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Ruangan</label>
-                                             <select class="form-select" name="id_ruangan">
-                                                <option>
-                                                    Pilih Ruangan
-                                                </option>
-                                                @foreach($ruangan as $data)
-                                                <option value="{{$data->id}}"
-                                                    {{ $skripsi->id_ruangan == $data->id ? 'selected' : '' }}>
-                                                    {{$data->nama}}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                             @error('id_ruangan')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                                    @foreach($makul as $data)
+                                                    <option value="{{$data->id}}" 
+                                                        {{ $skripsi->id_makul == $data->id ? 'selected' : '' }}>
+                                                        {{$data->nama}} 
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                 @error('id_makul')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Ruangan</label>
+                                                 <select class="form-select" name="id_ruangan">
+                                                    <option>
+                                                        Pilih Ruangan
+                                                    </option>
+                                                    @foreach($ruangan as $data)
+                                                    <option value="{{$data->id}}"
+                                                        {{ $skripsi->id_ruangan == $data->id ? 'selected' : '' }}>
+                                                        {{$data->nama}}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                 @error('id_ruangan')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

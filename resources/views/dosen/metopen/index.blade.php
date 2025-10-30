@@ -9,7 +9,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Jadwal Mata Kuliah (Data Metopen)</h2>
+                  <h2 class="page-title">Data Metopen</h2>
                   @include('components.alert')
               </div>
               <!-- Page title actions -->
@@ -23,7 +23,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">Tabel Jadwal Mata Kuliah (Data Metopen)</h3>
+                    <h3 class="card-title">Tabel Data Metopen</h3>
                     <!-- <div class="d-flex gap-2">
                         Tombol Import
                             <a href="#" class="btn btn-primary btn-mm">
@@ -74,9 +74,9 @@
                             <div class="ms-auto text-secondary d-flex align-items-center">
                                 <span class="me-2">Search:</span>
                                 <input type="text" class="form-control form-control-mm" 
-                                       aria-label="Search data Jadwal Mata Kuliah (Data Metopen)" 
+                                       aria-label="Search Data Metopen" 
                                        name="search" 
-                                       placeholder="Cari Data Jadwal Mata Kuliah (Data Metopen) ..." 
+                                       placeholder="Cari Data Metopen ..." 
                                        value="{{ request('search') }}">
 
                                 <a href="/dosen/metopen/add" class="btn btn-success btn-mm ms-2">
@@ -186,7 +186,7 @@
                                             @default
                                                 {{-- Default: semua tombol --}}
                                                 <!-- Nilai -->
-                                                <a href="/dosen/nilai" class="btn btn-primary btn-sm p-1">
+                                                <a href="/dosen/metopen/nilai/{{$data->id}}" class="btn btn-primary btn-sm p-1 btn-nilai">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"  
@@ -345,6 +345,29 @@ document.querySelectorAll('.btn-materi').forEach(button => {
             confirmButtonColor: '#28a745',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Ya, isi materi!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    });
+});
+</script>
+<script>
+document.querySelectorAll('.btn-nilai').forEach(button => {
+    button.addEventListener('click', function(e) {
+        e.preventDefault(); // cegah langsung pindah halaman
+        const url = this.getAttribute('href');
+
+        Swal.fire({
+            title: 'Konfirmasi Nilai',
+            text: "Apakah Anda yakin ingin mengisi Data Nilai?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, isi Data Nilai!',
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {

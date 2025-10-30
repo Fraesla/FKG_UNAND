@@ -919,7 +919,7 @@
                   <span class="nav-link-title"> Data Surat Izin Penelitian</span>
                 </a>
               </li>
-              <li class="nav-item @if ($activePage == 'suratizin') active @endif">
+              <li class="nav-item @if ($activePage == 'repositori') active @endif">
                 <a class="nav-link" href="#">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
                     ><!-- Download SVG icon from http://tabler.io/icons/icon/package -->
@@ -927,7 +927,7 @@
                   <span class="nav-link-title"> Repositori</span>
                 </a>
               </li>
-              <li class="nav-item @if ($activePage == 'absesnsi') active @endif ">
+              <li class="nav-item @if ($activePage == 'publikasi') active @endif ">
                 <a class="nav-link" href="#">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
                     ><!-- Download SVG icon from http://tabler.io/icons/icon/checkbox -->
@@ -1430,6 +1430,11 @@
     <script src="{{url('assets')}}/dist/libs/jsvectormap/dist/jsvectormap.min.js?1747674014" defer></script>
     <script src="{{url('assets')}}/dist/libs/jsvectormap/dist/maps/world.js?1747674014" defer></script>
     <script src="{{url('assets')}}/dist/libs/jsvectormap/dist/maps/world-merc.js?1747674014" defer></script>
+    <script src="{{url('assets')}}/dist/libs/imask/dist/imask.min.js?1747674014" defer></script>
+    <script src="{{url('assets')}}/dist/libs/autosize/dist/autosize.min.js?1747674014" defer></script>
+    <script src="{{url('assets')}}/dist/libs/nouislider/dist/nouislider.min.js?1747674014" defer></script>
+    <script src="{{url('assets')}}/dist/libs/litepicker/dist/litepicker.js?1747674014" defer></script>
+    <script src="{{url('assets')}}/dist/libs/tom-select/dist/js/tom-select.base.min.js?1747674014" defer></script>
     <!-- END PAGE LIBRARIES -->
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="{{url('assets')}}/dist/js/tabler.min.js?1747674014" defer></script>
@@ -2629,6 +2634,48 @@
           window.history.pushState({}, "", url);
         });
         checkItems();
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window.Litepicker &&
+          new Litepicker({
+            element: document.getElementById("datepicker-default"),
+            buttonText: {
+              previousMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-left -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M15 6l-6 6l6 6" /></svg>`,
+              nextMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-right -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M9 6l6 6l-6 6" /></svg>`,
+            },
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window.Litepicker &&
+          new Litepicker({
+            element: document.getElementById("datepicker-icon"),
+            buttonText: {
+              previousMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-left -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M15 6l-6 6l6 6" /></svg>`,
+              nextMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-right -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M9 6l6 6l-6 6" /></svg>`,
+            },
+          });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window.Litepicker &&
+          new Litepicker({
+            element: document.getElementById("datepicker-icon-prepend"),
+            buttonText: {
+              previousMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-left -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M15 6l-6 6l6 6" /></svg>`,
+              nextMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-right -->
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M9 6l6 6l-6 6" /></svg>`,
+            },
+          });
       });
     </script>
     <!-- END PAGE SCRIPTS -->

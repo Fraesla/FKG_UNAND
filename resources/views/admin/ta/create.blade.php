@@ -60,14 +60,6 @@
                                 <form action="/admin/ta/create" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
-                                        <!-- <div>
-                                            <label class="form-label">NO.BP</label>
-                                            <input type="text" placeholder="Masukkan No.BP" class="form-control" name="no_bp" />
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Nama Mahasiswa</label>
-                                            <input type="text" placeholder="Masukkan Nama Mahasiswa" class="form-control" name="nama_mahasiswa" />
-                                        </div> -->
                                         <div>
                                             <label class="form-label">Mahasiswa</label>
                                              <select class="form-select" name="id_mahasiswa">
@@ -96,10 +88,6 @@
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>
-                                        <!-- <div>
-                                            <label class="form-label">Dosen Pembimbing</label>
-                                            <input type="text" placeholder="Masukkan Dosen Pembimbing" class="form-control" name="dosen_pembimbing" />
-                                        </div> -->
                                         <div>
                                             <label class="form-label">Tanggal Pembimbing</label>
                                             <div class="input-icon">

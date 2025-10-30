@@ -1,5 +1,5 @@
 @extends('dosen.layouts.app', [
-'activePage' => 'nliai',
+'activePage' => 'nilai',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->

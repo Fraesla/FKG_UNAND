@@ -12,7 +12,8 @@ class MetopenController extends Controller
     public function read(Request $request){
 
         $entries = $request->input('entries', 5);
-
+        $user = Auth::user();
+        $idDosen = $user->id_dosen ?? $user->id;
         // Data blok (kelas) untuk select option
         $blok = DB::table('kelas')->orderBy('id','DESC')->get();
 
@@ -32,6 +33,7 @@ class MetopenController extends Controller
                 'dosen.nama as dosen',
                 'ruangan.nama as ruangan'
             )
+            ->where('jadwal_metopen.id_dosen', $idDosen)
             ->orderBy('jadwal_metopen.id', 'DESC');
 
         // Filter berdasarkan blok (id_kelas) kalau dipilih
@@ -51,6 +53,8 @@ class MetopenController extends Controller
 
     public function feature(Request $request)
     {
+        $user = Auth::user();
+        $idDosen = $user->id_dosen ?? $user->id;
         $blok = DB::table('kelas')->orderBy('id','DESC')->get();
         $query = DB::table('jadwal_metopen')
             ->join('makul', 'jadwal_metopen.id_makul', '=', 'makul.id')
@@ -66,7 +70,8 @@ class MetopenController extends Controller
                 'makul.nama as makul',
                 'dosen.nama as dosen',
                 'ruangan.nama as ruangan'
-            );
+            )
+            ->where('jadwal_metopen.id_dosen', $idDosen);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -105,6 +110,8 @@ class MetopenController extends Controller
     }
 
     public function create(Request $request){
+        $user = Auth::user();
+        $id_dosen = $user->id_dosen ?? $user->id;
         // Validasi input
         $request->validate([
             'minggu' => 'required|integer|min:1|max:6',
@@ -113,7 +120,6 @@ class MetopenController extends Controller
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
             'id_makul' => 'required|exists:makul,id',
-            'id_dosen' => 'required|exists:dosen,id',
             'id_ruangan' => 'required|exists:ruangan,id',
         ],[
             'minggu.required' => 'Minggu ke- wajib diisi.',
@@ -126,7 +132,6 @@ class MetopenController extends Controller
             'jam_selesai.date_format' => 'Format Jam Selesai tidak valid (gunakan format HH:MM).',
             'jam_selesai.after' => 'Jam Selesai harus setelah Jam Mulai.',
             'id_makul.exists' => 'Mata Kuliah yang dipilih tidak valid..',
-            'id_dosen.exists' => 'Dosen yang dipilih tidak valid..',
             'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
         ]);
 
@@ -137,7 +142,7 @@ class MetopenController extends Controller
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
             'id_makul' => $request->id_makul,
-            'id_dosen' => $request->id_dosen,
+            'id_dosen' => $id_dosen,
             'id_ruangan' => $request->id_ruangan
         ]);
 
@@ -210,6 +215,37 @@ class MetopenController extends Controller
         return redirect('/dosen/materi')->with('success', 'Materi dari data blok berhasil ditambahkan!');
     } 
 
+    public function nilai($id)
+    {
+        // Ambil data jadwal berdasarkan ID
+        $jadwal = DB::table('jadwal_metopen')->where('id', $id)->first();
+
+        if (!$jadwal) {
+            return redirect()->back()->with('error', 'Data jadwal tidak ditemukan!');
+        }
+
+        // // Cek apakah sudah ada absen dengan id_jadwal_dosen yang sama
+        // $cekDuplikat = DB::table('nilai')
+        //     ->where('id_makul', $jadwal->id_makul)
+        //     ->exists();
+
+        // if ($cekDuplikat) {
+        //     return redirect('/admin/jadmetopen')
+        //         ->with('error', 'Data Nilai untuk jadwal Mata Kuliah ini sudah ada!');
+        // }
+
+        // Simpan data absen baru
+        DB::table('nilai')->insert([
+            'id_makul'         => $jadwal->id_makul,
+            'id_dosen'   => $jadwal->id_dosen,
+            'id_mahasiswa'  => '',
+            'nilai'    => 0,
+        ]);
+
+        return redirect('/dosen/nilai')
+            ->with('success', 'Data Nilai dari data metopen berhasil ditambahkan!');
+    }
+
     public function edit($id){
         $jadmetopen = DB::table('jadwal_metopen')->where('id',$id)->first();
         $blok = DB::table('kelas')->orderBy('id','DESC')->get();
@@ -229,7 +265,6 @@ class MetopenController extends Controller
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
             'id_makul' => 'required|exists:makul,id',
-            'id_dosen' => 'required|exists:dosen,id',
             'id_ruangan' => 'required|exists:ruangan,id',
         ],[
             'minggu.required' => 'Minggu ke- wajib diisi.',
@@ -243,7 +278,6 @@ class MetopenController extends Controller
             'jam_selesai.date_format' => 'Format Jam Selesai tidak valid (gunakan format HH:MM).',
             'jam_selesai.after' => 'Jam Selesai harus setelah Jam Mulai.',
             'id_makul.exists' => 'Mata Kuliah yang dipilih tidak valid..',
-            'id_dosen.exists' => 'Dosen yang dipilih tidak valid..',
             'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
         ]);
 
@@ -256,7 +290,6 @@ class MetopenController extends Controller
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
             'id_makul' => $request->id_makul,
-            'id_dosen' => $request->id_dosen,
             'id_ruangan' => $request->id_ruangan
         ]);
 

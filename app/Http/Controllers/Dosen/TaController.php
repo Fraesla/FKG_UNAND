@@ -13,7 +13,8 @@ class TaController extends Controller
     {
         // Ambil parameter entries dari request, default = 5
         $entries = $request->input('entries', 5);
-
+        $user = Auth::user();
+        $idDosen = $user->id_dosen ?? $user->id;
         // Query pakai join ke mahasiswa
         $ta = DB::table('ta')
             ->join('mahasiswa', 'ta.id_mahasiswa', '=', 'mahasiswa.id')
@@ -24,6 +25,7 @@ class TaController extends Controller
                 'mahasiswa.nama',
                 'dosen.nama as dosen',
             )
+            ->where('ta.dosen_bimbingan', $idDosen)
             ->orderBy('ta.id', 'DESC')
             ->paginate($entries);
 
@@ -35,6 +37,8 @@ class TaController extends Controller
 
     public function feature(Request $request)
     {
+        $user = Auth::user();
+        $idDosen = $user->id_dosen ?? $user->id;
         $query = DB::table('ta')
         ->join('mahasiswa', 'ta.id_mahasiswa', '=', 'mahasiswa.id')
         ->join('dosen', 'ta.dosen_bimbingan', '=', 'dosen.id')
@@ -43,7 +47,8 @@ class TaController extends Controller
             'mahasiswa.nobp',
             'mahasiswa.nama',
             'dosen.nama as dosen',
-        );
+        )
+        ->where('ta.dosen_bimbingan', $idDosen);
 
         // Search berdasarkan ID/Nama/No BP/Dosen dll
         if ($request->filled('search')) {
@@ -77,21 +82,21 @@ class TaController extends Controller
     }
 
     public function create(Request $request){
+        $user = Auth::user();
+        $idDosen = $user->id_dosen ?? $user->id;
          // Validasi input
         $request->validate([
             'id_mahasiswa' => 'required|exists:makul,id',
-            'dosen_bimbingan' => 'required|exists:dosen,id',
             'tgl_bimbingan' => 'required|date',
             'catatan' => 'required|string',
         ],[
             'id_mahasiswa.exists' => 'Mahasiswa yang dipilih tidak valid..',
-            'dosen_bimbingan.exists' => 'Dosen Bimbingan yang dipilih tidak valid..',
             'tgl_bimbingan.required' => 'Tanggal Bimbingan wajib diisi.',
             'catatan.required' => 'Catatan wajib diisi.',
         ]);
         DB::table('ta')->insert([  
             'id_mahasiswa' => $request->id_mahasiswa,
-            'dosen_bimbingan' => $request->dosen_bimbingan,
+            'dosen_bimbingan' => $idDosen,
             'tgl_bimbingan' => $request->tgl_bimbingan,
             'catatan' => $request->catatan
         ]);
@@ -110,12 +115,10 @@ class TaController extends Controller
          // Validasi input
         $request->validate([
             'id_mahasiswa' => 'required|exists:makul,id',
-            'dosen_bimbingan' => 'required|exists:dosen,id',
             'tgl_bimbingan' => 'required|date',
             'catatan' => 'required|string',
         ],[
             'id_mahasiswa.exists' => 'Mahasiswa yang dipilih tidak valid..',
-            'dosen_bimbingan.exists' => 'Dosen Bimbingan yang dipilih tidak valid..',
             'tgl_bimbingan.required' => 'Tanggal Bimbingan wajib diisi.',
             'catatan.required' => 'Catatan wajib diisi.',
         ]);
@@ -123,7 +126,6 @@ class TaController extends Controller
             ->where('id', $id)
             ->update([
             'id_mahasiswa' => $request->id_mahasiswa,
-            'dosen_bimbingan' => $request->dosen_bimbingan,
             'tgl_bimbingan' => $request->tgl_bimbingan,
             'catatan' => $request->catatan
         ]);

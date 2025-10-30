@@ -92,7 +92,7 @@
                                              <select class="form-select" name="dosen_pembimbing_1">
                                                 <option>Pilih Data Dosen</option>
                                                 @foreach($dosen as $data)
-                                                    <option value="{{$data->nama}}">
+                                                    <option value="{{$data->id}}">
                                                         NIDM: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
                                                     </option>
                                                 @endforeach
@@ -106,7 +106,7 @@
                                              <select class="form-select" name="dosen_pembimbing_2">
                                                 <option>Pilih Data Dosen</option>
                                                 @foreach($dosen as $data)
-                                                    <option value="{{$data->nama}}">
+                                                    <option value="{{$data->id}}">
                                                         NIDM: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
                                                     </option>
                                                 @endforeach
