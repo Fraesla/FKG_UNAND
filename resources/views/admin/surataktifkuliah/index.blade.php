@@ -37,7 +37,7 @@
                                     <path d="M7 9l5 -5l5 5" />
                                     <path d="M12 4l0 12" />
                                 </svg>
-                                Import
+                                Upload Data Surat Aktif Kuliah
                             </a>
 
                             Tombol Export
@@ -77,7 +77,7 @@
                                 <input type="text" class="form-control form-control-mm" 
                                        aria-label="Search surataktifkuliah" 
                                        name="search" 
-                                       placeholder="Cari surataktifkuliah..." 
+                                       placeholder="Cari Data Surat Aktif Kuliah..." 
                                        value="{{ request('search') }}">
 
                                 <a href="/admin/surataktifkuliah/add" class="btn btn-success btn-mm ms-2">

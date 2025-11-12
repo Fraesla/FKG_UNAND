@@ -18,11 +18,11 @@ return new class extends Migration
             $table->string('nidn')->unique();
             $table->string('gender')->nullable();
             $table->string('pangol')->nullable();
-            $table->date('napater')->nullable();
+            $table->string('napater')->nullable();
             $table->string('napaber')->nullable();
             $table->string('jf')->nullable();
             $table->string('js')->nullable();
-            $table->date('najater')->nullable();
+            $table->string('najater')->nullable();
             $table->string('penter')->nullable();
             $table->string('keterangan')->nullable();
             $table->text('foto')->nullable();

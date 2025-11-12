@@ -37,7 +37,7 @@
                                     <path d="M7 9l5 -5l5 5" />
                                     <path d="M12 4l0 12" />
                                 </svg>
-                                Import
+                                Upload Data Yudisium
                             </a>
 
                             Tombol Export
@@ -75,9 +75,9 @@
                             <div class="ms-auto text-secondary d-flex align-items-center">
                                 <span class="me-2">Search:</span>
                                 <input type="text" class="form-control form-control-mm" 
-                                       aria-label="Search Yudisium" 
+                                       aria-label="Search Data Yudisium" 
                                        name="search" 
-                                       placeholder="Cari Yudisium..." 
+                                       placeholder="Cari Data Yudisium..." 
                                        value="{{ request('search') }}">
 
                                 <a href="/admin/yudisium/add" class="btn btn-success btn-mm ms-2">

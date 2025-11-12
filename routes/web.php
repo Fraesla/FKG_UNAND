@@ -370,6 +370,7 @@ Route::prefix('admin/jadmakul')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
+        Route::get('/nilai/{id}', 'nilai')->name('nilai');
         Route::get('/absen/{id}', 'absen')->name('absen');
         Route::get('/nilai/{id}', 'nilai')->name('nilai');
         Route::get('/materi/{id}', 'materi')->name('materi');
@@ -389,6 +390,7 @@ Route::prefix('admin/jadmetopen')
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
         Route::get('/feature', 'feature')->name('feature');
+        Route::get('/nilai/{id}', 'nilai')->name('nilai');
         Route::get('/absen/{id}', 'absen')->name('absen');
         Route::get('/nilai/{id}', 'nilai')->name('nilai');
         Route::get('/materi/{id}', 'materi')->name('materi');
@@ -407,6 +409,7 @@ Route::prefix('admin/mahasiswa')
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
         Route::get('/feature', 'feature')->name('feature');
+        Route::post('/import', 'import')->name('import');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -483,6 +486,7 @@ Route::prefix('admin/dosen')
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
         Route::get('/feature', 'feature')->name('feature');
+        Route::post('/import', 'import')->name('import');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -784,4 +788,20 @@ Route::prefix('mahasiswa/absensi')
         Route::post('/materi/{id}', 'materi')->name('materi');
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/delete/{id}', 'delete')->name('delete');
+    }); 
+
+// Absen Mahasiswa di Akun Mahasiswa
+Route::prefix('mahasiswa/jadwal')
+    ->name('mahasiswa.jadwal.')
+    ->middleware(['auth', 'checkrole:mahasiswa'])
+    ->controller(JadwalController::class)
+    ->group(function () {
+        Route::get('/', 'read')->name('read');
+        // fitur tambahan
+        Route::get('/feature', 'feature')->name('feature');
+
+        // scan + simpan absensi
+        Route::get('/isi/{id}', 'isi')->name('isi');
+        Route::get('/scan/{id}', 'scan')->name('scan');
+        Route::post('/simpan', 'simpan')->name('simpan'); // <-- FIX: tanpa {id}
     });

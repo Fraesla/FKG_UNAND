@@ -116,8 +116,8 @@
                                     </svg>
                                 </th>
                                 <th>Nama Mata Kuliah</th>
-                                <th>Nama Mahasiswa</th>
                                 <th>Nama Dosen</th>
+                                <th>Nama Mahasiswa</th>
                                 <th>Nilai</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -132,8 +132,8 @@
                                 </td> -->
                                 <td><span class="text-secondary"> {{$no++}}</span></td>
                                 <td class="text-secondary">{{$data->makul}}</td>
-                                <td class="text-secondary">{{$data->mahasiswa}}</td>
                                 <td class="text-secondary">{{$data->dosen}}</td>
+                                <td class="text-secondary">{{$data->mahasiswa}}</td>
                                 <td class="text-secondary">{{$data->nilai}}</td>
                                 <td class="w-0">
                                     <div class="d-flex gap-1">
