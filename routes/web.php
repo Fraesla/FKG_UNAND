@@ -31,6 +31,7 @@ use App\Http\Controllers\Admin\Absensi\AbsMahasiswaController;
 use App\Http\Controllers\Admin\Absensi\AbsDosenController;
 use App\Http\Controllers\Admin\Akun\MahasiswaController;
 use App\Http\Controllers\Admin\Akun\DosenController;
+use App\Http\Controllers\Mahasiswa\AbsensiController as AbsensiMahasiswaController;
 use App\Http\Controllers\Mahasiswa\JadwalController;
 use App\Http\Controllers\Mahasiswa\BlokMahasiswaController;
 use App\Http\Controllers\Admin\TaController;
@@ -151,10 +152,6 @@ Route::prefix('admin/jurusan')
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/delete/{id}', 'delete')->name('delete');
     });
-
-Route::get('/mahasiswa/absensi', function () {
-    return view('mahasiswa.absensi.index');
-});
 
 Route::get('/mahasiswa/absensi/absen', function () {
     return view('mahasiswa.absensi.absen');
@@ -771,6 +768,24 @@ Route::prefix('dosen/nilai')
         Route::get('/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
+    });
+
+// Absen Mahasiswa di Akun Mahasiswa
+Route::prefix('mahasiswa/absensi')
+    ->name('mahasiswa.absen')
+    ->middleware(['auth', 'checkrole:mahasiswa'])
+    ->controller(AbsensiMahasiswaController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/add', 'add')->name('add');
+        Route::post('/create', 'create')->name('create');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::get('/isi/{id}', 'isi')->name('isi');
+        Route::post('/absen', 'absen')->name('absen');
+        Route::get('/mahasiswa', 'mahasiswa')->name('mahasiswa');
+        Route::post('/materi/{id}', 'materi')->name('materi');
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/delete/{id}', 'delete')->name('delete');
     }); 

@@ -26,6 +26,7 @@
     <link href="{{url('assets')}}/dist/css/tabler-vendors.css?1747674014" rel="stylesheet" />
     <link href="{{url('assets')}}/dist/css/tabler-marketing.css?1747674014" rel="stylesheet" />
     <link href="{{url('assets')}}/dist/css/tabler-themes.css?1747674014" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
     <!-- END PLUGINS STYLES -->
     <!-- BEGIN DEMO STYLES -->
     <link href="{{url('assets')}}//preview/css/demo.css?1747674014" rel="stylesheet" />
@@ -856,10 +857,10 @@
                   <span class="nav-link-title"> Home </span>
                 </a>
               </li>
-              <li class="nav-item @if ($activePage == 'jadwal') active @endif">
+              <!-- <li class="nav-item @if ($activePage == 'jadwal') active @endif">
                 <a class="nav-link" href="/mahasiswa/jadwal">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/checkbox -->
+                    >Download SVG icon from http://tabler.io/icons/icon/checkbox
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -877,7 +878,7 @@
                   ></span>
                   <span class="nav-link-title"> Data Jadwal </span>
                 </a>
-              </li>
+              </li> -->
               <li class="nav-item @if ($activePage == 'absensi') active @endif">
                 <a class="nav-link" href="/mahasiswa/absensi">
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
@@ -1377,6 +1378,7 @@
       </form>
     </div>
     <!-- BEGIN PAGE LIBRARIES -->
+    <script src="{{url('assets')}}/dist/libs/fullcalendar/index.global.min.js?1747674014" defer></script>
     <script src="{{url('assets')}}/dist/libs/apexcharts/dist/apexcharts.min.js?1747674014" defer></script>
     <script src="{{url('assets')}}/dist/libs/jsvectormap/dist/jsvectormap.min.js?1747674014" defer></script>
     <script src="{{url('assets')}}/dist/libs/jsvectormap/dist/maps/world.js?1747674014" defer></script>
@@ -1390,6 +1392,11 @@
     <script src="{{url('assets')}}/dist/js/tabler.min.js?1747674014" defer></script>
     <!-- END GLOBAL MANDATORY SCRIPTS -->
     <!-- BEGIN DEMO SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script
     <script src="{{url('assets')}}/preview/js/demo.min.js?1747674014" defer></script>
     <!-- END DEMO SCRIPTS -->
     <!-- BEGIN PAGE SCRIPTS -->

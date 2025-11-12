@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('id_jadwal_mahasiswa');
             $table->text('status');
             $table->text('keterangan');
-            $table->text('qr');
             $table->timestamps();
         });
     }
