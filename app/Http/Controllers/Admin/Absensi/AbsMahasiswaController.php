@@ -10,28 +10,61 @@ use Auth;
 class AbsMahasiswaController extends Controller
 {
     public function read(Request $request){
-        // $absmahasiswa = DB::table('absen_mahasiswa')->orderBy('id','DESC')->get();
+        
         $entries = $request->input('entries', 5);
+        $user = Auth::user();
 
-        $absmahasiswa = DB::table('absen_mahasiswa as ad')
-            ->join('mahasiswa as d', 'ad.id_mahasiswa', '=', 'd.id')
-            ->join('jadwal_makul as jm', 'ad.id_jadwal_mahasiswa', '=', 'jm.id')
-            ->join('makul as m', 'jm.id_makul', '=', 'm.id')
-            ->join('ruangan as r', 'jm.id_ruangan', '=', 'r.id')
+        $absmahasiswa = DB::table('absen_mahasiswa as am')
+            ->join('mahasiswa as m', 'am.id_mahasiswa', '=', 'm.id')
+            ->leftJoin('absen_dosen as ad', 'am.id_jadwal_mahasiswa', '=', 'ad.id_jadwal_dosen')
+            ->leftJoin('dosen as d', 'ad.id_dosen', '=', 'd.id')
+
+            // LEFT JOIN ke jadwal_makul (prefix B)
+            ->leftJoin('jadwal_makul', function ($join) {
+                $join->on(DB::raw("SUBSTRING(am.id_jadwal_mahasiswa, 2)"), '=', 'jadwal_makul.id')
+                    ->whereRaw("LEFT(am.id_jadwal_mahasiswa, 1) = 'B'");
+            })
+            ->leftJoin('makul as makul_blok', 'jadwal_makul.id_makul', '=', 'makul_blok.id')
+            ->leftJoin('ruangan as ruangan_blok', 'jadwal_makul.id_ruangan', '=', 'ruangan_blok.id')
+
+            // LEFT JOIN ke jadwal_metopen (prefix M)
+            ->leftJoin('jadwal_metopen', function ($join) {
+                $join->on(DB::raw("SUBSTRING(am.id_jadwal_mahasiswa, 2)"), '=', 'jadwal_metopen.id')
+                    ->whereRaw("LEFT(am.id_jadwal_mahasiswa, 1) = 'M'");
+            })
+            ->leftJoin('makul as makul_metopen', 'jadwal_metopen.id_makul', '=', 'makul_metopen.id')
+            ->leftJoin('ruangan as ruangan_metopen', 'jadwal_metopen.id_ruangan', '=', 'ruangan_metopen.id')
+
+            // LEFT JOIN ke tabel materi (dua versi, blok & metopen)
+            ->leftJoin('materi as materi_blok', function ($join) {
+                $join->on('materi_blok.id_jadwal_blok', '=', DB::raw("SUBSTRING(am.id_jadwal_mahasiswa, 2)"))
+                    ->whereRaw("LEFT(am.id_jadwal_mahasiswa, 1) = 'B'");
+            })
+            ->leftJoin('materi as materi_metopen', function ($join) {
+                $join->on('materi_metopen.id_jadwal_metopen', '=', DB::raw("SUBSTRING(am.id_jadwal_mahasiswa, 2)"))
+                    ->whereRaw("LEFT(am.id_jadwal_mahasiswa, 1) = 'M'");
+            })
+
             ->select(
-                'ad.id',
-                'ad.tgl',
-                'ad.jam_masuk',
-                'ad.jam_pulang',
-                'd.nama as nama_mahasiswa',
-                'm.nama as makul',
-                'r.nama as ruangan',
-                'ad.qr'
+                'am.*',
+                'm.nobp',
+                'm.nama as nama_mahasiswa',
+                'd.nama as nama_dosen',
+
+                // ambil kode & nama makul dari jadwal_makul atau jadwal_metopen
+                DB::raw('COALESCE(makul_blok.kode, makul_metopen.kode) as kode_makul'),
+                DB::raw('COALESCE(makul_blok.nama, makul_metopen.nama) as nama_makul'),
+                DB::raw('COALESCE(ruangan_blok.nama, ruangan_metopen.nama) as ruangan'),
+                DB::raw('COALESCE(jadwal_makul.hari, jadwal_metopen.hari) as hari'),
+
+                // ambil materi (judul dan file)
+                DB::raw('COALESCE(materi_blok.judul, materi_metopen.judul) as judul_materi'),
+                DB::raw('COALESCE(materi_blok.file, materi_metopen.file) as file_materi')
             )
-            ->orderBy('ad.id', 'DESC')
+            ->orderBy('am.id', 'DESC')
             ->paginate($entries);
 
-         $absmahasiswa->appends($request->all());
+        $absmahasiswa->appends($request->all());
 
         return view('admin.absensi.mahasiswa.index',['absmahasiswa'=>$absmahasiswa]);
     }
@@ -117,27 +150,67 @@ class AbsMahasiswaController extends Controller
         return redirect('/admin/absmahasiswa')->with("success","Data Berhasil Ditambah !");
     }
 
-    public function edit($id){
-        $absmahasiswa = DB::table('absen_mahasiswa')->where('id',$id)->first();
-        $jadmakul = DB::table('jadwal_makul')
-            ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')
-            ->join('ruangan', 'jadwal_makul.id_ruangan', '=', 'ruangan.id')
+    public function edit($id)
+    {
+        $absmahasiswa = DB::table('absen_mahasiswa as am')
+            ->join('mahasiswa as m', 'am.id_mahasiswa', '=', 'm.id')
+            ->leftJoin('absen_dosen as ad', 'am.id_jadwal_mahasiswa', '=', 'ad.id_jadwal_dosen')
+            ->leftJoin('dosen as d', 'ad.id_dosen', '=', 'd.id')
+
+            ->leftJoin('jadwal_makul', function ($join) {
+                $join->on(DB::raw("SUBSTRING(am.id_jadwal_mahasiswa, 2)"), '=', 'jadwal_makul.id')
+                    ->whereRaw("LEFT(am.id_jadwal_mahasiswa, 1) = 'B'");
+            })
+            ->leftJoin('makul as makul_blok', 'jadwal_makul.id_makul', '=', 'makul_blok.id')
+            ->leftJoin('ruangan as ruangan_blok', 'jadwal_makul.id_ruangan', '=', 'ruangan_blok.id')
+
+            ->leftJoin('jadwal_metopen', function ($join) {
+                $join->on(DB::raw("SUBSTRING(am.id_jadwal_mahasiswa, 2)"), '=', 'jadwal_metopen.id')
+                    ->whereRaw("LEFT(am.id_jadwal_mahasiswa, 1) = 'M'");
+            })
+            ->leftJoin('makul as makul_metopen', 'jadwal_metopen.id_makul', '=', 'makul_metopen.id')
+            ->leftJoin('ruangan as ruangan_metopen', 'jadwal_metopen.id_ruangan', '=', 'ruangan_metopen.id')
+
+            ->leftJoin('materi as materi_blok', function ($join) {
+                $join->on('materi_blok.id_jadwal_blok', '=', DB::raw("SUBSTRING(am.id_jadwal_mahasiswa, 2)"))
+                    ->whereRaw("LEFT(am.id_jadwal_mahasiswa, 1) = 'B'");
+            })
+            ->leftJoin('materi as materi_metopen', function ($join) {
+                $join->on('materi_metopen.id_jadwal_metopen', '=', DB::raw("SUBSTRING(am.id_jadwal_mahasiswa, 2)"))
+                    ->whereRaw("LEFT(am.id_jadwal_mahasiswa, 1) = 'M'");
+            })
+
             ->select(
-                'jadwal_makul.id',
-                'jadwal_makul.hari',
-                'jadwal_makul.jam_mulai',
-                'jadwal_makul.jam_selesai',
-                'makul.nama as nama_makul',
-                'ruangan.nama as nama_ruangan'
+                'am.*',
+                'm.nobp',
+                'm.nama as nama_mahasiswa',
+                'd.nama as nama_dosen',
+                DB::raw('COALESCE(makul_blok.kode, makul_metopen.kode) as kode_makul'),
+                DB::raw('COALESCE(makul_blok.nama, makul_metopen.nama) as nama_makul'),
+                DB::raw('COALESCE(ruangan_blok.nama, ruangan_metopen.nama) as ruangan'),
+                DB::raw('COALESCE(jadwal_makul.hari, jadwal_metopen.hari) as hari'),
+                DB::raw('COALESCE(materi_blok.judul, materi_metopen.judul) as judul_materi'),
+                DB::raw('COALESCE(materi_blok.file, materi_metopen.file) as file_materi')
             )
-            ->orderBy('jadwal_makul.id', 'DESC')
-            ->get();
-        $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
-        
-        return view('admin.absensi.mahasiswa.edit',['absmahasiswa'=>$absmahasiswa,'jadmakul'=>$jadmakul,'mahasiswa'=>$mahasiswa]);
+            ->where('am.id', $id)  // <--- tambahkan ini
+            ->first();             // <--- dan ini
+
+        return view('admin.absensi.mahasiswa.edit', [
+            'absmahasiswa' => $absmahasiswa
+        ]);
     }
 
     public function update(Request $request, $id) {
+
+        // Jika status = hadir, maka keterangan otomatis "Hadir"
+        if ($request->status === 'hadir') {
+            $keterangan = 'Hadir';
+        } elseif (in_array($request->status, ['izin', 'sakit'])) {
+            $keterangan = trim($request->keterangan) ?: '-';
+        } else {
+            $keterangan = 'Alfa';
+        }
+
         // $request->validate([
         //     'tgl' => 'required|string|max:100',
         //     'jam_masuk' => 'required|string|max:100',
@@ -149,14 +222,8 @@ class AbsMahasiswaController extends Controller
         DB::table('absen_mahasiswa')  
             ->where('id', $id)
             ->update([
-            'tgl' => $request->tgl,
-            'jam_masuk' => $request->jam_masuk,
-            'jam_pulang' => $request->jam_pulang,
-            'id_mahasiswa' => $request->id_mahasiswa,
-            'id_jadwal_mahasiswa' => $request->id_jadwal_mahasiswa,
             'status' => $request->status,
-            'keterangan' => '',
-            'qr'=>uniqid()
+            'keterangan' => $keterangan,
         ]);
 
         return redirect('/admin/absmahasiswa')->with("success","Data Berhasil Diupdate !");

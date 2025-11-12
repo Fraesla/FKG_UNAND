@@ -1174,7 +1174,7 @@
                         Bimbingan Akademik
                         <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
                       </a> -->
-                      <!-- <a class="dropdown-item @if ($activeDrop == 'absmahasiswa') active @endif" href="/admin/absmahasiswa"> Mahasiswa </a> -->
+                      <a class="dropdown-item @if ($activeDrop == 'absmahasiswa') active @endif" href="/admin/absmahasiswa"> Mahasiswa </a>
                       <a class="dropdown-item @if ($activeDrop == 'absdosen') active @endif" href="/admin/absdosen"> Dosen</a>
                     </div>
                   </div>
@@ -1635,6 +1635,8 @@
     <script src="{{url('assets')}}/dist/libs/nouislider/dist/nouislider.min.js?1747674014" defer></script>
     <script src="{{url('assets')}}/dist/libs/litepicker/dist/litepicker.js?1747674014" defer></script>
     <script src="{{url('assets')}}/dist/libs/tom-select/dist/js/tom-select.base.min.js?1747674014" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <!-- END PAGE LIBRARIES -->
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="{{url('assets')}}/dist/js/tabler.min.js?1747674014" defer></script>

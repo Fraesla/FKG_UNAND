@@ -1,6 +1,5 @@
-@extends('admin.layouts.app', [
-'activePage' => 'absensi',
-'activeDrop' => 'absmahasiswa',
+@extends('mahasiswa.layouts.app', [
+'activePage' => 'absensi'
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -10,7 +9,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Absensi Mahasiswa</h2>
+                  <h2 class="page-title">Jadwal Absen Mahasiswa</h2>
                   @include('components.alert')
               </div>
               <!-- Page title actions -->
@@ -23,10 +22,39 @@
     <div class="container-xl">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Tabel Absensi Mahasiswa</h3>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title">Tabel Absen Mahasiswa</h3>
+                    <!-- <div class="d-flex gap-2">
+                        Tombol Import
+                            <a href="#" class="btn btn-primary btn-mm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                    class="icon icon-tabler icon-tabler-upload me-1">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                                    <path d="M7 9l5 -5l5 5" />
+                                    <path d="M12 4l0 12" />
+                                </svg>
+                                Import
+                            </a>
+
+                            Tombol Export
+                            <a href="#" class="btn btn-info btn-mm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                    class="icon icon-tabler icon-tabler-download me-1">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                                    <path d="M7 11l5 5l5 -5" />
+                                    <path d="M12 4l0 12" />
+                                </svg>
+                                Export
+                            </a>
+                        </div> -->
                 </div>
-                <form action="/admin/absmahasiswa/feature" method="GET">
+                <form action="#" method="GET">
                     <div class="card-body border-bottom py-3">
                         <div class="d-flex align-items-center">
                             <!-- Show Entries -->
@@ -46,22 +74,15 @@
                             <div class="ms-auto text-secondary d-flex align-items-center">
                                 <span class="me-2">Search:</span>
                                 <input type="text" class="form-control form-control-mm" 
-                                       aria-label="Search data Absensi Mahasiswa" 
+                                       aria-label="Search Bimbinga Tugas Akhir" 
                                        name="search" 
-                                       placeholder="Cari Data Absensi Mahasiswa ..." 
+                                       placeholder="Cari Absen Mahasiswa..." 
                                        value="{{ request('search') }}">
 
-                                <!-- <a href="/admin/absmahasiswa/add" class="btn btn-success btn-mm ms-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
-                                         class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                        <path d="M12 5v14" />
-                                        <path d="M5 12h14" />
-                                    </svg>
-                                    ADD
-                                </a> -->
+                                <a href="/mahasiswa/absensi" class="btn btn-secondary btn-mm ms-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
+                                    BACK
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -95,18 +116,20 @@
                                 <th>File Materi</th>
                                 <th>Status</th>
                                 <th>Keterangan</th>
-                                <th class="text-center">Action</th>
+                                <!-- <th class="text-center">Action</th> -->
                             </tr>
                         </thead>
                         <tbody>
                             <?php $no = 1; ?>
-                            @forelse($absmahasiswa as $data)
+                            @forelse($absen as $data)
                             <tr>
                                <!--  <td>
                                     <input class="form-check-input m-0 align-middle table-selectable-check"
                                     type="checkbox" aria-label="Select invoice">
                                 </td> -->
-                                <td><span class="text-secondary"> {{$no++}}</span></td>
+                                <td>
+                                    <span class="text-secondary"> {{$no++}}</span>
+                                </td>
                                 <td class="text-secondary">{{$data->tgl}}</td>
                                 <td class="text-secondary">{{$data->hari}}</td>
                                 <td class="text-center">{{ $data->jam_masuk }} - {{ $data->jam_pulang }}</td>
@@ -136,10 +159,10 @@
                                 </td>
                                 <td class="text-secondary">{{$data->status}}</td>
                                 <td class="text-secondary">{{$data->keterangan}}</td>
-                                <td class="w-0">
+                                <!-- <td class="w-0">
                                     <div class="d-flex gap-1">
-                                        <!-- Tombol Edit -->
-                                        <a href="/admin/absmahasiswa/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
+                                        Tombol Edit
+                                        <a href="#" class="btn btn-warning btn-sm p-1">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                                  viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -151,7 +174,7 @@
                                             </svg>
                                         </a>
 
-                                        <!-- Tombol Delete -->
+                                        Tombol Delete
                                         <button type="button" class="btn btn-danger btn-sm p-1" onclick="deleteData({{ $data->id }})">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                                  viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -164,7 +187,10 @@
                                             </svg>
                                         </button>
                                     </div>
-                                </td>
+                                </td> -->
+                                <!-- <td class="w-0">
+                                    <a href="/admin/ta/delete/{{$data->id}}" class="btn btn-danger w-10">Delete</a>
+                                </td> -->
                                 <!-- <td class="text-end">
                                     <span class="dropdown">
                                         <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport"
@@ -195,16 +221,66 @@
                         <div class="col-auto d-flex align-items-center">
                             <p class="m-0 text-secondary">
                                 Showing
-                                <strong>{{ $absmahasiswa->firstItem() }}</strong>
+                                <strong>{{ $absen->firstItem() }}</strong>
                                 to
-                                <strong>{{ $absmahasiswa->lastItem() }}</strong>
+                                <strong>{{ $absen->lastItem() }}</strong>
                                 of
-                                <strong>{{ $absmahasiswa->total() }}</strong>
+                                <strong>{{ $absen->total() }}</strong>
                                 entries
                             </p>
                         </div>
                         <div class="col-auto">
-                            {{ $absmahasiswa->links('pagination::bootstrap-5') }}
+                            <!-- <ul class="pagination m-0 ms-auto">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                        Download SVG icon from http://tabler.io/icons/icon/chevron-left
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="icon icon-1">
+                                            <path d="M15 6l-6 6l6 6">
+                                            </path>
+                                        </svg>
+                                    </a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">
+                                        1
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        2
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        3
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        4
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        5
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        Download SVG icon from http://tabler.io/icons/icon/chevron-right
+                                       
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="icon icon-1">
+                                            <path d="M9 6l6 6l-6 6">
+                                            </path>
+                                        </svg>
+                                    </a>
+                                </li>
+                            </ul> -->
+                            {{ $absen->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
@@ -226,7 +302,7 @@ function deleteData(id) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = "/admin/absmahasiswa/delete/" + id;
+            window.location.href = "#" + id;
         }
     })
 }
