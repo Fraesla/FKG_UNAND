@@ -54,7 +54,7 @@
                             </a>
                         </div> -->
                 </div>
-                <form action="#" method="GET">
+                <form action="/mahasiswa/absensi/feature" method="GET">
                     <div class="card-body border-bottom py-3">
                         <div class="d-flex align-items-center">
                             <!-- Show Entries -->
@@ -74,7 +74,7 @@
                             <div class="ms-auto text-secondary d-flex align-items-center">
                                 <span class="me-2">Search:</span>
                                 <input type="text" class="form-control form-control-mm" 
-                                       aria-label="Search Bimbinga Tugas Akhir" 
+                                       aria-label="Search Absen Mahasiswa" 
                                        name="search" 
                                        placeholder="Cari Absen Mahasiswa..." 
                                        value="{{ request('search') }}">
