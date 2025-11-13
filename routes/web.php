@@ -781,6 +781,7 @@ Route::prefix('mahasiswa/absensi')
         Route::get('/', 'index')->name('index');
         Route::get('/add', 'add')->name('add');
         Route::post('/create', 'create')->name('create');
+        Route::get('/feature', 'feature')->name('feature');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::get('/isi/{id}', 'isi')->name('isi');
         Route::post('/absen', 'absen')->name('absen');

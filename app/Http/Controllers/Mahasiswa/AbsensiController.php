@@ -156,7 +156,7 @@ class AbsensiController extends Controller
             $keterangan = $request->keterangan ?? '';
         }
         else{
-            $keterangan = 'Alfa'
+            $keterangan = 'Alfa';
         }
 
         // Simpan data absensi mahasiswa
@@ -238,6 +238,97 @@ class AbsensiController extends Controller
             ->orderBy('am.id', 'DESC')
             ->paginate($entries);
 
+        $absen->appends($request->all());
+
+        return view('mahasiswa.absen.mahasiswa', compact('absen'));
+    }
+
+    public function feature(Request $request)
+    {
+        $username = auth()->user()->username;
+        $mahasiswa = DB::table('mahasiswa')->where('nobp', $username)->first();
+
+        if (!$mahasiswa) {
+            return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan untuk akun ini.');
+        }
+
+        $query =  DB::table('absen_mahasiswa as am')
+            ->join('mahasiswa as m', 'am.id_mahasiswa', '=', 'm.id')
+            ->leftJoin('absen_dosen as ad', 'am.id_jadwal_mahasiswa', '=', 'ad.id_jadwal_dosen')
+            ->leftJoin('dosen as d', 'ad.id_dosen', '=', 'd.id')
+
+            // LEFT JOIN ke jadwal_makul (prefix B)
+            ->leftJoin('jadwal_makul', function ($join) {
+                $join->on(DB::raw("SUBSTRING(am.id_jadwal_mahasiswa, 2)"), '=', 'jadwal_makul.id')
+                    ->whereRaw("LEFT(am.id_jadwal_mahasiswa, 1) = 'B'");
+            })
+            ->leftJoin('makul as makul_blok', 'jadwal_makul.id_makul', '=', 'makul_blok.id')
+            ->leftJoin('ruangan as ruangan_blok', 'jadwal_makul.id_ruangan', '=', 'ruangan_blok.id')
+
+            // LEFT JOIN ke jadwal_metopen (prefix M)
+            ->leftJoin('jadwal_metopen', function ($join) {
+                $join->on(DB::raw("SUBSTRING(am.id_jadwal_mahasiswa, 2)"), '=', 'jadwal_metopen.id')
+                    ->whereRaw("LEFT(am.id_jadwal_mahasiswa, 1) = 'M'");
+            })
+            ->leftJoin('makul as makul_metopen', 'jadwal_metopen.id_makul', '=', 'makul_metopen.id')
+            ->leftJoin('ruangan as ruangan_metopen', 'jadwal_metopen.id_ruangan', '=', 'ruangan_metopen.id')
+
+            // LEFT JOIN ke tabel materi (dua versi, blok & metopen)
+            ->leftJoin('materi as materi_blok', function ($join) {
+                $join->on('materi_blok.id_jadwal_blok', '=', DB::raw("SUBSTRING(am.id_jadwal_mahasiswa, 2)"))
+                    ->whereRaw("LEFT(am.id_jadwal_mahasiswa, 1) = 'B'");
+            })
+            ->leftJoin('materi as materi_metopen', function ($join) {
+                $join->on('materi_metopen.id_jadwal_metopen', '=', DB::raw("SUBSTRING(am.id_jadwal_mahasiswa, 2)"))
+                    ->whereRaw("LEFT(am.id_jadwal_mahasiswa, 1) = 'M'");
+            })
+
+            ->select(
+                'am.*',
+                'm.nobp',
+                'm.nama as nama_mahasiswa',
+                'd.nama as nama_dosen',
+
+                // ambil kode & nama makul dari jadwal_makul atau jadwal_metopen
+                DB::raw('COALESCE(makul_blok.kode, makul_metopen.kode) as kode_makul'),
+                DB::raw('COALESCE(makul_blok.nama, makul_metopen.nama) as nama_makul'),
+                DB::raw('COALESCE(ruangan_blok.nama, ruangan_metopen.nama) as ruangan'),
+                DB::raw('COALESCE(jadwal_makul.hari, jadwal_metopen.hari) as hari'),
+
+                // ambil materi (judul dan file)
+                DB::raw('COALESCE(materi_blok.judul, materi_metopen.judul) as judul_materi'),
+                DB::raw('COALESCE(materi_blok.file, materi_metopen.file) as file_materi')
+            )
+            ->where('am.id_mahasiswa', $mahasiswa->id);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('am.id', 'like', "%{$search}%")
+                  ->orWhere('am.tgl', 'like', "%{$search}%")
+                  ->orWhere('jadwal_makul.hari', 'like', "%{$search}%")
+                  ->orWhere('am.jam_masuk', 'like', "%{$search}%")
+                  ->orWhere('am.jam_pulang', 'like', "%{$search}%")
+                  ->orWhere('m.nama', 'like', "%{$search}%")
+                  ->orWhere('d.nama', 'like', "%{$search}%")
+                  ->orWhere('ruangan_blok.nama', 'like', "%{$search}%")
+                  ->orWhere('ruangan_metopen.nama', 'like', "%{$search}%")
+                  ->orWhere('makul_blok.kode', 'like', "%{$search}%")
+                  ->orWhere('makul_blok.nama', 'like', "%{$search}%")
+                  ->orWhere('makul_metopen.kode', 'like', "%{$search}%")
+                  ->orWhere('makul_metopen.nama', 'like', "%{$search}%")
+                  ->orWhere('materi_blok.judul', 'like', "%{$search}%")
+                  ->orWhere('materi_metopen.judul', 'like', "%{$search}%");
+            });
+        }
+
+        // Show entries (default 10)
+        $entries = $request->get('entries', 10);
+
+        // Ambil data dengan pagination
+        $absen = $query->orderBy('am.id', 'DESC')->paginate($entries);
+
+        // Supaya pagination tetap bawa query string (search / entries)
         $absen->appends($request->all());
 
         return view('mahasiswa.absen.mahasiswa', compact('absen'));
