@@ -666,11 +666,13 @@ Route::prefix('dosen/absendosen')
     ->controller(AbsenController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/add', 'add')->name('add');
+        Route::get('/add/{id}', 'add')->name('add');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::get('/isi/{id}', 'isi')->name('isi');
+        Route::get('/feature/{id}', 'feature')->name('feature');
         Route::post('/absen/{id}', 'absen')->name('absen');
+        Route::post('/create/{id}', 'create')->name('create');
         Route::post('/materi/{id}', 'materi')->name('materi');
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/delete/{id}', 'delete')->name('delete');
