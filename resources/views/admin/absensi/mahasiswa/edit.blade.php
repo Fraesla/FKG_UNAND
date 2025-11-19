@@ -10,6 +10,20 @@
             <div class="col">
                 <div class="page-pretitle">Aplikasi FKG</div>
                 <h2 class="page-title">Edit Status Absensi Mahasiswa</h2>
+                @if ($errors->any())
+                        <div id="alert-error" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
+                            <strong>⚠️ Terjadi Kesalahan pada Pengisian Formulir:</strong>
+                            <ul class="mb-0 mt-2">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <div class="progress position-absolute bottom-0 start-0 w-100" style="height: 3px;">
+                                <div id="progress-bar-error" class="progress-bar bg-danger" role="progressbar"></div>
+                            </div>
+                        </div>
+                        @endif
             </div>
         </div>
     </div>
@@ -57,11 +71,15 @@
                             <div class="mb-3 text-start">
                                 <label for="status" class="form-label text-light">Status Kehadiran</label>
                                 <select name="status" id="status" class="form-select bg-dark text-light border-secondary">
+                                    <option value="">Pilih Status Kehadiran</option>
                                     <option value="hadir" {{ $absmahasiswa->status == 'hadir' ? 'selected' : '' }}>Hadir</option>
                                     <option value="izin" {{ $absmahasiswa->status == 'izin' ? 'selected' : '' }}>Izin</option>
                                     <option value="sakit" {{ $absmahasiswa->status == 'sakit' ? 'selected' : '' }}>Sakit</option>
                                     <option value="alfa" {{ $absmahasiswa->status == 'alfa' ? 'selected' : '' }}>Alfa</option>
                                 </select>
+                                @error('status')
+                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-3 text-start">

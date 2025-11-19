@@ -77,11 +77,15 @@
                                             <div class="mb-3 text-start">
                                                 <label for="status" class="form-label text-light">Status Kehadiran</label>
                                                 <select name="status" id="status" class="form-select bg-dark text-light border-secondary">
+                                                    <option value="">Pilih Status Kehadiran</option>
                                                     <option value="hadir" {{ $absenMhs->status == 'hadir' ? 'selected' : '' }}>Hadir</option>
                                                     <option value="izin" {{ $absenMhs->status == 'izin' ? 'selected' : '' }}>Izin</option>
                                                     <option value="sakit" {{ $absenMhs->status == 'sakit' ? 'selected' : '' }}>Sakit</option>
                                                     <option value="alfa" {{ $absenMhs->status == 'alfa' ? 'selected' : '' }}>Alfa</option>
                                                 </select>
+                                                @error('status')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
                                             </div>
                                             <div class="mb-3 text-start">
                                                 <label for="keterangan" class="form-label text-light">Keterangan</label>

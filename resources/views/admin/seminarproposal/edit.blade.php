@@ -60,111 +60,117 @@
                                 <form action="/admin/seminarproposal/update/{{$seminar_proposal->id}}" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
-                                        <div>
-                                            <label class="form-label">Mahasiswa</label>
-                                             <select class="form-select" name="id_mahasiswa">
-                                                <option>Pilih Data Mahasiswa</option>
-                                                @foreach($mahasiswa as $data)
-                                                    <option value="{{$data->id}}"
-                                                        {{ $seminar_proposal->id_mahasiswa == $data->id ? 'selected' : '' }}>
-                                                        No.BP : {{$data->nobp}} | Nama Mahasiswa : {{$data->nama}}  
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('id_mahasiswa')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Mahasiswa</label>
+                                                 <select class="form-select" name="id_mahasiswa">
+                                                    <option>Pilih Data Mahasiswa</option>
+                                                    @foreach($mahasiswa as $data)
+                                                        <option value="{{$data->id}}"
+                                                            {{ $seminar_proposal->id_mahasiswa == $data->id ? 'selected' : '' }}>
+                                                            No.BP : {{$data->nobp}} | Nama Mahasiswa : {{$data->nama}}  
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('id_mahasiswa')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                           <div class="col-md-4">
+                                                <label class="form-label">Dosen Pembimbing 1</label>
+                                                 <select class="form-select" name="dosen_pembimbing_1">
+                                                    <option>Pilih Data Dosen</option>
+                                                    @foreach($dosen as $data)
+                                                        <option value="{{$data->nama}}"
+                                                            {{ $seminar_proposal->dosen_pembimbing_1 == $data->nama ? 'selected' : '' }}>
+                                                            NIP : {{$data->nip}} | Nama Dosen : {{$data->nama}}  
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('dosen_pembimbing_1')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Dosen Pembimbing 2</label>
+                                                 <select class="form-select" name="dosen_pembimbing_2">
+                                                    <option>Pilih Data Dosen</option>
+                                                    @foreach($dosen as $data)
+                                                        <option value="{{$data->nama}}"
+                                                            {{ $seminar_proposal->dosen_pembimbing_2 == $data->nama ? 'selected' : '' }}>
+                                                            NIP : {{$data->nip}} | Nama Dosen : {{$data->nama}}  
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('dosen_pembimbing_2')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
-                                       <div>
-                                            <label class="form-label">Dosen Pembimbing 1</label>
-                                             <select class="form-select" name="dosen_pembimbing_1">
-                                                <option>Pilih Data Dosen</option>
-                                                @foreach($dosen as $data)
-                                                    <option value="{{$data->nama}}"
-                                                        {{ $seminar_proposal->dosen_pembimbing_1 == $data->nama ? 'selected' : '' }}>
-                                                        NIP : {{$data->nip}} | Nama Dosen : {{$data->nama}}  
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('dosen_pembimbing_1')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Penguji 1</label>
+                                                <input type="text" placeholder="Masukkan Penguji 1" class="form-control" name="penguji_1" value="{{$seminar_proposal->penguji_1}}"/>
+                                                @error('penguji_1')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Penguji 2</label>
+                                                <input type="text" placeholder="Masukkan Penguji 2" class="form-control" name="penguji_2" value="{{$seminar_proposal->penguji_2}}"/>
+                                                @error('penguji_2')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Penguji 3</label>
+                                                <input type="text" placeholder="Masukkan Penguji 3" class="form-control" name="penguji_3" value="{{$seminar_proposal->penguji_3}}"/>
+                                                @error('penguji_3')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label class="form-label">Dosen Pembimbing 2</label>
-                                             <select class="form-select" name="dosen_pembimbing_2">
-                                                <option>Pilih Data Dosen</option>
-                                                @foreach($dosen as $data)
-                                                    <option value="{{$data->nama}}"
-                                                        {{ $seminar_proposal->dosen_pembimbing_2 == $data->nama ? 'selected' : '' }}>
-                                                        NIP : {{$data->nip}} | Nama Dosen : {{$data->nama}}  
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('dosen_pembimbing_2')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                         <div>
-                                            <label class="form-label">Penguji 1</label>
-                                            <input type="text" placeholder="Masukkan Penguji 1" class="form-control" name="penguji_1" value="{{$seminar_proposal->penguji_1}}"/>
-                                            @error('penguji_1')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Penguji 2</label>
-                                            <input type="text" placeholder="Masukkan Penguji 2" class="form-control" name="penguji_2" value="{{$seminar_proposal->penguji_2}}"/>
-                                            @error('penguji_2')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Penguji 3</label>
-                                            <input type="text" placeholder="Masukkan Penguji 3" class="form-control" name="penguji_3" value="{{$seminar_proposal->penguji_3}}"/>
-                                            @error('penguji_3')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="mb-3">
-                                            <label>Surat Seminar Proposal</label>
-                                            <input type="file" name="surat_proposal" class="form-control">
-                                            @if($seminar_proposal->surat_proposal)
-                                                <small class="text-muted">
-                                                    File saat ini: 
-                                                    <a href="{{ asset('storage/'.$seminar_proposal->surat_proposal) }}" target="_blank">Lihat</a>
-                                                </small>
-                                            @endif
-                                        </div>
-                                        <div class="mb-3">
-                                            <label>File Draft</label>
-                                            <input type="file" name="file_draft" class="form-control">
-                                            @if($seminar_proposal->file_draft)
-                                                <small class="text-muted">
-                                                    File saat ini: 
-                                                    <a href="{{ asset('storage/'.$seminar_proposal->file_draft) }}" target="_blank">Lihat</a>
-                                                </small>
-                                            @endif
-                                        </div>
-                                        <div class="mb-3">
-                                            <label>Bukti Izin</label>
-                                            <input type="file" name="bukti_izin" class="form-control">
-                                            @if($seminar_proposal->bukti_izin)
-                                                <small class="text-muted">
-                                                    File saat ini: 
-                                                    <a href="{{ asset('storage/'.$seminar_proposal->bukti_izin) }}" target="_blank">Lihat</a>
-                                                </small>
-                                            @endif
-                                        </div>
-                                        <div class="mb-3">
-                                            <label>Lembar Jadwal</label>
-                                            <input type="file" name="lembar_jadwal" class="form-control">
-                                            @if($seminar_proposal->lembar_jadwal)
-                                                <small class="text-muted">
-                                                    File saat ini: 
-                                                    <a href="{{ asset('storage/'.$seminar_proposal->lembar_jadwal) }}" target="_blank">Lihat</a>
-                                                </small>
-                                            @endif
+                                        <div class="row">
+                                            <div class="col-md-3 mb-3">
+                                                <label>Surat Seminar Proposal</label>
+                                                <input type="file" name="surat_proposal" class="form-control">
+                                                @if($seminar_proposal->surat_proposal)
+                                                    <small class="text-muted">
+                                                        File saat ini: 
+                                                        <a href="{{ asset('storage/'.$seminar_proposal->surat_proposal) }}" target="_blank">Lihat</a>
+                                                    </small>
+                                                @endif
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label>File Draft</label>
+                                                <input type="file" name="file_draft" class="form-control">
+                                                @if($seminar_proposal->file_draft)
+                                                    <small class="text-muted">
+                                                        File saat ini: 
+                                                        <a href="{{ asset('storage/'.$seminar_proposal->file_draft) }}" target="_blank">Lihat</a>
+                                                    </small>
+                                                @endif
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label>Bukti Izin</label>
+                                                <input type="file" name="bukti_izin" class="form-control">
+                                                @if($seminar_proposal->bukti_izin)
+                                                    <small class="text-muted">
+                                                        File saat ini: 
+                                                        <a href="{{ asset('storage/'.$seminar_proposal->bukti_izin) }}" target="_blank">Lihat</a>
+                                                    </small>
+                                                @endif
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label>Lembar Jadwal</label>
+                                                <input type="file" name="lembar_jadwal" class="form-control">
+                                                @if($seminar_proposal->lembar_jadwal)
+                                                    <small class="text-muted">
+                                                        File saat ini: 
+                                                        <a href="{{ asset('storage/'.$seminar_proposal->lembar_jadwal) }}" target="_blank">Lihat</a>
+                                                    </small>
+                                                @endif
+                                            </div>
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

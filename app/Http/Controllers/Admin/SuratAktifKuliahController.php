@@ -64,22 +64,25 @@ class SuratAktifKuliahController extends Controller
     }
 
     public function add(){
-        return view('admin.surataktifkuliah.create');
+        $mahasiswa = DB::table('mahasiswa')
+        ->join('tahun_ajaran', 'mahasiswa.id_tahun_ajaran', '=', 'tahun_ajaran.id')
+        ->select(
+            'mahasiswa.*',
+            'tahun_ajaran.nama as tahun_ajaran'
+        )
+        ->orderBy('mahasiswa.id', 'DESC')
+        ->get();
+        $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
+        return view('admin.surataktifkuliah.create',['mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
     }
 
     public function create(Request $request){
         // Validasi
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'nip' => 'required|string|max:255',
-            'pango' => 'required|string|max:255',
-            'jabatan' => 'required|string|max:255',
-            'nama_mhs' => 'required|string|max:255',
+            'dosen_data' => 'required|exists:dosen_data',
+            'mahasiswa_data' => 'required|exists:mahasiswa_data',
             'tmp_lahir_mhs' => 'required|string|max:255',
             'tgl_lahir_mhs' => 'required|string|max:255',
-            'no_bp' => 'required|string|max:255',
-            'semester' => 'required|string|max:255',
-            'tahun_akademik' => 'required|string|max:255',
             'nama_ort' => 'required|string|max:255',
             'tmp_lahir_ort' => 'required|string|max:255',
             'tgl_lahir_ort' => 'required|string|max:255',
@@ -88,16 +91,12 @@ class SuratAktifKuliahController extends Controller
             'jabatan_ort' => 'required|string|max:255',
             'instansi_ort' => 'required|string|max:255',
         ],[
-            'nama.required'            => 'Nama  wajib diisi.',
-            'nip.required'            => 'NIP wajib diisi.',
-            'pango.required'            => 'Pangkat / Golongan wajib diisi.',
-            'jabatan.required'            => 'Jabatan wajib diisi.',
-            'nama_mhs.required'            => 'Nama Mahasiswa wajib diisi.',
+            'dosen_data.required'            => 'Silahkan Pilih dulu data dosen terlebih dahulu.',
+            'dosen_data.exists'            => 'Pilihan dulu data dosen tidak valid.',
+            'mahasiswa_data.required'            => 'Silahkan Pilih dulu data mahasiswa terlebih dahulu.',
+            'mahasiswa_data.exists'            => 'Pilihan dulu data mahasiswa tidak valid',
             'tmp_lahir_mhs.required'            => 'Tempat Lahir Mahasiswa wajib diisi.',
             'tgl_lahir_mhs.required'            => 'Tanggal Lahir Mahasiswa wajib diisi.',
-            'no_bp.required'            => 'No.BP wajib diisi.',
-            'semester.required'            => 'Semester wajib diisi.',
-            'tahun_akademik.required'            => 'Tahun Akademik wajib diisi.',
             'nama_ort.required'            => 'Nama Orang Tua / Wali wajib diisi.',
             'tmp_lahir_ort.required'            => 'Tempat Lahir Orang Tua / Wali wajib diisi.',
             'tgl_lahir_ort.required'            => 'Tanggal Lahir Orang Tua / Wali wajib diisi.',
@@ -107,17 +106,20 @@ class SuratAktifKuliahController extends Controller
             'instansi_ort.required'            => 'Instasi Orang Tua / Wali wajib diisi.',
         ]);
 
+        $dosen = json_decode($request->dosen_data);
+        $mahasiswa = json_decode($request->mahasiswa_data);
+
         DB::table('surat_aktif_kuliah')->insert([  
-            'nama' => $request->nama,
-            'nip' => $request->nip,
-            'pango' => $request->pango,
-            'jabatan' => $request->jabatan,
-            'nama_mhs' => $request->nama_mhs,
+            'nama' => $dosen->nama,
+            'nip' => $dosen->nip,
+            'pango' => $dosen->pangol,
+            'jabatan' => $dosen->jf,
+            'nama_mhs' => $mahasiswa->nama,
             'tmp_lahir_mhs' => $request->tmp_lahir_mhs,
             'tgl_lahir_mhs' => $request->tgl_lahir_mhs,
-            'no_bp' => $request->no_bp,
-            'semester' => $request->semester,
-            'tahun_akademik' => $request->tahun_akademik,
+            'no_bp' => $mahasiswa->nobp,
+            'semester' => $mahasiswa->ukt,
+            'tahun_akademik' => $mahasiswa->tahun_ajaran,
             'nama_ort' => $request->nama_ort,
             'tmp_lahir_ort' => $request->tmp_lahir_ort,
             'tgl_lahir_ort' => $request->tgl_lahir_ort,
@@ -131,24 +133,27 @@ class SuratAktifKuliahController extends Controller
     }
 
     public function edit($id){
+        $mahasiswa = DB::table('mahasiswa')
+        ->join('tahun_ajaran', 'mahasiswa.id_tahun_ajaran', '=', 'tahun_ajaran.id')
+        ->select(
+            'mahasiswa.*',
+            'tahun_ajaran.nama as tahun_ajaran'
+        )
+        ->orderBy('mahasiswa.id', 'DESC')
+        ->get();
+        $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
         $surataktifkuliah = DB::table('surat_aktif_kuliah')->where('id',$id)->first();
         
-        return view('admin.surataktifkuliah.edit',['surataktifkuliah'=>$surataktifkuliah]);
+        return view('admin.surataktifkuliah.edit',['surataktifkuliah'=>$surataktifkuliah,'mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
     }
 
     public function update(Request $request, $id) {
         // Validasi
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'nip' => 'required|string|max:255',
-            'pango' => 'required|string|max:255',
-            'jabatan' => 'required|string|max:255',
-            'nama_mhs' => 'required|string|max:255',
+            'dosen_data' => 'required|exists:dosen_data',
+            'mahasiswa_data' => 'required|exists:mahasiswa_data',
             'tmp_lahir_mhs' => 'required|string|max:255',
             'tgl_lahir_mhs' => 'required|string|max:255',
-            'no_bp' => 'required|string|max:255',
-            'semester' => 'required|string|max:255',
-            'tahun_akademik' => 'required|string|max:255',
             'nama_ort' => 'required|string|max:255',
             'tmp_lahir_ort' => 'required|string|max:255',
             'tgl_lahir_ort' => 'required|string|max:255',
@@ -157,16 +162,12 @@ class SuratAktifKuliahController extends Controller
             'jabatan_ort' => 'required|string|max:255',
             'instansi_ort' => 'required|string|max:255',
         ],[
-            'nama.required'            => 'Nama  wajib diisi.',
-            'nip.required'            => 'NIP wajib diisi.',
-            'pango.required'            => 'Pangkat / Golongan wajib diisi.',
-            'jabatan.required'            => 'Jabatan wajib diisi.',
-            'nama_mhs.required'            => 'Nama Mahasiswa wajib diisi.',
+            'dosen_data.required'            => 'Silahkan Pilih dulu data dosen terlebih dahulu.',
+            'dosen_data.exists'            => 'Pilihan dulu data dosen tidak valid.',
+            'mahasiswa_data.required'            => 'Silahkan Pilih dulu data mahasiswa terlebih dahulu.',
+            'mahasiswa_data.exists'            => 'Pilihan dulu data mahasiswa tidak valid',
             'tmp_lahir_mhs.required'            => 'Tempat Lahir Mahasiswa wajib diisi.',
             'tgl_lahir_mhs.required'            => 'Tanggal Lahir Mahasiswa wajib diisi.',
-            'no_bp.required'            => 'No.BP wajib diisi.',
-            'semester.required'            => 'Semester wajib diisi.',
-            'tahun_akademik.required'            => 'Tahun Akademik wajib diisi.',
             'nama_ort.required'            => 'Nama Orang Tua / Wali wajib diisi.',
             'tmp_lahir_ort.required'            => 'Tempat Lahir Orang Tua / Wali wajib diisi.',
             'tgl_lahir_ort.required'            => 'Tanggal Lahir Orang Tua / Wali wajib diisi.',
@@ -175,19 +176,22 @@ class SuratAktifKuliahController extends Controller
             'jabatan_ort.required'            => 'Jabatan Orang Tua / Wali wajib diisi.',
             'instansi_ort.required'            => 'Instasi Orang Tua / Wali wajib diisi.',
         ]);
+
+        $dosen = json_decode($request->dosen_data);
+        $mahasiswa = json_decode($request->mahasiswa_data);
         DB::table('surat_aktif_kuliah')  
             ->where('id', $id)
             ->update([
-            'nama' => $request->nama,
-            'nip' => $request->nip,
-            'pango' => $request->pango,
-            'jabatan' => $request->jabatan,
-            'nama_mhs' => $request->nama_mhs,
+            'nama' => $dosen->nama,
+            'nip' => $dosen->nip,
+            'pango' => $dosen->pangol,
+            'jabatan' => $dosen->jf,
+            'nama_mhs' => $mahasiswa->nama,
             'tmp_lahir_mhs' => $request->tmp_lahir_mhs,
             'tgl_lahir_mhs' => $request->tgl_lahir_mhs,
-            'no_bp' => $request->no_bp,
-            'semester' => $request->semester,
-            'tahun_akademik' => $request->tahun_akademik,
+            'no_bp' => $mahasiswa->nobp,
+            'semester' => $mahasiswa->ukt,
+            'tahun_akademik' => $mahasiswa->tahun_ajaran,
             'nama_ort' => $request->nama_ort,
             'tmp_lahir_ort' => $request->tmp_lahir_ort,
             'tgl_lahir_ort' => $request->tgl_lahir_ort,

@@ -73,94 +73,100 @@
                                                 @endforeach
                                             </select>
                                         </div> -->
-                                        <div>
-                                            <label class="form-label">Minggu ke-</label>
-                                            <select class="form-select" name="minggu">
-                                                <option value="0">Pilih Minggu ke-
-                                                @for($no=1; $no<=6; $no++)
-                                                    <option value="{{ $no }}">Minggu Ke-{{ $no }}</option>
-                                                @endfor
-                                            </select>
-                                            @error('minggu')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Minggu ke-</label>
+                                                <select class="form-select" name="minggu">
+                                                    <option value="0">Pilih Minggu ke-
+                                                    @for($no=1; $no<=6; $no++)
+                                                        <option value="{{ $no }}">Minggu Ke-{{ $no }}</option>
+                                                    @endfor
+                                                </select>
+                                                @error('minggu')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Hari</label>
+                                                 <select class="form-select" name="hari">
+                                                    <option value="">
+                                                        Pilih Hari
+                                                    </option>
+                                                    <option value="Senin">Senin</option>
+                                                    <option value="Selasa">Selasa</option>
+                                                    <option value="Rabu">Rabu</option>
+                                                    <option value="Kamis">Kamis</option>
+                                                    <option value="Jum'at">Jum'at</option>
+                                                </select>
+                                                @error('hari')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label class="form-label">Hari</label>
-                                             <select class="form-select" name="hari">
-                                                <option value="">
-                                                    Pilih Hari
-                                                </option>
-                                                <option value="Senin">Senin</option>
-                                                <option value="Selasa">Selasa</option>
-                                                <option value="Rabu">Rabu</option>
-                                                <option value="Kamis">Kamis</option>
-                                                <option value="Jum'at">Jum'at</option>
-                                            </select>
-                                            @error('hari')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Jam Mulai</label>
+                                                <input type="time" name="jam_mulai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off">
+                                                @error('jam_mulai')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Jam Selesai</label>
+                                                <input type="time" name="jam_selesai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off">
+                                                @error('jam_selesai')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label class="form-label">Jam Mulai</label>
-                                            <input type="text" name="jam_mulai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off">
-                                            @error('jam_mulai')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Jam Selesai</label>
-                                            <input type="text" name="jam_selesai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off">
-                                            @error('jam_selesai')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Mata Kuliah</label>
-                                             <select class="form-select" name="id_makul">
-                                                <option>Pilih Mata Kuliah</option>
-                                                @foreach($makul as $data)
-                                                <option value="{{$data->id}}">
-                                                    {{$data->nama}}
-                                                </option>
-                                                @endforeach
-                                                <option value="Libur">Libur</option>
-                                            </select>
-                                            @error('id_makul')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Dosen</label>
-                                             <select class="form-select" name="id_dosen">
-                                                <option>
-                                                    Pilih Dosen
-                                                </option>
-                                                @foreach($dosen as $data)
-                                                <option value="{{$data->id}}">
-                                                    {{$data->nama}}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                            @error('id_dosen')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Ruangan</label>
-                                             <select class="form-select" name="id_ruangan">
-                                                <option>
-                                                    Pilih Ruangan
-                                                </option>
-                                                @foreach($ruangan as $data)
-                                                <option value="{{$data->id}}">
-                                                    {{$data->nama}}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                            @error('id_ruangan')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Mata Kuliah</label>
+                                                 <select class="form-select" name="id_makul">
+                                                    <option>Pilih Mata Kuliah</option>
+                                                    @foreach($makul as $data)
+                                                    <option value="{{$data->id}}">
+                                                        {{$data->nama}}
+                                                    </option>
+                                                    @endforeach
+                                                    <option value="Libur">Libur</option>
+                                                </select>
+                                                @error('id_makul')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Dosen</label>
+                                                 <select class="form-select" name="id_dosen">
+                                                    <option>
+                                                        Pilih Dosen
+                                                    </option>
+                                                    @foreach($dosen as $data)
+                                                    <option value="{{$data->id}}">
+                                                        {{$data->nama}}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('id_dosen')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Ruangan</label>
+                                                 <select class="form-select" name="id_ruangan">
+                                                    <option>
+                                                        Pilih Ruangan
+                                                    </option>
+                                                    @foreach($ruangan as $data)
+                                                    <option value="{{$data->id}}">
+                                                        {{$data->nama}}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('id_ruangan')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

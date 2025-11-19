@@ -61,92 +61,146 @@
                                 {{ csrf_field() }}
                                     <div class="space-y">
                                         <div>
-                                            <label class="form-label">Nama </label>
-                                            <input type="text" placeholder="Masukkan Nama " class="form-control" name="nama" value="{{$surataktifkuliah->nama}}"/>
+                                            <label class="form-label">Dosen</label>
+                                            <select class="form-select" name="dosen_data">
+                                                <option value="">Pilih Data Dosen</option>
+                                                @foreach($dosen as $data)
+                                                    <option value='@json($data)'
+                                                        {{ $surataktifkuliah->nama == $data->nama ? 'selected' : '' }}>
+                                                        NIP : {{$data->nip}}  | Nama Dosen : {{$data->nama}} | Pangkat & Golongan : {{$data->pangol}} | Jabatan : {{$data->jf}}   
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('dosen_data')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
                                         </div>
-                                        <div>
-                                            <label class="form-label">NIP </label>
-                                            <input type="text" placeholder="Masukkan NIP " class="form-control" name="nip" value="{{$surataktifkuliah->nip}}"/>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Pangkat / Golongan </label>
-                                            <input type="text" placeholder="Masukkan Pangkat / Golongan " class="form-control" name="pango" value="{{$surataktifkuliah->pango}}"/>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Jabatan </label>
-                                            <input type="text" placeholder="Masukkan Jabatan " class="form-control" name="jabatan" value="{{$surataktifkuliah->jabatan}}"/>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Nama Mahasiswa</label>
-                                            <input type="text" placeholder="Masukkan Nama Mahasiswa" class="form-control" name="nama_mhs" value="{{$surataktifkuliah->nama_mhs}}"/>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Tempat Lahir </label>
-                                            <input type="text" placeholder="Masukkan Tempat Lahir Mahasiswa" class="form-control" name="tmp_lahir_mhs" value="{{$surataktifkuliah->tmp_lahir_mhs}}"/>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Tanggal Lahir Mahasiswa</label>
-                                            <div class="input-icon">
-                                                <span class="input-icon-addon"><!-- Download SVG icon from http://tabler.io/icons/icon/calendar -->
-                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
-                                                    <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
-                                                    <path d="M16 3v4"></path>
-                                                    <path d="M8 3v4"></path>
-                                                    <path d="M4 11h16"></path>
-                                                    <path d="M11 15h1"></path>
-                                                    <path d="M12 15v3"></path></svg></span>
-                                                <input class="form-control" placeholder="Masukkan Tanggal Lahir Mahasiswa" id="datepicker-icon-prepend" name="tgl_lahir" value="{{$surataktifkuliah->tgl_lahir_mhs}}">
+                                        <div class="row">
+                                             <div class="col-md-4">
+                                                <label class="form-label">Mahasiswa</label>
+                                                <select class="form-select" name="mahasiswa_data">
+                                                    <option value="">Pilih Data Mahasiswa</option>
+                                                    @foreach($mahasiswa as $data)
+                                                        <option value='@json($data)' {{ $surataktifkuliah->nama_mhs == $data->nama ? 'selected' : '' }}>
+                                                            NO.BP: {{$data->nobp}} | Nama Mahasiswa : {{$data->nama}} | Semester : {{$data->ukt}} | Tahun Akademik : {{$data->tahun_ajaran}} 
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('mahasiswa_data')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div> 
+                                            <div class="col-md-8">
+                                                <label class="form-label">Tempat & Tanggal Lahir Mahasiswa</label>
+                                                <div class="row g-2">
+                                                    <!-- Tempat Lahir -->
+                                                    <div class="col-md-6">
+                                                        <input type="text" 
+                                                               class="form-control" 
+                                                               name="tmp_lahir_mhs" 
+                                                               placeholder="Masukkan Tempat Lahir Mahasiswa" value="{{$surataktifkuliah->tmp_lahir_mhs}}">
+                                                        @error('tmp_lahir_mhs')
+                                                            <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+
+                                                    <!-- Tanggal Lahir -->
+                                                    <div class="col-md-6 input-icon">
+                                                        <span class="input-icon-addon"><!-- Download SVG icon from http://tabler.io/icons/icon/calendar -->
+                                                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                                                            <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
+                                                            <path d="M16 3v4"></path>
+                                                            <path d="M8 3v4"></path>
+                                                            <path d="M4 11h16"></path>
+                                                            <path d="M11 15h1"></path>
+                                                            <path d="M12 15v3"></path></svg></span>
+                                                        <input class="form-control" placeholder="Masukkan Tanggal Lahir Mahasiswa" id="datepicker-icon-prepend_2" name="tgl_lahir_mhs" value="{{$surataktifkuliah->tgl_lahir_mhs}}">
+                                                        @error('tgl_lahir_mhs')
+                                                            <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div>
-                                            <label class="form-label">NO.BP</label>
-                                            <input type="text" placeholder="Masukkan No.BP" class="form-control" name="no_bp" value="{{$surataktifkuliah->no_bp}}" />
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Semester</label>
-                                            <input type="text" placeholder="Masukkan Semester" class="form-control" name="semester" value="{{$surataktifkuliah->semester}}" />
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Tahun Akademik</label>
-                                            <input type="text" placeholder="Masukkan Tahun Akademik" class="form-control" name="tahun_akademik" value="{{$surataktifkuliah->tahun_akademik}}"/>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Nama Orang Tua / Wali</label>
-                                            <input type="text" placeholder="Masukkan Nama Orang Tua / Wali" class="form-control" name="nama_ort" value="{{$surataktifkuliah->nama_ort}}"/>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Tempat Lahir </label>
-                                            <input type="text" placeholder="Masukkan Tempat Lahir Orang Tua/ Wali" class="form-control" name="tmp_lahir_ort" value="{{$surataktifkuliah->tmp_lahir_ort}}"/>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Tanggal Lahir </label>
-                                            <div class="input-icon">
-                                                <span class="input-icon-addon"><!-- Download SVG icon from http://tabler.io/icons/icon/calendar -->
-                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
-                                                    <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
-                                                    <path d="M16 3v4"></path>
-                                                    <path d="M8 3v4"></path>
-                                                    <path d="M4 11h16"></path>
-                                                    <path d="M11 15h1"></path>
-                                                    <path d="M12 15v3"></path></svg></span>
-                                                <input class="form-control" placeholder="Masukkan Tanggal Lahir Orang Tua" id="datepicker-icon-prepend_2" name="tgl_lahir_ort" value="{{$surataktifkuliah->tgl_lahir_ort}}">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Nama Orang Tua / Wali</label>
+                                                <input type="text" placeholder="Masukkan Nama Orang Tua / Wali" class="form-control" name="nama_ort" value="{{$surataktifkuliah->nama_ort}}" />
+                                                @error('nama_ort')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-8">
+                                                <label class="form-label">Tempat & Tanggal Lahir Orang Tua / Wali</label>
+                                                <div class="row g-2">
+                                                    <!-- Tempat Lahir -->
+                                                    <div class="col-md-6">
+                                                        <input type="text" 
+                                                               class="form-control" 
+                                                               name="tmp_lahir_ort" 
+                                                               placeholder="Masukkan Tempat Lahir Orang Tua / Wali"
+                                                               value="{{$surataktifkuliah->tmp_lahir_ort}}">
+                                                        @error('tmp_lahir_ort')
+                                                            <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+
+                                                    <!-- Tanggal Lahir -->
+                                                    <div class="col-md-6 input-icon">
+                                                        <span class="input-icon-addon"><!-- Download SVG icon from http://tabler.io/icons/icon/calendar -->
+                                                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                                                            <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
+                                                            <path d="M16 3v4"></path>
+                                                            <path d="M8 3v4"></path>
+                                                            <path d="M4 11h16"></path>
+                                                            <path d="M11 15h1"></path>
+                                                            <path d="M12 15v3"></path></svg></span>
+                                                        <input class="form-control" placeholder="Masukkan Tanggal Lahir Orang Tua / Wali" id="datepicker-icon-prepend_1" name="tgl_lahir_ort" value="{{$surataktifkuliah->tgl_lahir_ort}}">
+                                                        @error('tgl_lahir_ort')
+                                                            <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div>
-                                            <label class="form-label">NIP </label>
-                                            <input type="text" placeholder="Masukkan NIP" class="form-control" name="nip_ort" value="{{$surataktifkuliah->nip_ort}}"/>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Pangkat / Golongan </label>
-                                            <input type="text" placeholder="Masukkan Pangkat / Golongan" class="form-control" name="pango_ort" value="{{$surataktifkuliah->pango_ort}}"/>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Jabatan </label>
-                                            <input type="text" placeholder="Masukkan Jabatan" class="form-control" name="jabatan_ort" value="{{$surataktifkuliah->jabatan_ort}}"/>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Instansi </label>
-                                            <input type="text" placeholder="Masukkan Instansi" class="form-control" name="instansi_ort" value="{{$surataktifkuliah->instansi_ort}}"/>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label class="form-label">NIP </label>
+                                                <input type="text" placeholder="Masukkan NIP" class="form-control" name="nip_ort" value="{{$surataktifkuliah->nip_ort}}" />
+                                                @error('nip_ort')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Pangkat & Golongan</label>
+                                                <div class="row g-2">
+                                                    <!-- Pangkat -->
+                                                    <div>
+                                                        <input type="text" 
+                                                               class="form-control" 
+                                                               name="pango_ort" 
+                                                               placeholder="Masukkan Pangkat & Golongan" 
+                                                               value="{{$surataktifkuliah->pango_ort}}">
+                                                    </div>
+                                                </div>
+                                                @error('pango_ort')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Jabatan </label>
+                                                <input type="text" placeholder="Masukkan Jabatan" class="form-control" name="jabatan_ort" value="{{$surataktifkuliah->jabatan_ort}}" />
+                                                @error('jabatan_ort')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Instansi </label>
+                                                <input type="text" placeholder="Masukkan Instansi" class="form-control" name="instansi_ort" value="{{$surataktifkuliah->instansi_ort}}" />
+                                                @error('instansi_ort')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

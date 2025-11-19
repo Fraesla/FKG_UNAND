@@ -139,9 +139,9 @@
                                 </td>
                                 <td class="text-secondary">
                                     @if ($data->foto && file_exists(public_path('storage/' . $data->foto)))
-                                        <img src="{{ asset('storage/' . $data->foto) }}" width="50" height="50" class="rounded-circle">
+                                        <img src="{{ asset('storage/' . $data->foto) }}" width="50" height="50" class="rounded-circle object-cover">
                                     @else
-                                        <img src="{{ asset('images/default-user.png') }}" width="50" height="50" class="rounded-circle">
+                                        <img src="{{ asset('assets/images/default-fkg.jpg') }}" width="50" height="50" class="rounded-circle object-cover">
                                     @endif
                                 </td>
                                 <td class="text-secondary">{{$data->nama}}</td>

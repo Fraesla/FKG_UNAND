@@ -11,6 +11,20 @@
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
                   <h2 class="page-title">Data Absensi Dosen</h2>
+                  @if ($errors->any())
+                        <div id="alert-error" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
+                            <strong>⚠️ Terjadi Kesalahan pada Pengisian Formulir:</strong>
+                            <ul class="mb-0 mt-2">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <div class="progress position-absolute bottom-0 start-0 w-100" style="height: 3px;">
+                                <div id="progress-bar-error" class="progress-bar bg-danger" role="progressbar"></div>
+                            </div>
+                        </div>
+                        @endif
               </div>
               <!-- Page title actions -->
       </div>
@@ -20,108 +34,64 @@
 <!-- BEGIN PAGE BODY -->
 <div class="page-body">
     <div class="container-xl">
-        <div class="row row-cards row-cols-1 row-cols-md-12">
-            <div class="col">
-                <div class="row row-cards">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <h3 class="card-title">
-                                    Pengeditan Data Absensi Dosen
-                                </h3>
-                                <a href="/admin/absdosen/" class="btn btn-secondary btn-sm">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
-                                         class="icon icon-tabler icon-tabler-arrow-left">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                        <path d="M5 12l14 0" />
-                                        <path d="M5 12l6 6" />
-                                        <path d="M5 12l6 -6" />
-                                    </svg>
-                                    Back
-                                </a>
-                            </div>
-                            <div class="card-body">
-                                <form action="/admin/absdosen/update/{{$absdosen->id}}" method="POST" enctype="multipart/form-data">
-                                {{ csrf_field() }}
-                                    <div class="space-y">
-                                        <div>
-                                            <label class="form-label">Tanggal</label>
-                                            <div class="input-icon">
-                                                <span class="input-icon-addon"><!-- Download SVG icon from http://tabler.io/icons/icon/calendar -->
-                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
-                                                    <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
-                                                    <path d="M16 3v4"></path>
-                                                    <path d="M8 3v4"></path>
-                                                    <path d="M4 11h16"></path>
-                                                    <path d="M11 15h1"></path>
-                                                    <path d="M12 15v3"></path></svg></span>
-                                                <input class="form-control" placeholder="Masukkan Tanggal" id="datepicker-icon-prepend" name="tgl" value="{{$absdosen->tgl}}">
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Jam Masuk</label>
-                                            <input type="time" name="jam_masuk" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off" value="{{$absdosen->jam_masuk}}">
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Jam Pulang</label>
-                                            <input type="time" name="jam_pulang" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off" value="{{$absdosen->jam_pulang}}">
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Dosen</label>
-                                             <select class="form-select" name="id_dosen">
-                                                <option>
-                                                    Pilih Dosen
-                                                </option>
-                                                @foreach($dosen as $data)
-                                                <option value="{{$data->id}}"
-                                                    {{ $absdosen->id_dosen == $data->id ? 'selected' : '' }}>
-                                                    {{$data->nama}}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Jadwal Dosen</label>
-                                             <select class="form-select" name="id_jadwal_dosen">
-                                                <option>Pilih Jadwal Mahasiswa</option>
-                                                @foreach($jadmakul as $data)
-                                                    <option value="{{$data->id}}"
-                                                        {{ $absdosen->id_jadwal_dosen == $data->id ? 'selected' : '' }}>
-                                                        Mata Kuliah: {{$data->nama_makul}} | Ruangan: {{$data->nama_ruangan}}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Status</label>
-                                            <select class="form-select" name="status" required>
-                                                <option value="">Pilih Status</option>
-                                                <option value="hadir" {{ $absdosen->status == 'hadir' ? 'selected' : '' }}>Hadir</option>
-                                                <option value="izin" {{ $absdosen->status == 'izin' ? 'selected' : '' }}>Izin</option>
-                                                <option value="alfa" {{ $absdosen->status == 'alfa' ? 'selected' : '' }}>Alfa</option>
-                                                <option value="belum absen" {{ $absdosen->status == 'belum absen' ? 'selected' : '' }}>Belum Absen</option>
-                                            </select>
-                                        </div> 
-                                        <div>
-                                            <button type="submit" class="btn btn-primary btn-4 w-100">
-                                                Simpan
-                                                <!-- Download SVG icon from http://tabler.io/icons/icon/arrow-right -->
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                stroke-linejoin="round" class="icon icon-right icon-2">
-                                                    <path d="M5 12l14 0" />
-                                                    <path d="M13 18l6 -6" />
-                                                    <path d="M13 6l6 6" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="card-title">🧾 Edit Absensi</h3>
+                        <a href="{{ url('/admin/absdosen') }}" class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-arrow-left-circle"></i> Back
+                        </a>
                     </div>
+
+                    <div class="card-body bg-dark text-light rounded-bottom">
+                        <div class="text-center mb-4">
+                            <h4 class="text-info mb-2">Detail Absensi Dosen</h4>
+                            <p class="text-muted mb-0">NIP: <strong>{{ $absdosen->nip_dosen ?? '-' }}</strong></p>
+                            <p class="text-muted mb-0">Dosen: <strong>{{ $absdosen->nama_dosen ?? '-' }}</strong></p>
+                        </div>
+
+                        <div class="mb-3">
+                            <p>📘 <strong>Kode Kuliah:</strong> {{ $absdosen->kode_makul ?? '-' }}</p>
+                            <p>📘 <strong>Mata Kuliah:</strong> {{ $absdosen->nama_makul ?? '-' }}</p>
+                            <p>📅 <strong>Tanggal:</strong> {{ $absdosen->tgl }}</p>
+                            <p>🕗 <strong>Jam Masuk:</strong> {{ $absdosen->jam_masuk ?? '-' }}</p>
+                            <p>🕙 <strong>Jam Pulang:</strong> {{ $absdosen->jam_pulang ?? '-' }}</p>
+                            <p>🏫 <strong>Ruangan:</strong> {{ $absdosen->ruangan ?? '-' }}</p>
+                        </div>
+
+                        <hr class="border-secondary">
+
+                        <form method="POST" action="/admin/absdosen/update/{{$absdosen->id}}" enctype="multipart/form-data">
+                            @csrf
+
+                            <div class="mb-3 text-start">
+                                <label for="status" class="form-label text-light">Status Kehadiran</label>
+                                <select name="status" id="status" class="form-select bg-dark text-light border-secondary">
+                                    <option value="">Pilih Status Kehadiran</option>
+                                    <option value="belum absen" {{ $absdosen->status == 'belum absen' ? 'selected' : '' }}>Belum Absen</option>
+                                    <option value="hadir" {{ $absdosen->status == 'hadir' ? 'selected' : '' }}>Hadir</option>
+                                    <option value="izin" {{ $absdosen->status == 'izin' ? 'selected' : '' }}>Izin</option>
+                                    <option value="sakit" {{ $absdosen->status == 'sakit' ? 'selected' : '' }}>Sakit</option>
+                                    <option value="alfa" {{ $absdosen->status == 'alfa' ? 'selected' : '' }}>Alfa</option>
+                                </select>
+                                @error('status')
+                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3 text-start">
+                                <label for="keterangan" class="form-label text-light">Keterangan</label>
+                                <textarea name="keterangan" id="keterangan" rows="3" 
+                                    class="form-control bg-dark text-light border-secondary"
+                                    placeholder="Masukkan keterangan jika izin atau sakit...">{{ $absdosen->keterangan }}</textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 shadow-sm">
+                                Simpan Perubahan
+                            </button>
+                        </form>
+                    </div> {{-- end card body --}}
                 </div>
             </div>
         </div>

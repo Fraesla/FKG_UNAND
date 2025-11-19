@@ -159,6 +159,14 @@ class AbsensiController extends Controller
             $keterangan = 'Alfa';
         }
 
+        // Validasi input
+            $request->validate([
+                'status' => 'required|exists:status',
+            ],[
+                'status.required' => 'Status yang dipilih tidak valid..',
+                'status.exists' => 'Status yang dipilih tidak valid..',
+            ]);
+
         // Simpan data absensi mahasiswa
         DB::table('absen_mahasiswa')->insert([
             'tgl' => $request->tgl,

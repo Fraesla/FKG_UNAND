@@ -170,9 +170,9 @@ class BlokController extends Controller
             return redirect()->back()->with('error', 'Data jadwal tidak ditemukan!');
         }
 
-        // Cek apakah sudah ada absen dengan id_jadwal_dosen yang sama
+         // Cek apakah sudah ada absen dengan id_jadwal_dosen yang sama
         $cekDuplikat = DB::table('absen_dosen')
-            ->where('id_jadwal_dosen', $jadwal->id)
+            ->whereRaw("REGEXP_REPLACE(id_jadwal_dosen, '[^0-9]', '') = ?", [$jadwal->id])
             ->exists();
 
         if ($cekDuplikat) {
@@ -236,15 +236,15 @@ class BlokController extends Controller
             return redirect()->back()->with('error', 'Data jadwal tidak ditemukan!');
         }
 
-        // // Cek apakah sudah ada absen dengan id_makul yang sama
-        // $cekDuplikat = DB::table('nilai')
-        //     ->where('id_makul', $jadwal->id)
-        //     ->exists();
+        // Cek apakah sudah ada absen dengan id_makul yang sama
+        $cekDuplikat = DB::table('nilai')
+            ->where('id_makul', $jadwal->id_makul)
+            ->exists();
 
-        // if ($cekDuplikat) {
-        //     return redirect('/admin/jadmakul')
-        //         ->with('error', 'Data Nilai untuk jadwal Mata Kuliah ini sudah ada!');
-        // }
+        if ($cekDuplikat) {
+            return redirect('/admin/jadmakul')
+                ->with('error', 'Data Nilai untuk jadwal Mata Kuliah ini sudah ada!');
+        }
 
         // Simpan data absen baru
         DB::table('nilai')->insert([

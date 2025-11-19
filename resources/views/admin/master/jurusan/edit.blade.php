@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
 'activePage' => 'master',
-'activeDrop' => 'fakultas',
+'activeDrop' => 'jurusan',
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
