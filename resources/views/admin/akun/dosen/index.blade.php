@@ -143,7 +143,12 @@
                                     <span class="text-secondary"> {{$no++}}</span>
                                 </td>
                                 <td class="text-secondary">
-                                    <img src="{{ asset('storage/'.$data->foto) }}" width="50" height="50" class="rounded-circle">
+                                    <img 
+                                        src="{{ $data->foto 
+                                            ? asset('storage/'.$data->foto) 
+                                            : asset('assets/images/default-fkg.jpg') }}" 
+                                        width="50" height="50" 
+                                        class="rounded-circle object-cover">
                                 </td>
                                 <td class="text-secondary">{{$data->nama}}</td>
                                 <td class="text-secondary">{{$data->nip}}</td>

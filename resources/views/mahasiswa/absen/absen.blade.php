@@ -1,6 +1,41 @@
 @extends('mahasiswa.layouts.app', ['activePage' => 'absensi'])
 
 @section('content')
+<!-- BEGIN PAGE HEADER -->
+<div class="page-header d-print-none" aria-label="Page header">
+   <div class="container-xl">
+      <div class="row g-2 align-items-center">
+         <div class="col">
+            <!-- Page pre-title -->
+               <div class="page-pretitle">Aplikasi FKG</div>
+                  <h2 class="page-title">Data Absensi Mahasiwa</h2>
+                  @if ($errors->any())
+                        <div id="alert-error" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
+                            <strong>⚠️ Terjadi Kesalahan pada Pengisian Formulir:</strong>
+                            <ul class="mb-0 mt-2">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <div class="progress position-absolute bottom-0 start-0 w-100" style="height: 3px;">
+                                <div id="progress-bar-error" class="progress-bar bg-danger" role="progressbar"></div>
+                            </div>
+                        </div>
+                        @endif
+                    
+                    @if (session('warning'))
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        ⚠️ {{ session('warning') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    @endif
+              </div>
+              <!-- Page title actions -->
+      </div>
+   </div>
+</div>
+<!-- END PAGE HEADER -->
 <div class="container py-5">
     <div class="card shadow-lg border-0 mx-auto" style="max-width: 500px;">
         <div class="card-body text-center">
@@ -55,11 +90,15 @@
                 <div class="mb-3">
                     <label for="status" class="form-label">Status Kehadiran</label>
                     <select name="status" id="status" class="form-select">
+                        <option value="">Pilih Status Kehadiran</option>
                         <option value="hadir">Hadir</option>
                         <option value="izin">Izin</option>
                         <option value="sakit">Sakit</option>
                         <option value="alfa">Alfa</option>
                     </select>
+                    @error('status')
+                        <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                    @enderror
                 </div>
 
 

@@ -30,6 +30,7 @@ class AbsDosenController extends Controller
                 'ad.tgl',
                 'ad.jam_masuk',
                 'ad.jam_pulang',
+                'd.nip as nip_dosen',
                 'd.nama as nama_dosen',
                 DB::raw("COALESCE(m.nama, 'Tidak diketahui') as makul"),
                 DB::raw("COALESCE(r.nama, '-') as ruangan"),
@@ -62,6 +63,7 @@ class AbsDosenController extends Controller
                 'ad.tgl',
                 'ad.jam_masuk',
                 'ad.jam_pulang',
+                'd.nip as nip_dosen',
                 'd.nama as nama_dosen',
                 DB::raw("COALESCE(m.nama, '-') as makul"),
                 DB::raw("COALESCE(r.nama, '-') as ruangan"),
@@ -76,6 +78,7 @@ class AbsDosenController extends Controller
                   ->orWhere('ad.tgl', 'like', "%{$search}%")
                   ->orWhere('ad.jam_masuk', 'like', "%{$search}%")
                   ->orWhere('ad.jam_pulang', 'like', "%{$search}%")
+                  ->orWhere('d.nip', 'like', "%{$search}%")
                   ->orWhere('d.nama', 'like', "%{$search}%")
                   ->orWhere('m.nama', 'like', "%{$search}%")
                   ->orWhere('r.nama', 'like', "%{$search}%");
@@ -131,44 +134,70 @@ class AbsDosenController extends Controller
     }
 
     public function edit($id){
-        $absdosen = DB::table('absen_dosen')->where('id',$id)->first();
-        $jadmakul = DB::table('jadwal_makul')
-            ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')
-            ->join('ruangan', 'jadwal_makul.id_ruangan', '=', 'ruangan.id')
+        $absdosen = DB::table('absen_dosen as am')
+            ->join('dosen as d', 'am.id_dosen', '=', 'd.id')
+
+            ->leftJoin('jadwal_makul', function ($join) {
+                $join->on(DB::raw("SUBSTRING(am.id_jadwal_dosen, 2)"), '=', 'jadwal_makul.id')
+                    ->whereRaw("LEFT(am.id_jadwal_dosen, 1) = 'B'");
+            })
+            ->leftJoin('makul as makul_blok', 'jadwal_makul.id_makul', '=', 'makul_blok.id')
+            ->leftJoin('ruangan as ruangan_blok', 'jadwal_makul.id_ruangan', '=', 'ruangan_blok.id')
+
+            ->leftJoin('jadwal_metopen', function ($join) {
+                $join->on(DB::raw("SUBSTRING(am.id_jadwal_dosen, 2)"), '=', 'jadwal_metopen.id')
+                    ->whereRaw("LEFT(am.id_jadwal_dosen, 1) = 'M'");
+            })
+            ->leftJoin('makul as makul_metopen', 'jadwal_metopen.id_makul', '=', 'makul_metopen.id')
+            ->leftJoin('ruangan as ruangan_metopen', 'jadwal_metopen.id_ruangan', '=', 'ruangan_metopen.id')
+
+            ->leftJoin('materi as materi_blok', function ($join) {
+                $join->on('materi_blok.id_jadwal_blok', '=', DB::raw("SUBSTRING(am.id_jadwal_dosen, 2)"))
+                    ->whereRaw("LEFT(am.id_jadwal_dosen, 1) = 'B'");
+            })
+            ->leftJoin('materi as materi_metopen', function ($join) {
+                $join->on('materi_metopen.id_jadwal_metopen', '=', DB::raw("SUBSTRING(am.id_jadwal_dosen, 2)"))
+                    ->whereRaw("LEFT(am.id_jadwal_dosen, 1) = 'M'");
+            })
+
             ->select(
-                'jadwal_makul.id',
-                'jadwal_makul.hari',
-                'jadwal_makul.jam_mulai',
-                'jadwal_makul.jam_selesai',
-                'makul.nama as nama_makul',
-                'ruangan.nama as nama_ruangan'
+                'am.*',
+                'd.nip as nip_dosen',
+                'd.nama as nama_dosen',
+                DB::raw('COALESCE(makul_blok.kode, makul_metopen.kode) as kode_makul'),
+                DB::raw('COALESCE(makul_blok.nama, makul_metopen.nama) as nama_makul'),
+                DB::raw('COALESCE(ruangan_blok.nama, ruangan_metopen.nama) as ruangan'),
+                DB::raw('COALESCE(jadwal_makul.hari, jadwal_metopen.hari) as hari'),
+                DB::raw('COALESCE(materi_blok.judul, materi_metopen.judul) as judul_materi'),
+                DB::raw('COALESCE(materi_blok.file, materi_metopen.file) as file_materi')
             )
-            ->orderBy('jadwal_makul.id', 'DESC')
-            ->get();
-        $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
+            ->where('am.id', $id)  // <--- tambahkan ini
+            ->first();             // <--- dan ini
         
-        return view('admin.absensi.dosen.edit',['absdosen'=>$absdosen,'jadmakul'=>$jadmakul,'dosen'=>$dosen]);
+        return view('admin.absensi.dosen.edit',['absdosen'=>$absdosen]);
     }
 
     public function update(Request $request, $id) {
-        // $request->validate([
-        //     'tgl' => 'required|string|max:100',
-        //     'jam_masuk' => 'required|string|max:100',
-        //     'jam_selesai' => 'required|string|max:100',
-        //     'id_dosen' => 'required|string|max:100',
-        //     'id_jadwal_dosen' => 'required|string|max:100',
-        //     'status' => 'required|string|max:100',
-        // ]);
+         // Jika status = hadir, maka keterangan otomatis "Hadir"
+        if ($request->status === 'hadir') {
+            $keterangan = 'Hadir';
+        } elseif (in_array($request->status, ['izin', 'sakit', 'belum absen'])) {
+            $keterangan = trim($request->keterangan) ?: '-';
+        } else {
+            $keterangan = 'Alfa';
+        }
+
+        $request->validate([
+            'status' => 'required|exists:status',
+        ],[
+            'status.required' => 'Status yang dipilih tidak valid..',
+            'status.exists' => 'Status yang dipilih tidak valid..',
+        ]);
         DB::table('absen_dosen')  
             ->where('id', $id)
             ->update([
-            'tgl' => $request->tgl,
-            'jam_masuk' => $request->jam_masuk,
-            'jam_pulang' => $request->jam_pulang,
-            'id_dosen' => $request->id_dosen,
-            'id_jadwal_dosen' => $request->id_jadwal_dosen,
-            'keterangan' => '',
-            'qr'=>' '
+            'status' => $request->status,
+            'keterangan' => $request->keterangan,
         ]);
 
         return redirect('/admin/absdosen')->with("success","Data Berhasil Diupdate !");

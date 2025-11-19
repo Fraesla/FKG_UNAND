@@ -357,30 +357,16 @@ class AbsenController extends Controller
             ->where('absen_dosen.id', $id)
             ->first();
 
-         // Validasi input
-        // $request->validate([
-        //     'id_kelas' => 'required|exists:kelas,id',
-        //     'minggu' => 'required|integer|min:1|max:6',
-        //     'tgl' => 'required|date',
-        //     'hari' => 'required|string|max:255',
-        //     'jam_mulai' => 'required|date_format:H:i',
-        //     'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
-        //     'id_makul' => 'required|exists:makul,id',
-        //     'id_ruangan' => 'required|exists:ruangan,id',
-        // ],[
-        //     'id_kelas.exists' => 'Blok yang dipilih tidak valid...',
-        //     'minggu.required' => 'Minggu ke- wajib diisi.',
-        //     'minggu.integer' => 'Minggu ke- yang dipilih tidak valid.',
-        //     'tgl.required' => 'Tanggal wajib diisi.',
-        //     'hari.required' => 'Hari wajib diisi.',
-        //     'jam_mulai.required' => 'Jam Mulai wajib diisi.',
-        //     'jam_mulai.date_format' => 'Format Jam Mulai tidak valid (gunakan format HH:MM).',
-        //     'jam_selesai.required' => 'Jam Selesai wajib diisi.',
-        //     'jam_selesai.date_format' => 'Format Jam Selesai tidak valid (gunakan format HH:MM).',
-        //     'jam_selesai.after' => 'Jam Selesai harus setelah Jam Mulai.',
-        //     'id_makul.exists' => 'Mata Kuliah yang dipilih tidak valid..',
-        //     'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
-        // ]);
+          // Validasi input
+            $request->validate([
+                'id_mahasiswa' => 'required|exists:id_mahasiswa,id',
+                'status' => 'required|exists:status',
+            ],[
+                'id_mahasiswa.required' => 'Nama Mahasiswa yang dipilih tidak valid..',
+                'id_mahasiswa.exists' => 'Nama Mahasiswa yang dipilih tidak valid..',
+                'status.required' => 'Status yang dipilih tidak valid..',
+                'status.exists' => 'Status yang dipilih tidak valid..',
+            ]);
 
         DB::table('absen_mahasiswa')->insert([  
             'tgl' => $request->tgl,
@@ -412,30 +398,15 @@ class AbsenController extends Controller
     public function update(Request $request, $id) {
 
          // Validasi input
-        // $request->validate([
-        //     'id_kelas' => 'required|exists:kelas,id',
-        //     'minggu' => 'required|integer|min:1|max:6',
-        //     'tgl' => 'required|date',
-        //     'hari' => 'required|string|max:255',
-        //     'jam_mulai' => 'required|date_format:H:i',
-        //     'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
-        //     'id_makul' => 'required|exists:makul,id',
-        //     'id_ruangan' => 'required|exists:ruangan,id',
-        // ],[
-        //     'id_kelas.required' => 'Form Blok Silahkan dipilh Dulu...',
-        //     'id_kelas.exists' => 'Blok yang dipilih tidak valid...',
-        //     'minggu.required' => 'Minggu ke- wajib diisi.',
-        //     'minggu.integer' => 'Minggu ke- yang dipilih tidak valid.',
-        //     'tgl.required' => 'Tanggal wajib diisi.',
-        //     'hari.required' => 'Hari wajib diisi.',
-        //     'jam_mulai.required' => 'Jam Mulai wajib diisi.',
-        //     'jam_mulai.date_format' => 'Format Jam Mulai tidak valid (gunakan format HH:MM).',
-        //     'jam_selesai.required' => 'Jam Selesai wajib diisi.',
-        //     'jam_selesai.date_format' => 'Format Jam Selesai tidak valid (gunakan format HH:MM).',
-        //     'jam_selesai.after' => 'Jam Selesai harus setelah Jam Mulai.',
-        //     'id_makul.exists' => 'Mata Kuliah yang dipilih tidak valid..',
-        //     'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
-        // ]);
+            $request->validate([
+                'id_mahasiswa' => 'required|exists:id_mahasiswa,id',
+                'status' => 'required|exists:status',
+            ],[
+                'id_mahasiswa.required' => 'Nama Mahasiswa yang dipilih tidak valid..',
+                'id_mahasiswa.exists' => 'Nama Mahasiswa yang dipilih tidak valid..',
+                'status.required' => 'Status yang dipilih tidak valid..',
+                'status.exists' => 'Status yang dipilih tidak valid..',
+            ]);
 
         $absen = DB::table('absen_dosen')
             ->join('dosen', 'absen_dosen.id_dosen', '=', 'dosen.id')

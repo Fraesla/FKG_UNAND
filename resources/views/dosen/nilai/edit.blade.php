@@ -60,53 +60,55 @@
                                 <form action="/dosen/nilai/update/{{$nilai->id}}" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
-                                        <div>
-                                            <label class="form-label">Mata Kuliah</label>
-                                            <select class="form-select" name="id_kelas">
-                                                <option>
-                                                    Pilih Nama Mata Kuliah
-                                                </option>
-                                                @foreach($makul as $data)
-                                                <option value="{{$data->id}}" {{ $nilai->id_makul == $data->id ? 'selected' : '' }}>
-                                                    {{$data->nama}}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                            @error('id_makul')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Dosen</label>
-                                            <select class="form-select" name="id_dosen">
-                                                <option>
-                                                    Pilih Nama Dosen
-                                                </option>
-                                                @foreach($dosen as $data)
-                                                <option value="{{$data->id}}" {{ $nilai->id_dosen == $data->id ? 'selected' : '' }}>
-                                                    {{$data->nama}}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                            @error('id_dosen')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                         <div>
-                                            <label class="form-label">Mahasiswa</label>
-                                            <select class="form-select" name="id_mahasiswa">
-                                                <option>
-                                                    Pilih Nama Mahasiswa
-                                                </option>
-                                                @foreach($mahasiswa as $data)
-                                                <option value="{{$data->id}}" {{ $nilai->id_mahasiswa == $data->id ? 'selected' : '' }}>
-                                                    {{$data->nama}}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                            @error('id_mahasiswa')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Mata Kuliah</label>
+                                                <select class="form-select" name="id_kelas">
+                                                    <option>
+                                                        Pilih Nama Mata Kuliah
+                                                    </option>
+                                                    @foreach($makul as $data)
+                                                    <option value="{{$data->id}}" {{ $nilai->id_makul == $data->id ? 'selected' : '' }}>
+                                                        {{$data->nama}}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('id_makul')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Dosen</label>
+                                                <select class="form-select" name="id_dosen">
+                                                    <option>
+                                                        Pilih Nama Dosen
+                                                    </option>
+                                                    @foreach($dosen as $data)
+                                                    <option value="{{$data->id}}" {{ $nilai->id_dosen == $data->id ? 'selected' : '' }}>
+                                                        {{$data->nama}}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('id_dosen')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                             <div class="col-md-4">
+                                                <label class="form-label">Mahasiswa</label>
+                                                <select class="form-select" name="id_mahasiswa">
+                                                    <option>
+                                                        Pilih Nama Mahasiswa
+                                                    </option>
+                                                    @foreach($mahasiswa as $data)
+                                                    <option value="{{$data->id}}" {{ $nilai->id_mahasiswa == $data->id ? 'selected' : '' }}>
+                                                        {{$data->nama}}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('id_mahasiswa')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
                                         <div>
                                             <label class="form-label">Nilai</label>

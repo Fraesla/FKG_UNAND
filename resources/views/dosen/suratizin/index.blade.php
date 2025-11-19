@@ -74,9 +74,9 @@
                             <div class="ms-auto text-secondary d-flex align-items-center">
                                 <span class="me-2">Search:</span>
                                 <input type="text" class="form-control form-control-mm" 
-                                       aria-label="Search Surat Izin" 
+                                       aria-label="Search Surat Izin Penelitan" 
                                        name="search" 
-                                       placeholder="Cari Surat Izin..." 
+                                       placeholder="Cari Surat Izin Penelitan..." 
                                        value="{{ request('search') }}">
 
                                 <a href="/dosen/suratizin/add" class="btn btn-success btn-mm ms-2">

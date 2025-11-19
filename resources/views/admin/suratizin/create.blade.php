@@ -67,54 +67,58 @@
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>
-                                        <div>
-                                            <label class="form-label">Mahasiswa</label>
-                                             <select class="form-select" name="id_mahasiswa">
-                                                <option>Pilih Data Mahasiswa</option>
-                                                @foreach($mahasiswa as $data)
-                                                    <option value="{{$data->id}}">
-                                                        No.BP: {{$data->nobp}} | Nama Mahasiswa: {{$data->nama}} 
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('id_mahasiswa')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Mahasiswa</label>
+                                                 <select class="form-select" name="id_mahasiswa">
+                                                    <option>Pilih Data Mahasiswa</option>
+                                                    @foreach($mahasiswa as $data)
+                                                        <option value="{{$data->id}}">
+                                                            No.BP: {{$data->nobp}} | Nama Mahasiswa: {{$data->nama}} 
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('id_mahasiswa')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Judul Penelitian</label>
+                                                <input type="text" placeholder="Masukkan Judul Penelitian" class="form-control" name="judul_penelitian" />
+                                                @error('judul_penelitian')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label class="form-label">Judul Penelitian</label>
-                                            <input type="text" placeholder="Masukkan Judul Penelitian" class="form-control" name="judul_penelitian" />
-                                            @error('judul_penelitian')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Dosen Pembimbing 1</label>
-                                             <select class="form-select" name="dosen_pembimbing_1">
-                                                <option>Pilih Data Dosen</option>
-                                                @foreach($dosen as $data)
-                                                    <option value="{{$data->nama}}">
-                                                        NIDM: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('dosen_pembimbing_1')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Dosen Pembimbing 2</label>
-                                             <select class="form-select" name="dosen_pembimbing_2">
-                                                <option>Pilih Data Dosen</option>
-                                                @foreach($dosen as $data)
-                                                    <option value="{{$data->nama}}">
-                                                        NIDM: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('dosen_pembimbing_2')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Dosen Pembimbing 1</label>
+                                                 <select class="form-select" name="dosen_pembimbing_1">
+                                                    <option>Pilih Data Dosen</option>
+                                                    @foreach($dosen as $data)
+                                                        <option value="{{$data->nama}}">
+                                                            NIDM: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('dosen_pembimbing_1')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Dosen Pembimbing 2</label>
+                                                 <select class="form-select" name="dosen_pembimbing_2">
+                                                    <option>Pilih Data Dosen</option>
+                                                    @foreach($dosen as $data)
+                                                        <option value="{{$data->nama}}">
+                                                            NIDM: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('dosen_pembimbing_2')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
                                         <div class="mb-3">
                                           <label class="form-label">Isi Surat</label>

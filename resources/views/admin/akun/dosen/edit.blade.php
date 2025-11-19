@@ -39,127 +39,146 @@
                 <div class="row row-cards">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header d-flex justify-content-between align-items-center">
                                 <h3 class="card-title">
                                     Pengeditan Data Dosen
                                 </h3>
+                                <a href="/admin/dosen/" class="btn btn-secondary btn-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
+                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                         class="icon icon-tabler icon-tabler-arrow-left">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M5 12l14 0" />
+                                        <path d="M5 12l6 6" />
+                                        <path d="M5 12l6 -6" />
+                                    </svg>
+                                    Back
+                                </a>
                             </div>
                             <div class="card-body">
                                 <form action="/admin/dosen/update/{{$dosen->id}}" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
-                                        <div>
-                                            <label class="form-label">Nama Dosen</label>
-                                            <input type="text" placeholder="Masukkan Nama Dosen" class="form-control" name="nama" value="{{$dosen->nama}}"/>
-                                            @error('nama')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">NIP</label>
-                                            <input type="text" placeholder="Masukkan NIP" class="form-control" name="nip" value="{{$dosen->nip}}"/>
-                                            @error('nip')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">NIDN</label>
-                                            <input type="text" placeholder="Masukkan NIDN" class="form-control" name="nidn" value="{{$dosen->nidn}}"/>
-                                            @error('nidm')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="mb-3">
-                                          <div class="form-label">Jenis Kelamin</div>
-                                          <div>
-                                            <label class="form-check form-check-inline">
-                                              <input class="form-check-input" type="radio" name="gender" value="Laki-Laki" {{ $dosen->gender == 'Laki-Laki' ? 'checked' : '' }}>
-                                              <span class="form-check-label">Laki-Laki</span>
-                                            </label>
-                                            <label class="form-check form-check-inline">
-                                              <input class="form-check-input" type="radio" name="gender" value="Perempuan" {{ $dosen->gender == 'Perempuan' ? 'checked' : '' }}>
-                                              <span class="form-check-label">Perempuan</span>
-                                            </label>
-                                          </div>
-                                          @error('gender')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                          @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Pangkat / Golongan</label>
-                                            <input type="text" placeholder="Masukkan Pangkat / Golongan" class="form-control" name="pangol" value="{{$dosen->pangol}}"/>
-                                            @error('pangol')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Naik Pangkat Terakhir</label>
-                                            <div class="input-icon">
-                                                <span class="input-icon-addon">
-                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
-                                                    <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
-                                                    <path d="M16 3v4"></path>
-                                                    <path d="M8 3v4"></path>
-                                                    <path d="M4 11h16"></path>
-                                                    <path d="M11 15h1"></path>
-                                                    <path d="M12 15v3"></path></svg></span>
-                                                <input class="form-control" placeholder="Masukkan Naik Pangkat Terakhir" id="datepicker-icon-prepend" name="napater" value="{{$dosen->napater}}">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label class="form-label">Nama Dosen</label>
+                                                <input type="text" placeholder="Masukkan Nama Dosen" class="form-control" name="nama" value="{{$dosen->nama}}"/>
+                                                @error('nama')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
                                             </div>
-                                            @error('napater')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Naik Pangkat Berikutnya</label>
-                                            <input type="text" placeholder="Masukkan Naik Pangkat Berikutnya" class="form-control" name="napaber" value="{{$dosen->napaber}}"/>
-                                            @error('napaber')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">JF</label>
-                                            <input type="text" placeholder="Masukkan JF" class="form-control" name="jf" value="{{$dosen->jf}}"/>
-                                            @error('jf')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">JS</label>
-                                            <input type="text" placeholder="Masukkan JS" class="form-control" name="js" value="{{$dosen->js}}"/>
-                                            @error('js')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Naik Jabatan Terakhir</label>
-                                            <div class="input-icon">
-                                                <span class="input-icon-addon">
-                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
-                                                    <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
-                                                    <path d="M16 3v4"></path>
-                                                    <path d="M8 3v4"></path>
-                                                    <path d="M4 11h16"></path>
-                                                    <path d="M11 15h1"></path>
-                                                    <path d="M12 15v3"></path></svg></span>
-                                                <input class="form-control" placeholder="Masukkan Naik Jabatan Terakhir" id="datepicker-icon-prepend_2" name="najater" value="{{$dosen->najater}}">
+                                            <div class="col-md-3">
+                                                <label class="form-label">NIP</label>
+                                                <input type="text" placeholder="Masukkan NIP" class="form-control" name="nip" value="{{$dosen->nip}}"/>
+                                                @error('nip')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
                                             </div>
-                                            @error('najater')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                            <div class="col-md-3">
+                                                <label class="form-label">NIDN</label>
+                                                <input type="text" placeholder="Masukkan NIDN" class="form-control" name="nidn" value="{{$dosen->nidn}}"/>
+                                                @error('nidm')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                              <div class="form-label">Jenis Kelamin</div>
+                                              <div>
+                                                <label class="form-check form-check-inline">
+                                                  <input class="form-check-input" type="radio" name="gender" value="Laki-Laki" {{ $dosen->gender == 'Laki-Laki' ? 'checked' : '' }}>
+                                                  <span class="form-check-label">Laki-Laki</span>
+                                                </label>
+                                                <label class="form-check form-check-inline">
+                                                  <input class="form-check-input" type="radio" name="gender" value="Perempuan" {{ $dosen->gender == 'Perempuan' ? 'checked' : '' }}>
+                                                  <span class="form-check-label">Perempuan</span>
+                                                </label>
+                                              </div>
+                                              @error('gender')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                              @enderror
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label class="form-label">Pendidikan Terakhir</label>
-                                            <input type="text" placeholder="Masukkan Pendidikan Terakhir" class="form-control" name="penter" value="{{$dosen->penter}}"/>
-                                            @error('penter')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Pangkat / Golongan</label>
+                                                <input type="text" placeholder="Masukkan Pangkat / Golongan" class="form-control" name="pangol" value="{{$dosen->pangol}}"/>
+                                                @error('pangol')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Naik Pangkat Terakhir</label>
+                                                <div class="input-icon">
+                                                    <span class="input-icon-addon">
+                                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                                                        <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
+                                                        <path d="M16 3v4"></path>
+                                                        <path d="M8 3v4"></path>
+                                                        <path d="M4 11h16"></path>
+                                                        <path d="M11 15h1"></path>
+                                                        <path d="M12 15v3"></path></svg></span>
+                                                    <input class="form-control" placeholder="Masukkan Naik Pangkat Terakhir" id="datepicker-icon-prepend" name="napater" value="{{$dosen->napater}}">
+                                                </div>
+                                                @error('napater')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Naik Pangkat Berikutnya</label>
+                                                <input type="text" placeholder="Masukkan Naik Pangkat Berikutnya" class="form-control" name="napaber" value="{{$dosen->napaber}}"/>
+                                                @error('napaber')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label class="form-label">Keterangan</label>
-                                            <input type="text" placeholder="Masukkan Keterangan" class="form-control" name="keterangan" value="{{$dosen->keterangan}}"/>
-                                            @error('keterangan')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label class="form-label">JF</label>
+                                                <input type="text" placeholder="Masukkan JF" class="form-control" name="jf" value="{{$dosen->jf}}"/>
+                                                @error('jf')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">JS</label>
+                                                <input type="text" placeholder="Masukkan JS" class="form-control" name="js" value="{{$dosen->js}}"/>
+                                                @error('js')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Naik Jabatan Terakhir</label>
+                                                <div class="input-icon">
+                                                    <span class="input-icon-addon">
+                                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                                                        <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
+                                                        <path d="M16 3v4"></path>
+                                                        <path d="M8 3v4"></path>
+                                                        <path d="M4 11h16"></path>
+                                                        <path d="M11 15h1"></path>
+                                                        <path d="M12 15v3"></path></svg></span>
+                                                    <input class="form-control" placeholder="Masukkan Naik Jabatan Terakhir" id="datepicker-icon-prepend_2" name="najater" value="{{$dosen->najater}}">
+                                                </div>
+                                                @error('najater')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Pendidikan Terakhir</label>
+                                                <input type="text" placeholder="Masukkan Pendidikan Terakhir" class="form-control" name="penter" value="{{$dosen->penter}}"/>
+                                                @error('penter')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 text-start">
+                                            <label for="keterangan" class="form-label text-light">Keterangan</label>
+                                            <textarea name="keterangan" id="keterangan" rows="3" 
+                                                class="form-control" placeholder="Masukkan keterangan"></textarea>
+                                                @error('keterangan')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
                                         </div>
                                         <div class="mb-3">
                                           <div class="form-label">Foto</div>

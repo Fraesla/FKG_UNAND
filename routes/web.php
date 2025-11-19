@@ -370,7 +370,6 @@ Route::prefix('admin/jadmakul')
     ->group(function () {
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
-        Route::get('/nilai/{id}', 'nilai')->name('nilai');
         Route::get('/absen/{id}', 'absen')->name('absen');
         Route::get('/nilai/{id}', 'nilai')->name('nilai');
         Route::get('/materi/{id}', 'materi')->name('materi');
@@ -390,7 +389,6 @@ Route::prefix('admin/jadmetopen')
         Route::get('/', 'read')->name('read');
         Route::get('/add', 'add')->name('add');
         Route::get('/feature', 'feature')->name('feature');
-        Route::get('/nilai/{id}', 'nilai')->name('nilai');
         Route::get('/absen/{id}', 'absen')->name('absen');
         Route::get('/nilai/{id}', 'nilai')->name('nilai');
         Route::get('/materi/{id}', 'materi')->name('materi');

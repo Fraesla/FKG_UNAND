@@ -65,7 +65,7 @@
                                         <div>
                                             <label class="form-label">Nama Mahasiswa</label>
                                              <select class="form-select" name="id_mahasiswa">
-                                                <option>
+                                                <option value="">
                                                     Pilih Nama Mahasiswa
                                                 </option>
                                                 @foreach($mahasiswa as $data)
@@ -84,11 +84,15 @@
                                             <div class="mb-3">
                                                 <label for="status" class="form-label">Status Kehadiran</label>
                                                 <select name="status" id="status" class="form-select">
+                                                    <option value="">Pilih Status Kehadiran</option>
                                                     <option value="hadir">Hadir</option>
                                                     <option value="izin">Izin</option>
                                                     <option value="sakit">Sakit</option>
                                                     <option value="alfa">Alfa</option>
                                                 </select>
+                                                @error('status')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
                                             </div>
 
                                             <div class="mb-3">

@@ -39,72 +39,88 @@
                 <div class="row row-cards">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header d-flex justify-content-between align-items-center">
                                 <h3 class="card-title">
                                     Pengeditan Data Mahasiswa
                                 </h3>
+                                <a href="/admin/mahasiswa/" class="btn btn-secondary btn-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
+                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                         class="icon icon-tabler icon-tabler-arrow-left">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M5 12l14 0" />
+                                        <path d="M5 12l6 6" />
+                                        <path d="M5 12l6 -6" />
+                                    </svg>
+                                    Back
+                                </a>
                             </div>
                             <div class="card-body">
                                 <form action="/admin/mahasiswa/update/{{$mahasiswa->id}}" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
-                                        <div>
-                                            <label class="form-label">NO.BP</label>
-                                            <input type="text" placeholder="Masukkan NO.BP" class="form-control" name="nobp" value="{{$mahasiswa->nobp}}" />
-                                            @error('nobp')
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label">NO.BP</label>
+                                                <input type="text" placeholder="Masukkan NO.BP" class="form-control" name="nobp" value="{{$mahasiswa->nobp}}" />
+                                                @error('nobp')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Nama Lengkap Mahasiswa</label>
+                                                <input type="text" placeholder="Masukkan Nama Lengkap Mahasiswa" class="form-control" name="nama" value="{{$mahasiswa->nama}}" />
+                                                @error('nama')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                              <div class="form-label">Jenis Kelamin</div>
+                                              <div>
+                                                <label class="form-check form-check-inline">
+                                                  <input class="form-check-input" type="radio" name="gender" value="Laki-Laki" {{ $mahasiswa->gender == 'Laki-Laki' ? 'checked' : '' }}>
+                                                  <span class="form-check-label">Laki-Laki</span>
+                                                </label>
+                                                <label class="form-check form-check-inline">
+                                                  <input class="form-check-input" type="radio" name="gender" value="Perempuan" {{ $mahasiswa->gender == 'Perempuan' ? 'checked' : '' }}>
+                                                  <span class="form-check-label">Perempuan</span>
+                                                </label>
+                                              </div>
+                                              @error('gender')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                              @enderror
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label class="form-label">Nama Lengakap Mahasiswa</label>
-                                            <input type="text" placeholder="Masukkan Nama Lengkap Mahasiswa" class="form-control" name="nama" value="{{$mahasiswa->nama}}" />
-                                            @error('nama')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="mb-3">
-                                          <div class="form-label">Jenis Kelamin</div>
-                                          <div>
-                                            <label class="form-check form-check-inline">
-                                              <input class="form-check-input" type="radio" name="gender" value="Laki-Laki" {{ $mahasiswa->gender == 'Laki-Laki' ? 'checked' : '' }}>
-                                              <span class="form-check-label">Laki-Laki</span>
-                                            </label>
-                                            <label class="form-check form-check-inline">
-                                              <input class="form-check-input" type="radio" name="gender" value="Perempuan" {{ $mahasiswa->gender == 'Perempuan' ? 'checked' : '' }}>
-                                              <span class="form-check-label">Perempuan</span>
-                                            </label>
-                                          </div>
-                                          @error('gender')
-                                            <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                          @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Level UKT</label>
-                                            <input type="text" placeholder="Masukkan Level UKT" class="form-control" name="ukt" value="{{$mahasiswa->ukt}}" />
-                                            @error('ukt')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Tahun Ajaran</label>
-                                            <select class="form-select" name="id_tahun_ajaran">
-                                                <option>
-                                                    Pilih Tahun Ajaran
-                                                </option>
-                                                @foreach($tahun as $data)
-                                                <option value="{{$data->id}}" {{ $mahasiswa->id_tahun_ajaran == $data->id ? 'selected' : '' }}>
-                                                    Tahun Ajaran : {{$data->nama}} | Semester : {{$data->semester}} | Status : 
-                                                    <?php if ($data->status=="1"): ?>
-                                                        Aktif
-                                                    <?php else: ?>
-                                                        Noaktif
-                                                    <?php endif ?>
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                            @error('id_tahun_ajaran')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="row">
+                                            <div class="col-md-6 ">
+                                                <label class="form-label">Level UKT</label>
+                                                <input type="text" placeholder="Masukkan Level UKT" class="form-control" name="ukt" value="{{$mahasiswa->ukt}}" />
+                                                @error('ukt')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-6 ">
+                                                <label class="form-label">Tahun Ajaran</label>
+                                                <select class="form-select" name="id_tahun_ajaran">
+                                                    <option>
+                                                        Pilih Tahun Ajaran
+                                                    </option>
+                                                    @foreach($tahun as $data)
+                                                    <option value="{{$data->id}}" {{ $mahasiswa->id_tahun_ajaran == $data->id ? 'selected' : '' }}>
+                                                        Tahun Ajaran : {{$data->nama}} | Semester : {{$data->semester}} | Status : 
+                                                        <?php if ($data->status=="1"): ?>
+                                                            Aktif
+                                                        <?php else: ?>
+                                                            Noaktif
+                                                        <?php endif ?>
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('id_tahun_ajaran')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
                                         <div class="mb-3">
                                           <div class="form-label">Foto</div>

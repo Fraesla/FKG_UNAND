@@ -60,68 +60,72 @@
                                 <form action="/admin/seminarhasil/create" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
-                                        <div>
-                                            <label class="form-label">Mahasiswa</label>
-                                            <select class="form-select" name="id_mahasiswa">
-                                                <option>Pilih Data Mahasiswa</option>
-                                                @foreach($mahasiswa as $data)
-                                                    <option value="{{$data->id}}">
-                                                        No.BP: {{$data->nobp}} | Nama Mahasiswa: {{$data->nama}} 
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('id_mahasiswa')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Mahasiswa</label>
+                                                <select class="form-select" name="id_mahasiswa">
+                                                    <option>Pilih Data Mahasiswa</option>
+                                                    @foreach($mahasiswa as $data)
+                                                        <option value="{{$data->id}}">
+                                                            No.BP: {{$data->nobp}} | Nama Mahasiswa: {{$data->nama}} 
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('id_mahasiswa')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Dosen Pembimbing 1</label>
+                                                <select class="form-select" name="dosen_pembimbing_1">
+                                                    <option>Pilih Data Dosen</option>
+                                                    @foreach($dosen as $data)
+                                                        <option value="{{$data->nama}}">
+                                                            NIP: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('dosen_pembimbing_1')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Dosen Pembimbing 2</label>
+                                                <select class="form-select" name="dosen_pembimbing_2">
+                                                    <option>Pilih Data Dosen</option>
+                                                    @foreach($dosen as $data)
+                                                        <option value="{{$data->nama}}">
+                                                            NIP: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('dosen_pembimbing_2')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label class="form-label">Dosen Pembimbing 1</label>
-                                            <select class="form-select" name="dosen_pembimbing_1">
-                                                <option>Pilih Data Dosen</option>
-                                                @foreach($dosen as $data)
-                                                    <option value="{{$data->nama}}">
-                                                        NIP: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('dosen_pembimbing_1')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Dosen Pembimbing 2</label>
-                                            <select class="form-select" name="dosen_pembimbing_2">
-                                                <option>Pilih Data Dosen</option>
-                                                @foreach($dosen as $data)
-                                                    <option value="{{$data->nama}}">
-                                                        NIP: {{$data->nip}} | Nama Dosen : {{$data->nama}} 
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('dosen_pembimbing_2')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                         <div>
-                                            <label class="form-label">Penguji 1</label>
-                                            <input type="text" placeholder="Masukkan Penguji 1" class="form-control" name="penguji_1" />
-                                            @error('penguji_1')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Penguji 2</label>
-                                            <input type="text" placeholder="Masukkan Penguji 2" class="form-control" name="penguji_2" />
-                                            @error('penguji_2')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Penguji 3</label>
-                                            <input type="text" placeholder="Masukkan Penguji 3" class="form-control" name="penguji_3" />
-                                            @error('penguji_3')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Penguji 1</label>
+                                                <input type="text" placeholder="Masukkan Penguji 1" class="form-control" name="penguji_1" />
+                                                @error('penguji_1')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Penguji 2</label>
+                                                <input type="text" placeholder="Masukkan Penguji 2" class="form-control" name="penguji_2" />
+                                                @error('penguji_2')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Penguji 3</label>
+                                                <input type="text" placeholder="Masukkan Penguji 3" class="form-control" name="penguji_3" />
+                                                @error('penguji_3')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
                                         <!-- <div>
                                             <label class="form-label">Surat Seminar Hasil</label>

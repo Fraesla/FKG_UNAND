@@ -247,14 +247,12 @@ class AbsMahasiswaController extends Controller
             $keterangan = 'Alfa';
         }
 
-        // $request->validate([
-        //     'tgl' => 'required|string|max:100',
-        //     'jam_masuk' => 'required|string|max:100',
-        //     'jam_selesai' => 'required|string|max:100',
-        //     'id_mahasiswa' => 'required|string|max:100',
-        //     'id_jadwal_mahasiswa' => 'required|string|max:100',
-        //     'status' => 'required|string|max:100',
-        // ]);
+        $request->validate([
+            'status' => 'required|exists:status',
+        ],[
+            'status.required' => 'Status yang dipilih tidak valid..',
+            'status.exists' => 'Status yang dipilih tidak valid..',
+        ]);
         DB::table('absen_mahasiswa')  
             ->where('id', $id)
             ->update([

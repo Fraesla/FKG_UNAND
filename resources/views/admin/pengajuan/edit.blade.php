@@ -60,50 +60,52 @@
                                 <form action="/admin/pengajuan/update/{{$pengajuan->id}}" method="POST" enctype="multipart/form-data">
                                 {{ csrf_field() }}
                                     <div class="space-y">
-                                        <div>
-                                            <label class="form-label">Mahasiswa</label>
-                                             <select class="form-select" name="id_mahasiswa">
-                                                <option>Pilih Data Mahasiswa</option>
-                                                @foreach($mahasiswa as $data)
-                                                    <option value="{{$data->id}}"
-                                                        {{ $pengajuan->id_mahasiswa == $data->id ? 'selected' : '' }}>
-                                                        No.BP : {{$data->nobp}} | Nama Mahasiswa : {{$data->nama}}  
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('id_mahasiswa')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                       <div>
-                                            <label class="form-label">Dosen Pembimbing 1</label>
-                                             <select class="form-select" name="dosen_pembimbing_1">
-                                                <option>Pilih Data Dosen</option>
-                                                @foreach($dosen as $data)
-                                                    <option value="{{$data->nama}}"
-                                                        {{ $pengajuan->dosen_pembimbing_1 == $data->nama ? 'selected' : '' }}>
-                                                        NIDM : {{$data->nip}} | Nama Dosen : {{$data->nama}}  
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('dosen_pembimbing_1')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Dosen Pembimbing 2</label>
-                                             <select class="form-select" name="dosen_pembimbing_2">
-                                                <option>Pilih Data Dosen</option>
-                                                @foreach($dosen as $data)
-                                                    <option value="{{$data->nama}}"
-                                                        {{ $pengajuan->dosen_pembimbing_2 == $data->nama ? 'selected' : '' }}>
-                                                        NIDM : {{$data->nip}} | Nama Dosen : {{$data->nama}}  
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                             @error('dosen_pembimbing_2')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Mahasiswa</label>
+                                                 <select class="form-select" name="id_mahasiswa">
+                                                    <option>Pilih Data Mahasiswa</option>
+                                                    @foreach($mahasiswa as $data)
+                                                        <option value="{{$data->id}}"
+                                                            {{ $pengajuan->id_mahasiswa == $data->id ? 'selected' : '' }}>
+                                                            No.BP : {{$data->nobp}} | Nama Mahasiswa : {{$data->nama}}  
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('id_mahasiswa')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                           <div class="col-md-4">
+                                                <label class="form-label">Dosen Pembimbing 1</label>
+                                                 <select class="form-select" name="dosen_pembimbing_1">
+                                                    <option>Pilih Data Dosen</option>
+                                                    @foreach($dosen as $data)
+                                                        <option value="{{$data->nama}}"
+                                                            {{ $pengajuan->dosen_pembimbing_1 == $data->nama ? 'selected' : '' }}>
+                                                            NIDM : {{$data->nip}} | Nama Dosen : {{$data->nama}}  
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('dosen_pembimbing_1')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Dosen Pembimbing 2</label>
+                                                 <select class="form-select" name="dosen_pembimbing_2">
+                                                    <option>Pilih Data Dosen</option>
+                                                    @foreach($dosen as $data)
+                                                        <option value="{{$data->nama}}"
+                                                            {{ $pengajuan->dosen_pembimbing_2 == $data->nama ? 'selected' : '' }}>
+                                                            NIDM : {{$data->nip}} | Nama Dosen : {{$data->nama}}  
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                 @error('dosen_pembimbing_2')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
                                         <div>
                                             <label class="form-label">Judul</label>
@@ -112,31 +114,33 @@
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>
-                                        <div class="mb-3">
-                                            <label>Surat Pengajuan</label>
-                                            <input type="file" name="surat_pengajuan" class="form-control">
-                                            @if($pengajuan->surat_pengajuan)
-                                                <small class="text-muted">
-                                                    File saat ini: 
-                                                    <a href="{{ asset('storage/'.$pengajuan->surat_pengajuan) }}" target="_blank">Lihat</a>
-                                                </small>
-                                            @endif
-                                            @error('surat_pengajuan`')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="mb-3">
-                                            <label>KRS</label>
-                                            <input type="file" name="krs" class="form-control">
-                                            @if($pengajuan->krs)
-                                                <small class="text-muted">
-                                                    File saat ini: 
-                                                    <a href="{{ asset('storage/'.$pengajuan->krs) }}" target="_blank">Lihat</a>
-                                                </small>
-                                            @endif
-                                             @error('krs`')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label>Surat Pengajuan</label>
+                                                <input type="file" name="surat_pengajuan" class="form-control">
+                                                @if($pengajuan->surat_pengajuan)
+                                                    <small class="text-muted">
+                                                        File saat ini: 
+                                                        <a href="{{ asset('storage/'.$pengajuan->surat_pengajuan) }}" target="_blank">Lihat</a>
+                                                    </small>
+                                                @endif
+                                                @error('surat_pengajuan`')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label>KRS</label>
+                                                <input type="file" name="krs" class="form-control">
+                                                @if($pengajuan->krs)
+                                                    <small class="text-muted">
+                                                        File saat ini: 
+                                                        <a href="{{ asset('storage/'.$pengajuan->krs) }}" target="_blank">Lihat</a>
+                                                    </small>
+                                                @endif
+                                                 @error('krs`')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

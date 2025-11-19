@@ -74,26 +74,28 @@
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>
-                                        <div>
-                                            <label class="form-label">Jumlah Point A</label>
-                                            <input type="text" placeholder="Masukkan Jumlah Point A" class="form-control" name="jml_point_a" />
-                                            @error('jml_point_a')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Jumlah Point B</label>
-                                            <input type="text" placeholder="Masukkan Jumlah Point B" class="form-control" name="jml_point_b" />
-                                            @error('jml_point_b')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Jumlah Point C</label>
-                                            <input type="text" placeholder="Masukkan Jumlah Point C" class="form-control" name="jml_point_c" />
-                                            @error('jml_point_c')
-                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                            @enderror
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Jumlah Point A</label>
+                                                <input type="text" placeholder="Masukkan Jumlah Point A" class="form-control" name="jml_point_a" />
+                                                @error('jml_point_a')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Jumlah Point B</label>
+                                                <input type="text" placeholder="Masukkan Jumlah Point B" class="form-control" name="jml_point_b" />
+                                                @error('jml_point_b')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Jumlah Point C</label>
+                                                <input type="text" placeholder="Masukkan Jumlah Point C" class="form-control" name="jml_point_c" />
+                                                @error('jml_point_c')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">

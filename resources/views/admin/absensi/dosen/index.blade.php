@@ -84,6 +84,7 @@
                                 </th>
                                 <th>Tanggal</th>
                                 <th class="text-center">Jam Absen</th>
+                                <th>NIP</th>
                                 <th>Nama Dosen</th>
                                 <th>Mata Kuliah</th>
                                 <th>Ruangan</th>
@@ -102,6 +103,7 @@
                                 <td><span class="text-secondary"> {{$no++}}</span></td>
                                 <td>{{ $data->tgl }}</td>
                                 <td class="text-center">{{ $data->jam_masuk }} - {{ $data->jam_pulang }}</td>
+                                <td>{{ $data->nip_dosen }}</td>
                                 <td>{{ $data->nama_dosen }}</td>
                                 <td>{{ $data->makul }}</td>
                                 <td>{{ $data->ruangan }}</td>
@@ -173,7 +175,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="8" class="text-center">Data tidak ditemukan</td>
+                                <td colspan="9" class="text-center">Data tidak ditemukan</td>
                             </tr>
                             @endforelse
                         </tbody>
