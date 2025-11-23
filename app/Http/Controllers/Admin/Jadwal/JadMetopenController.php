@@ -116,7 +116,7 @@ class JadMetopenController extends Controller
             'id_makul' => [
                 'required',
                 'exists:makul,id',
-                Rule::unique('jadwal_metopen', 'id_makul'),
+                // Rule::unique('jadwal_metopen', 'id_makul'),
             ],
             'id_dosen' => 'required|exists:dosen,id',
             'id_ruangan' => 'required|exists:ruangan,id',
@@ -131,12 +131,12 @@ class JadMetopenController extends Controller
             'jam_selesai.date_format' => 'Format Jam Selesai tidak valid (gunakan format HH:MM).',
             'jam_selesai.after' => 'Jam Selesai harus setelah Jam Mulai.',
             'id_makul.exists' => 'Mata Kuliah yang dipilih tidak valid..',
-            'id_makul.unique' => 'Mata Kuliah ini sudah terdaftar di jadwal Metopen.',
+            // 'id_makul.unique' => 'Mata Kuliah ini sudah terdaftar di jadwal Metopen.',
             'id_dosen.exists' => 'Dosen yang dipilih tidak valid..',
             'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
         ]);
 
-        DB::table('jadwal_metopen')->insert([  
+        $id_jadwal = DB::table('jadwal_metopen')->insertGetId([  
             'minggu' => $request->minggu,
             'tgl' => $request->tgl,
             'hari' => $request->hari,
@@ -145,6 +145,18 @@ class JadMetopenController extends Controller
             'id_makul' => $request->id_makul,
             'id_dosen' => $request->id_dosen,
             'id_ruangan' => $request->id_ruangan
+        ]);
+
+        // Simpan data absen baru
+        DB::table('absen_dosen')->insert([
+            'tgl'         => $request->tgl,
+            'jam_masuk'   => $request->jam_mulai,
+            'jam_pulang'  => $request->jam_selesai,
+            'id_dosen'    => $request->id_dosen,
+            'id_jadwal_dosen' => 'M'.$id_jadwal,
+            'status'      => 'belum absen',
+            'keterangan'  => '',
+            'qr'          => '',
         ]);
 
         return redirect('/admin/jadmetopen')->with("success","Data Berhasil Ditambah !");

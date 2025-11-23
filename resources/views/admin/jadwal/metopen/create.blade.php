@@ -117,7 +117,7 @@
                                                     <option value="Selasa" {{ old('hari') == 'Selasa' ? 'selected' : '' }}>Selasa</option>
                                                     <option value="Rabu" {{ old('hari') == 'Rabu' ? 'selected' : '' }}>Rabu</option>
                                                     <option value="Kamis" {{ old('hari') == 'Kamis' ? 'selected' : '' }}>Kamis</option>
-                                                    <option value="Jum\'at" {{ old('hari') == "Jum'at" ? 'selected' : '' }}>Jum'at</option>
+                                                    <option value="Jum'at" {{ old('hari') == "Jum'at" ? 'selected' : '' }}>Jum'at</option>
                                                 </select>
                                                 @error('hari')
                                                     <div class="text-danger small mt-1">⚠️ {{ $message }}</div>

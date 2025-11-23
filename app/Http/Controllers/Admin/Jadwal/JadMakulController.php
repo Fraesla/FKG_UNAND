@@ -120,7 +120,7 @@ class JadMakulController extends Controller
             'id_makul' => [
                 'required',
                 'exists:makul,id',
-                Rule::unique('jadwal_makul', 'id_makul'),
+                // Rule::unique('jadwal_makul', 'id_makul'),
             ],
             'id_dosen' => 'required|exists:dosen,id',
             'id_ruangan' => 'required|exists:ruangan,id',
@@ -136,25 +136,38 @@ class JadMakulController extends Controller
             'jam_selesai.date_format' => 'Format Jam Selesai tidak valid (gunakan format HH:MM).',
             'jam_selesai.after' => 'Jam Selesai harus setelah Jam Mulai.',
             'id_makul.exists' => 'Mata Kuliah yang dipilih tidak valid..',
-            'id_makul.unique' => 'Mata Kuliah ini sudah terdaftar di jadwal Blok.',
+            // 'id_makul.unique' => 'Mata Kuliah ini sudah terdaftar di jadwal Blok.',
             'id_dosen.exists' => 'Dosen yang dipilih tidak valid..',
             'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
         ]);
 
-        DB::table('jadwal_makul')->insert([  
-            'id_kelas' => $request->id_kelas,
-            'minggu' => $request->minggu,
-            'tgl' => $request->tgl,
-            'hari' => $request->hari,
-            'jam_mulai' => $request->jam_mulai,
+        // Simpan jadwal & ambil ID-nya
+        $id_jadwal = DB::table('jadwal_makul')->insertGetId([
+            'id_kelas'    => $request->id_kelas,
+            'minggu'      => $request->minggu,
+            'tgl'         => $request->tgl,
+            'hari'        => $request->hari,
+            'jam_mulai'   => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
-            'id_makul' => $request->id_makul,
-            'id_dosen' => $request->id_dosen,
-            'id_ruangan' => $request->id_ruangan
+            'id_makul'    => $request->id_makul,
+            'id_dosen'    => $request->id_dosen,
+            'id_ruangan'  => $request->id_ruangan
+        ]);
+
+        // Simpan data absen_dosen
+        DB::table('absen_dosen')->insert([
+            'tgl'             => $request->tgl,
+            'jam_masuk'       => $request->jam_mulai,
+            'jam_pulang'      => $request->jam_selesai,
+            'id_dosen'        => $request->id_dosen,
+            'id_jadwal_dosen' => 'B' . $id_jadwal,   // ← otomatis memakai ID dari jadwal_makul
+            'status'          => 'belum absen',
+            'keterangan'      => '',
+            'qr'              => '',
         ]);
 
         return redirect('/admin/jadmakul')->with("success","Data Berhasil Ditambah !");
-    }  
+    }
 
     public function absen($id)
     {

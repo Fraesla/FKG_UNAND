@@ -78,7 +78,7 @@
                                             <div class="col-md-3">
                                                 <label class="form-label">NIDN</label>
                                                 <input type="text" placeholder="Masukkan NIDN" class="form-control" name="nidn" value="{{$dosen->nidn}}"/>
-                                                @error('nidm')
+                                                @error('nidn')
                                                     <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                                 @enderror
                                             </div>

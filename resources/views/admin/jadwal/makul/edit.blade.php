@@ -111,7 +111,7 @@
                                                     <option value="Selasa" {{ $jadmakul->hari == 'Selasa' ? 'selected' : '' }}>Selasa</option>
                                                     <option value="Rabu"   {{ $jadmakul->hari == 'Rabu' ? 'selected' : '' }}>Rabu</option>
                                                     <option value="Kamis"  {{ $jadmakul->hari == 'Kamis' ? 'selected' : '' }}>Kamis</option>
-                                                    <option value="Jum\'at" {{ $jadmakul->hari == "Jum'at" ? 'selected' : '' }}>Jum'at</option>
+                                                    <option value="Jum'at" {{ $jadmakul->hari == "Jum'at" ? 'selected' : '' }}>Jum'at</option>
                                                 </select>
                                                  @error('hari')
                                                     <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
