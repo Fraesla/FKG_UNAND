@@ -15,12 +15,28 @@ class MahasiswaImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        return new Mahasiswa([
-            'nobp' => $row['nobp'], // pastikan kolom file Excel = "nobp"
-            'nama' => $row['nama'], // pastikan kolom file Excel = "nama"
-            'gender' => $row['gender'], // pastikan kolom file Excel = "gender"
-            'ukt' => $row['ukt'], // pastikan kolom file Excel = "ukt"
-            'id_tahun_ajaran' => $row['id_tahun_ajaran'], // pastikan kolom file Excel = "id_tahun_ajaran"
+        // 1. Insert data dosen
+        $dosen = Dosen::create([
+            'nobp' => $row['nobp'],
+            'nama' => $row['nama'],
+            'gender' => $row['gender'],
+            'ukt' => $row['ukt'],
+            'id_tahun_ajaran' => $row['id_tahun_ajaran'],
         ]);
+
+        // 2. Cek apakah user sudah ada
+        $cek = DB::table('user')->where('username', $row['nobp'])->first();
+
+        if (!$cek) {
+            // 3. Buat akun user otomatis
+            DB::table('user')->insert([
+                'username' => $row['nobp'],      // Gunakan No.BP dari Excel
+                'password' => bcrypt('Unand2025'),
+                'level'    => 'dosen',
+                'status'   => '0',
+            ]);
+        }
+
+        return $dosen;
     }
 }

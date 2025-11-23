@@ -15,19 +15,35 @@ class DosenImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        return new Dosen([
-            'nama' => $row['nama'], // pastikan kolom file Excel = "nama"
-            'nip' => $row['nip'], // pastikan kolom file Excel = "nip"
-            'nidn' => $row['nidn'], // pastikan kolom file Excel = "nidn"
-            'gender' => $row['gender'], // pastikan kolom file Excel = "gender"
-            'pangol' => $row['pangol'], // pastikan kolom file Excel = "pangol"
-            'napater' => $row['napater'], // pastikan kolom file Excel = "napater"
-            'napaber' => $row['napaber'], // pastikan kolom file Excel = "napaber"
-            'jf' => $row['jf'], // pastikan kolom file Excel = "jf"
-            'js' => $row['js'], // pastikan kolom file Excel = "js"
-            'najater' => $row['najater'], // pastikan kolom file Excel = "najater"
-            'penter' => $row['penter'], // pastikan kolom file Excel = "penter"
-            'keterangan' => $row['keterangan'], // pastikan kolom file Excel = "keterangan"
+       // 1. Insert data dosen
+        $dosen = Dosen::create([
+            'nama' => $row['nama'],
+            'nip' => $row['nip'],
+            'nidn' => $row['nidn'],
+            'gender' => $row['gender'],
+            'pangol' => $row['pangol'],
+            'napater' => $row['napater'],
+            'napaber' => $row['napaber'],
+            'jf' => $row['jf'],
+            'js' => $row['js'],
+            'najater' => $row['najater'],
+            'penter' => $row['penter'],
+            'keterangan' => $row['keterangan'],
         ]);
+
+        // 2. Cek apakah user sudah ada
+        $cek = DB::table('user')->where('username', $row['nip'])->first();
+
+        if (!$cek) {
+            // 3. Buat akun user otomatis
+            DB::table('user')->insert([
+                'username' => $row['nip'],      // Gunakan NIP dari Excel
+                'password' => bcrypt('Unand2025'),
+                'level'    => 'dosen',
+                'status'   => '0',
+            ]);
+        }
+
+        return $dosen;
     }
 }

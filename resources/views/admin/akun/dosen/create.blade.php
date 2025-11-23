@@ -78,7 +78,7 @@
                                             <div class="col-md-3">
                                                 <label class="form-label">NIDN</label>
                                                 <input type="text" placeholder="Masukkan NIDN" class="form-control" name="nidn" />
-                                                @error('nidm')
+                                                @error('nidn')
                                                     <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                                 @enderror
                                             </div>
@@ -142,7 +142,7 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <label class="form-label">JS</label>
-                                                <input type="text" placeholder="Masukkan JS" class="form-control" name="JS" />
+                                                <input type="text" placeholder="Masukkan JS" class="form-control" name="js" />
                                                 @error('js')
                                                     <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                                 @enderror
@@ -180,7 +180,6 @@
                                                     <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                                 @enderror
                                         </div>
-
                                         <div class="mb-3">
                                           <div class="form-label">Foto</div>
                                           <input type="file" class="form-control" accept="image/*" name="foto">
