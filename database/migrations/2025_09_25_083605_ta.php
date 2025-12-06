@@ -16,7 +16,8 @@ return new class extends Migration
         $table->string('id_mahasiswa');
         $table->string('dosen_bimbingan');
         $table->string('tgl_bimbingan');
-        $table->text('catatan');
+        $table->text('catatan')->nullable();
+        $table->text('id_prodi');
         $table->timestamps();
     });
     }

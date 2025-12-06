@@ -1,87 +1,8 @@
 @extends('admin.layouts.app', [
-'activePage' => 'master',
-'activeDrop' => 'tahun',
+'activePage' => 'dashboard',
+'activeDrop' => '',
 ])
 @section('content')
-<style>
-    .profile-card {
-        background: #111827;
-        border-radius: 14px;
-        padding: 10px 14px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-        transition: 0.2s ease;
-        border: 1px solid #1f2937;
-        position: relative;
-        z-index: 99999;
-    }
-
-    .profile-card:hover {
-        transform: translateY(-2px);
-    }
-
-    .profile-img {
-        width: 46px;
-        height: 46px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #4b5563;
-    }
-
-    .profile-name {
-        font-size: 15px;
-        font-weight: 600;
-        color: #fff;
-    }
-
-    .profile-sub {
-        font-size: 12px;
-        color: #9ca3af;
-    }
-
-    /* Dropdown custom */
-    .menu-dropdown {
-        position: absolute;
-        top: 60px;
-        right: 10px;
-        width: 180px;
-
-        background: #1f2937;
-        border: 1px solid #374151;
-        border-radius: 8px;
-        padding: 6px 0;
-
-        display: none; /* HIDDEN BY DEFAULT */
-        opacity: 0;
-        transform: translateY(-5px);
-        transition: 0.2s ease;
-        z-index: 999999;
-    }
-
-    .menu-dropdown.show {
-        display: block;
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    .dropdown-item-btn {
-        display: block;
-        width: 100%;
-        padding: 8px 14px;
-        color: #e5e7eb;
-        text-align: left;
-        font-size: 14px;
-        text-decoration: none;
-    }
-
-    .dropdown-item-btn:hover {
-        background: #374151;
-        color: white;
-    }
-
-</style>
  <div class="page-header d-print-none" aria-label="Page header">
     <div class="container-xl">
         <div class="row g-2 align-items-center">
@@ -89,35 +10,8 @@
             <!-- KOLOM KIRI (judul) -->
             <div class="col-md-8">
                 <div class="page-pretitle">Aplikasi FKG</div>
-                <h2 class="page-title">Data Tahun Ajaran</h2>
+                <h2 class="page-title">Data Users</h2>
             </div>
-
-            <!-- KOLOM KANAN (profile card) -->
-            <div class="col-md-4 d-flex justify-content-end">
-
-                <div class="profile-card">
-
-                    <img src="{{ asset('assets/images/default-fkg.jpg') }}" width="50" height="50" class="rounded-circle object-cover profile-img">
-
-                    <div>
-                        <div class="profile-name">Nama Admin : {{ $username }}</div>
-                        <div class="profile-sub">Username : {{ $username }}</div>
-                    </div>
-
-                    <!-- BUTTON -->
-                    <button id="toggleMenu" class="btn btn-sm" style="background:#1f2937;border:1px solid #374151;color:white;">
-                        ☰
-                    </button>
-
-                    <!-- CUSTOM MENU -->
-                    <div id="menuDropdown" class="menu-dropdown">
-                        <a href="/admin/user" class="dropdown-item-btn">Data Users</a>
-                        <a href="/admin/changepass" class="dropdown-item-btn">Ubah Password</a>
-                    </div>
-
-                </div>
-
-            </div> <!-- end col kanan -->
 
         </div> <!-- end row -->
          @include('components.alert')
@@ -129,24 +23,28 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">Tabel Tahun Ajaran</h3>
+                    <h3 class="card-title">Tabel Users</h3>
                     <!-- <div class="d-flex gap-2">
                         Tombol Import
-                            <a href="#" class="btn btn-primary btn-mm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
-                                    class="icon icon-tabler icon-tabler-upload me-1">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
-                                    <path d="M7 9l5 -5l5 5" />
-                                    <path d="M12 4l0 12" />
-                                </svg>
-                                Import
-                            </a>
+                            <form action="/admin/jurusan/import" method="POST" enctype="multipart/form-data" class="d-inline-block me-2">
+                                @csrf
+                                <label class="btn btn-primary btn-mm mb-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                        class="icon icon-tabler icon-tabler-upload">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                                        <path d="M7 9l5 -5l5 5" />
+                                        <path d="M12 4v12" />
+                                    </svg>
+                                    Import
+                                    <input type="file" name="file" class="d-none" onchange="this.form.submit()">
+                                </label>
+                            </form>
 
                             Tombol Export
-                            <a href="#" class="btn btn-info btn-mm">
+                            <a href="/admin/jurusan/export" class="btn btn-info btn-mm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -160,7 +58,7 @@
                             </a>
                     </div> -->
                 </div>
-                <form action="/admin/tahunajar/feature" method="GET">
+                <form action="/admin/user/feature" method="GET">
                     <div class="card-body border-bottom py-3">
                         <div class="d-flex align-items-center">
                             <!-- Show Entries -->
@@ -180,12 +78,12 @@
                             <div class="ms-auto text-secondary d-flex align-items-center">
                                 <span class="me-2">Search:</span>
                                 <input type="text" class="form-control form-control-mm" 
-                                       aria-label="Search data Tahun Ajaran" 
+                                       aria-label="Search data Users" 
                                        name="search" 
-                                       placeholder="Cari Data Tahun Ajaran ..." 
+                                       placeholder="Cari Data users ..." 
                                        value="{{ request('search') }}">
 
-                                <a href="/admin/tahunajar/add" class="btn btn-success btn-mm ms-2">
+                                <a href="/admin/user/add" class="btn btn-success btn-mm ms-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -216,30 +114,31 @@
                                         <path d="M6 15l6 -6l6 6"></path>
                                     </svg>
                                 </th>
-                                <th>Tahun Ajaran</th>
-                                <th>Level UKT</th>
-                                <th>Semester</th>
-                                <th>Status</th>
+                                <th>Username</th>
+                                <th>Status </th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php $no = 1; ?>
-                            @forelse($tahunajar as $data)
+                            @forelse($user as $data)
                             <tr>
                                <!--  <td>
                                     <input class="form-check-input m-0 align-middle table-selectable-check"
                                     type="checkbox" aria-label="Select invoice">
                                 </td> -->
                                 <td><span class="text-secondary"> {{$no++}}</span></td>
-                                <td class="text-secondary">{{$data->nama}}</td>
-                                <td class="text-secondary">{{$data->ukt}}</td>
-                                <td class="text-secondary">{{$data->semester}}</td>
-                                <td class="text-secondary">{{ $data->status == 1 ? 'Aktif' : 'Nonaktif' }}</td>
+                                <td class="text-secondary">{{$data->username}}</td>
+                                <td class="text-secondary">{{$data->level}}</td>
                                 <td class="w-0">
                                     <div class="d-flex gap-1">
+                                        <!-- Tombol Change Password -->
+                                        <a href="/admin/user/ubahpass/{{$data->id}}" class="btn btn-primary btn-sm p-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-samsungpass"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 10m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v7a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M7 10v-1.862c0 -2.838 2.239 -5.138 5 -5.138s5 2.3 5 5.138v1.862" /><path d="M10.485 17.577c.337 .29 .7 .423 1.515 .423h.413c.323 0 .633 -.133 .862 -.368a1.27 1.27 0 0 0 .356 -.886c0 -.332 -.128 -.65 -.356 -.886a1.203 1.203 0 0 0 -.862 -.368h-.826a1.2 1.2 0 0 1 -.861 -.367a1.27 1.27 0 0 1 -.356 -.886c0 -.332 .128 -.651 .356 -.886a1.2 1.2 0 0 1 .861 -.368h.413c.816 0 1.178 .133 1.515 .423" /></svg>
+                                        </a>
+
                                         <!-- Tombol Edit -->
-                                        <a href="/admin/tahunajar/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
+                                        <a href="/admin/user/edit/{{$data->id}}" class="btn btn-warning btn-sm p-1">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                                  viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -295,16 +194,16 @@
                         <div class="col-auto d-flex align-items-center">
                             <p class="m-0 text-secondary">
                                 Showing
-                                <strong>{{ $tahunajar->firstItem() }}</strong>
+                                <strong>{{ $user->firstItem() }}</strong>
                                 to
-                                <strong>{{ $tahunajar->lastItem() }}</strong>
+                                <strong>{{ $user->lastItem() }}</strong>
                                 of
-                                <strong>{{ $tahunajar->total() }}</strong>
+                                <strong>{{ $user->total() }}</strong>
                                 entries
                             </p>
                         </div>
                         <div class="col-auto">
-                            {{ $tahunajar->links('pagination::bootstrap-5') }}
+                            {{ $user->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
@@ -326,7 +225,7 @@ function deleteData(id) {
         cancelButtonText: 'Batal'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = "/admin/tahunajar/delete/" + id;
+            window.location.href = "/admin/user/delete/" + id;
         }
     })
 }

@@ -93,22 +93,29 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6 ">
-                                                <label class="form-label">Level UKT</label>
-                                                <input type="text" placeholder="Masukkan Level UKT" class="form-control" name="ukt" />
-                                                @error('ukt')
+                                            <div class="col-md-4 ">
+                                                <label class="form-label">Kontak</label>
+                                                <input type="text" placeholder="Masukkan Kontak" class="form-control" name="contact" />
+                                                @error('contact')
                                                     <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                                 @enderror
                                             </div>
-                                            <div class="col-md-6 ">
+                                            <div class="col-md-4 ">
+                                                <label class="form-label">Alamat</label>
+                                                <textarea class="form-control" data-bs-toggle="autosize"  placeholder="Masukkan Alamat..." style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 56px;" name="alamat"></textarea>
+                                                @error('alamat')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4 ">
                                                 <label class="form-label">Tahun Ajaran</label>
                                                  <select class="form-select" name="id_tahun_ajaran">
-                                                    <option>
-                                                        Pilih Tahun Ajaran
+                                                    <option value="">
+                                                        Pilih Tahun Ajaran / Tidak Registrasi Ulang Mahasiswa
                                                     </option>
                                                     @foreach($tahun as $data)
                                                     <option value="{{$data->id}}">
-                                                        Tahun Ajaran : {{$data->nama}} | Semester : {{$data->semester}} | Status : 
+                                                        Tahun Ajaran : {{$data->nama}}| Level UKT : {{$data->ukt}} | Semester : {{$data->semester}} | Status : 
                                                         <?php if ($data->status=="1"): ?>
                                                             Aktif
                                                         <?php else: ?>

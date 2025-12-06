@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
 'activePage' => 'gigi',
-'activeDrop' => 'pengajuan',
+'activeDrop' => 'pengajuan'.$pengajuan->id_prodi,
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -10,7 +10,7 @@
          <div class="col">
             <!-- Page pre-title -->
                <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Pengajuan & Penguji</h2>
+                  <h2 class="page-title">Data Pengajuan Judul & Penguji Seminar</h2>
                    @if ($errors->any())
                     <div id="alert-error" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
                         <strong>⚠️ Terjadi Kesalahan pada Pengisian Formulir:</strong>
@@ -41,9 +41,9 @@
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h3 class="card-title">
-                                    Pengeditan Data Pengajuan & Penguji
+                                    Pengeditan Data Pengajuan Judul & Penguji Seminar
                                 </h3>
-                                <a href="/admin/pengajuan/" class="btn btn-secondary btn-sm">
+                                <a href="/admin/pengajuan/{{$pengajuan->id_prodi}}" class="btn btn-secondary btn-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -142,6 +142,7 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        <input type="hidden" name="id_prodi" value="{{$pengajuan->id_prodi}}">
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">
                                                 Simpan

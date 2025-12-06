@@ -3,20 +3,125 @@
 'activeDrop' => 'absmahasiswa',
 ])
 @section('content')
-<!-- BEGIN PAGE HEADER -->
-<div class="page-header d-print-none" aria-label="Page header">
-   <div class="container-xl">
-      <div class="row g-2 align-items-center">
-         <div class="col">
-            <!-- Page pre-title -->
-               <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Absensi Mahasiswa</h2>
-                  @include('components.alert')
-              </div>
-              <!-- Page title actions -->
-      </div>
-   </div>
-</div>
+<style>
+    .profile-card {
+        background: #111827;
+        border-radius: 14px;
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+        transition: 0.2s ease;
+        border: 1px solid #1f2937;
+        position: relative;
+        z-index: 99999;
+    }
+
+    .profile-card:hover {
+        transform: translateY(-2px);
+    }
+
+    .profile-img {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #4b5563;
+    }
+
+    .profile-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .profile-sub {
+        font-size: 12px;
+        color: #9ca3af;
+    }
+
+    /* Dropdown custom */
+    .menu-dropdown {
+        position: absolute;
+        top: 60px;
+        right: 10px;
+        width: 180px;
+
+        background: #1f2937;
+        border: 1px solid #374151;
+        border-radius: 8px;
+        padding: 6px 0;
+
+        display: none; /* HIDDEN BY DEFAULT */
+        opacity: 0;
+        transform: translateY(-5px);
+        transition: 0.2s ease;
+        z-index: 999999;
+    }
+
+    .menu-dropdown.show {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .dropdown-item-btn {
+        display: block;
+        width: 100%;
+        padding: 8px 14px;
+        color: #e5e7eb;
+        text-align: left;
+        font-size: 14px;
+        text-decoration: none;
+    }
+
+    .dropdown-item-btn:hover {
+        background: #374151;
+        color: white;
+    }
+
+</style>
+ <div class="page-header d-print-none" aria-label="Page header">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+
+            <!-- KOLOM KIRI (judul) -->
+            <div class="col-md-8">
+                <div class="page-pretitle">Aplikasi FKG</div>
+                <h2 class="page-title">Data Absensi Mahasiswa</h2>
+            </div>
+
+            <!-- KOLOM KANAN (profile card) -->
+            <div class="col-md-4 d-flex justify-content-end">
+
+                <div class="profile-card">
+
+                    <img src="{{ asset('assets/images/default-fkg.jpg') }}" width="50" height="50" class="rounded-circle object-cover profile-img">
+
+                    <div>
+                        <div class="profile-name">Nama Admin : {{ $username }}</div>
+                        <div class="profile-sub">Username : {{ $username }}</div>
+                    </div>
+
+                    <!-- BUTTON -->
+                    <button id="toggleMenu" class="btn btn-sm" style="background:#1f2937;border:1px solid #374151;color:white;">
+                        ☰
+                    </button>
+
+                    <!-- CUSTOM MENU -->
+                    <div id="menuDropdown" class="menu-dropdown">
+                        <a href="/admin/user" class="dropdown-item-btn">Data Users</a>
+                        <a href="/admin/changepass" class="dropdown-item-btn">Ubah Password</a>
+                    </div>
+
+                </div>
+
+            </div> <!-- end col kanan -->
+
+        </div> <!-- end row -->
+         @include('components.alert')
+    </div>
 <!-- END PAGE HEADER -->
 <!-- BEGIN PAGE BODY -->
 <div class="page-body">
@@ -88,6 +193,7 @@
                                 <th>No.BP</th>
                                 <th>Nama Mahasiswa</th>
                                 <th>Nama Dosen</th>
+                                <th>Prodi</th>
                                 <th>Kode Mata Kuliah</th>
                                 <th>Nama Mata Kuliah</th>
                                 <th>Ruangan</th>
@@ -113,6 +219,7 @@
                                 <td class="text-secondary">{{$data->nobp}}</td>
                                 <td class="text-secondary">{{$data->nama_mahasiswa}}</td>
                                 <td class="text-secondary">{{$data->nama_dosen}}</td>
+                                <td class="text-secondary">{{$data->prodi}}</td>
                                 <td class="text-secondary">{{$data->kode_makul}}</td>
                                 <td class="text-secondary">{{$data->nama_makul}}</td>
                                 <td class="text-secondary">{{$data->ruangan}}</td>
@@ -184,7 +291,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="7" class="text-center">Data tidak ditemukan</td>
+                                <td colspan="8" class="text-center">Data tidak ditemukan</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -230,6 +337,25 @@ function deleteData(id) {
         }
     })
 }
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // CUSTOM MENU HANDLER
+    const toggleBtn = document.getElementById("toggleMenu");
+    const dropdown = document.getElementById("menuDropdown");
+
+    toggleBtn.addEventListener("click", () => {
+        dropdown.classList.toggle("show");
+    });
+
+    // Close dropdown if click outside
+    document.addEventListener("click", (e) => {
+        if (!toggleBtn.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.remove("show");
+        }
+    });
+});
 </script>
 <!-- END PAGE BODY -->
 @endsection

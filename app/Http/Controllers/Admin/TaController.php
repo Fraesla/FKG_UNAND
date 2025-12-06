@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -9,47 +9,63 @@ use Auth;
 
 class TaController extends Controller
 {
-    public function read(Request $request)
+    public function read(Request $request, $id_prodi = null)
     {
         // Ambil parameter entries dari request, default = 5
         $entries = $request->input('entries', 5);
 
         // Query pakai join ke mahasiswa
-        $ta = DB::table('ta')
+        $query = DB::table('ta')
             ->join('mahasiswa', 'ta.id_mahasiswa', '=', 'mahasiswa.id')
+            ->join('prodi', 'ta.id_prodi', '=', 'prodi.id')
             ->join('dosen', 'ta.dosen_bimbingan', '=', 'dosen.id')
             ->select(
                 'ta.*',
+                'prodi.nama as prodi',
                 'mahasiswa.nobp',
                 'mahasiswa.nama',
                 'dosen.nama as dosen',
             )
-            ->orderBy('ta.id', 'DESC')
-            ->paginate($entries);
+            ->orderBy('ta.id', 'DESC');
 
-        // Supaya pagination tetap bawa query string (search / entries)
+        // Filter berdasarkan prodi
+        if ($id_prodi) {
+            $query->where('ta.id_prodi', $id_prodi);
+        }
+
+        // Pagination
+        $ta = $query->paginate($entries);
         $ta->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.ta.index', ['ta' => $ta]);
+        return view('admin.ta.index', ['ta' => $ta,'username'=> $username,'id_prodi' => $id_prodi]);
     }
 
-    public function feature(Request $request)
+    public function feature(Request $request, $id_prodi = null)
     {
         $query = DB::table('ta')
         ->join('mahasiswa', 'ta.id_mahasiswa', '=', 'mahasiswa.id')
         ->join('dosen', 'ta.dosen_bimbingan', '=', 'dosen.id')
+        ->join('prodi', 'ta.id_prodi', '=', 'prodi.id')
         ->select(
             'ta.*',
+            'prodi.nama as prodi',
             'mahasiswa.nobp',
             'mahasiswa.nama',
             'dosen.nama as dosen',
         );
+
+        // Filter berdasarkan prodi
+        if ($id_prodi) {
+            $query->where('ta.id_prodi', $id_prodi);
+        }
 
         // Search berdasarkan ID/Nama/No BP/Dosen dll
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('ta.id', 'like', "%{$search}%")
+                  ->orWhere('prodi.nama', 'like', "%{$search}%")
                   ->orWhere('mahasiswa.nobp', 'like', "%{$search}%")
                   ->orWhere('mahasiswa.nama', 'like', "%{$search}%")
                   ->orWhere('dosen.nama', 'like', "%{$search}%")
@@ -66,37 +82,38 @@ class TaController extends Controller
 
         // Supaya pagination tetap bawa query string
         $ta->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.ta.index', compact('ta'));
+        return view('admin.ta.index', compact('ta','username','id_prodi'));
     }
 
-    public function add(){
+    public function add($id_prodi = null){
         $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
         $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
-        return view('admin.ta.create',['mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
+        return view('admin.ta.create',['mahasiswa'=>$mahasiswa,'dosen'=>$dosen,'id_prodi'=>$id_prodi]);
     }
 
     public function create(Request $request){
          // Validasi input
         $request->validate([
-            'id_mahasiswa' => 'required|exists:makul,id',
+            'id_mahasiswa' => 'required|exists:mahasiswa,id',
             'dosen_bimbingan' => 'required|exists:dosen,id',
             'tgl_bimbingan' => 'required|date',
-            'catatan' => 'required|string',
+            'catatan' => 'nullable|string',
         ],[
             'id_mahasiswa.exists' => 'Mahasiswa yang dipilih tidak valid..',
             'dosen_bimbingan.exists' => 'Dosen Bimbingan yang dipilih tidak valid..',
             'tgl_bimbingan.required' => 'Tanggal Bimbingan wajib diisi.',
-            'catatan.required' => 'Catatan wajib diisi.',
         ]);
         DB::table('ta')->insert([  
             'id_mahasiswa' => $request->id_mahasiswa,
+            'id_prodi' => $request->id_prodi,
             'dosen_bimbingan' => $request->dosen_bimbingan,
             'tgl_bimbingan' => $request->tgl_bimbingan,
             'catatan' => $request->catatan
         ]);
 
-        return redirect('/admin/ta')->with("success","Data Berhasil Ditambah !");
+        return redirect('/admin/ta/'.$request->id_prodi)->with("success","Data Berhasil Ditambah !");
     }
 
     public function edit($id){
@@ -109,15 +126,14 @@ class TaController extends Controller
     public function update(Request $request, $id) {
          // Validasi input
         $request->validate([
-            'id_mahasiswa' => 'required|exists:makul,id',
+            'id_mahasiswa' => 'required|exists:mahasiswa,id',
             'dosen_bimbingan' => 'required|exists:dosen,id',
             'tgl_bimbingan' => 'required|date',
-            'catatan' => 'required|string',
+            'catatan' => 'nullable|string',
         ],[
             'id_mahasiswa.exists' => 'Mahasiswa yang dipilih tidak valid..',
             'dosen_bimbingan.exists' => 'Dosen Bimbingan yang dipilih tidak valid..',
             'tgl_bimbingan.required' => 'Tanggal Bimbingan wajib diisi.',
-            'catatan.required' => 'Catatan wajib diisi.',
         ]);
         DB::table('ta')  
             ->where('id', $id)
@@ -128,13 +144,21 @@ class TaController extends Controller
             'catatan' => $request->catatan
         ]);
 
-        return redirect('/admin/ta')->with("success","Data Berhasil Diupdate !");
+        return redirect('/admin/ta/'.$request->id_prodi)->with("success","Data Berhasil Diupdate !");
     }
 
     public function delete($id)
     {
-        DB::table('ta')->where('id',$id)->delete();
+        // Ambil data berdasarkan ID
+        $ta = DB::table('ta')->where('id', $id)->first();
 
-        return redirect('/admin/ta')->with("success","Data Berhasil Dihapus !");
+        if (!$ta) {
+            return redirect()->back()->with('error', 'Data Bimbingan TA tidak ditemukan!');
+        }
+
+        // Hapus jadwal
+        DB::table('ta')->where('id', $id)->delete();
+
+        return redirect('/admin/ta/'.$ta->id_prodi)->with("success","Data Berhasil Dihapus !");
     }
 }

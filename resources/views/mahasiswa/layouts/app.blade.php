@@ -908,10 +908,9 @@
                   <span class="nav-link-title"> Blok Mahasiswa </span>
                 </a>
               </li>
-              <li class="nav-item @if ($activePage == 'profile') active @endif">
+              <!-- <li class="nav-item @if ($activePage == 'profile') active @endif">
                 <a class="nav-link" href="/mahasiswa/profile">
-                  <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/puzzle -->
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -930,7 +929,7 @@
                   ></span>
                   <span class="nav-link-title"> Edit Profile </span>
                 </a>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <form id="logout-form" action="{{ route('logout') }}" method="POST">
                 <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();

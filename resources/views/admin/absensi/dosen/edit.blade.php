@@ -52,6 +52,7 @@
                         </div>
 
                         <div class="mb-3">
+                            <p>📘 <strong>Prodi:</strong> {{ $absdosen->prodi ?? '-' }}</p>
                             <p>📘 <strong>Kode Kuliah:</strong> {{ $absdosen->kode_makul ?? '-' }}</p>
                             <p>📘 <strong>Mata Kuliah:</strong> {{ $absdosen->nama_makul ?? '-' }}</p>
                             <p>📅 <strong>Tanggal:</strong> {{ $absdosen->tgl }}</p>

@@ -73,6 +73,16 @@ Route::prefix('admin')
     ->middleware(['auth', 'checkrole:admin'])
     ->group(function () {
         Route::get('/dashboard', [AdminHomeController::class, 'index'])->name('admin.dashboard');
+        Route::get('/user', [AdminHomeController::class, 'user'])->name('admin.user');
+        Route::get('/user/feature', [AdminHomeController::class, 'feature'])->name('admin.feature');
+        Route::get('/user/add', [AdminHomeController::class, 'add'])->name('admin.add');
+        Route::post('/user/create', [AdminHomeController::class, 'create'])->name('admin.create');
+        Route::get('/user/edit/{id}', [AdminHomeController::class, 'edit'])->name('admin.edit');
+        Route::post('/user/update/{id}', [AdminHomeController::class, 'update'])->name('admin.update');
+        Route::get('/user/delete/{id}', [AdminHomeController::class, 'delete'])->name('admin.delete');
+        Route::get('/changepass', [AdminHomeController::class, 'changepass'])->name('admin.changepass');
+        Route::get('/user/ubahpass/{id}', [AdminHomeController::class, 'ubahpass'])->name('admin.ubahpass');
+        Route::post('/updatePass', [AdminHomeController::class, 'updatePass'])->name('admin.updatePass');
         // contoh tambahan route Admin
         // Route::resource('/users', \App\Http\Controllers\Admin\UserController::class);
     });
@@ -87,6 +97,10 @@ Route::prefix('dosen')
     ->middleware(['auth', 'checkrole:dosen'])
     ->group(function () {
         Route::get('/dashboard', [DosenHomeController::class, 'index'])->name('dosen.dashboard');
+        Route::get('/profile', [DosenHomeController::class, 'profile'])->name('dosen.profile');
+        Route::post('/update/{id}', [DosenHomeController::class, 'update'])->name('dosen.update');
+        Route::get('/changepass', [DosenHomeController::class, 'changepass'])->name('dosen.changepass');
+        Route::post('/updatePass', [DosenHomeController::class, 'updatePass'])->name('dosen.updatePass');
         // contoh tambahan route Dosen
         // Route::get('/jadwal', [\App\Http\Controllers\Dosen\JadwalController::class, 'index'])->name('dosen.jadwal');
     });
@@ -101,6 +115,10 @@ Route::prefix('mahasiswa')
     ->middleware(['auth', 'checkrole:mahasiswa'])
     ->group(function () {
         Route::get('/dashboard', [MahasiswaHomeController::class, 'index'])->name('mahasiswa.dashboard');
+        Route::get('/profile', [MahasiswaHomeController::class, 'profile'])->name('mahasiswa.profile');
+        Route::post('/update/{id}', [MahasiswaHomeController::class, 'update'])->name('mahasiswa.update');
+        Route::get('/changepass', [MahasiswaHomeController::class, 'changepass'])->name('mahasiswa.changepass');
+        Route::post('/updatePass', [MahasiswaHomeController::class, 'updatePass'])->name('mahasiswa.updatePass');
         // contoh tambahan route Mahasiswa
         // Route::get('/profile', [\App\Http\Controllers\Mahasiswa\ProfileController::class, 'index'])->name('mahasiswa.profile');
     });
@@ -368,12 +386,12 @@ Route::prefix('admin/jadmakul')
     ->middleware(['auth', 'checkrole:admin'])
     ->controller(JadMakulController::class)
     ->group(function () {
-        Route::get('/', 'read')->name('read');
-        Route::get('/add', 'add')->name('add');
+        Route::get('/{id_prodi?}', 'read')->name('read');
+        Route::get('/{id_prodi}/add', 'add')->name('add');
         Route::get('/absen/{id}', 'absen')->name('absen');
         Route::get('/nilai/{id}', 'nilai')->name('nilai');
         Route::get('/materi/{id}', 'materi')->name('materi');
-        Route::get('/feature', 'feature')->name('feature');
+        Route::get('/{id_prodi}/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -386,9 +404,9 @@ Route::prefix('admin/jadmetopen')
     ->middleware(['auth', 'checkrole:admin'])
     ->controller(JadMetopenController::class)
     ->group(function () {
-        Route::get('/', 'read')->name('read');
-        Route::get('/add', 'add')->name('add');
-        Route::get('/feature', 'feature')->name('feature');
+        Route::get('/{id_prodi?}', 'read')->name('read');
+        Route::get('/{id_prodi}/add', 'add')->name('add');
+        Route::get('/{id_prodi}/feature', 'feature')->name('feature');
         Route::get('/absen/{id}', 'absen')->name('absen');
         Route::get('/nilai/{id}', 'nilai')->name('nilai');
         Route::get('/materi/{id}', 'materi')->name('materi');
@@ -528,9 +546,9 @@ Route::prefix('admin/skripsi')
     ->middleware(['auth', 'checkrole:admin'])
     ->controller(SkripsiController::class)
     ->group(function () {
-        Route::get('/', 'read')->name('read');
-        Route::get('/add', 'add')->name('add');
-        Route::get('/feature', 'feature')->name('feature');
+        Route::get('/{id_prodi?}', 'read')->name('read');
+        Route::get('/{id_prodi}/add', 'add')->name('add');
+        Route::get('/{id_prodi}/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -543,9 +561,9 @@ Route::prefix('admin/ta')
     ->middleware(['auth', 'checkrole:admin'])
     ->controller(TaController::class)
     ->group(function () {
-        Route::get('/', 'read')->name('read');
-        Route::get('/add', 'add')->name('add');
-        Route::get('/feature', 'feature')->name('feature');
+        Route::get('/{id_prodi?}', 'read')->name('read');
+        Route::get('/{id_prodi}/add', 'add')->name('add');
+        Route::get('/{id_prodi}/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -558,9 +576,9 @@ Route::prefix('admin/suratizin')
     ->middleware(['auth', 'checkrole:admin'])
     ->controller(SuratIzinController::class)
     ->group(function () {
-        Route::get('/', 'read')->name('read');
-        Route::get('/add', 'add')->name('add');
-        Route::get('/feature', 'feature')->name('feature');
+        Route::get('/{id_prodi?}', 'read')->name('read');
+        Route::get('/{id_prodi}/add', 'add')->name('add');
+        Route::get('/{id_prodi}/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -573,9 +591,9 @@ Route::prefix('admin/pengajuan')
     ->middleware(['auth', 'checkrole:admin'])
     ->controller(PengajuanController::class)
     ->group(function () {
-        Route::get('/', 'read')->name('read');
-        Route::get('/add', 'add')->name('add');
-        Route::get('/feature', 'feature')->name('feature');
+        Route::get('/{id_prodi?}', 'read')->name('read');
+        Route::get('/{id_prodi}/add', 'add')->name('add');
+        Route::get('/{id_prodi}/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -588,9 +606,9 @@ Route::prefix('admin/seminarproposal')
     ->middleware(['auth', 'checkrole:admin'])
     ->controller(SeminarProposalController::class)
     ->group(function () {
-        Route::get('/', 'read')->name('read');
-        Route::get('/add', 'add')->name('add');
-        Route::get('/feature', 'feature')->name('feature');
+        Route::get('/{id_prodi?}', 'read')->name('read');
+        Route::get('/{id_prodi}/add', 'add')->name('add');
+        Route::get('/{id_prodi}/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -603,9 +621,9 @@ Route::prefix('admin/seminarhasil')
     ->middleware(['auth', 'checkrole:admin'])
     ->controller(SeminarHasilController::class)
     ->group(function () {
-        Route::get('/', 'read')->name('read');
-        Route::get('/add', 'add')->name('add');
-        Route::get('/feature', 'feature')->name('feature');
+        Route::get('/{id_prodi?}', 'read')->name('read');
+        Route::get('/{id_prodi}/add', 'add')->name('add');
+        Route::get('/{id_prodi}/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -682,12 +700,12 @@ Route::prefix('dosen/blok')
     ->middleware(['auth', 'checkrole:dosen'])
     ->controller(BlokController::class)
     ->group(function () {
-        Route::get('/', 'read')->name('read');
-        Route::get('/add', 'add')->name('add');
+        Route::get('/{id_prodi?}', 'read')->name('read');
+        Route::get('/{id_prodi}/add', 'add')->name('add');
         Route::get('/absen/{id}', 'absen')->name('absen');
         Route::get('/nilai/{id}', 'nilai')->name('nilai');
         Route::get('/materi/{id}', 'materi')->name('materi');
-        Route::get('/feature', 'feature')->name('feature');
+        Route::get('/{id_prodi}/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -700,12 +718,12 @@ Route::prefix('dosen/metopen')
     ->middleware(['auth', 'checkrole:dosen'])
     ->controller(MetopenController::class)
     ->group(function () {
-        Route::get('/', 'read')->name('read');
-        Route::get('/add', 'add')->name('add');
+        Route::get('/{id_prodi}', 'read')->name('read');
+        Route::get('/{id_prodi}/add', 'add')->name('add');
         Route::get('/absen/{id}', 'absen')->name('absen');
         Route::get('/nilai/{id}', 'nilai')->name('nilai');
         Route::get('/materi/{id}', 'materi')->name('materi');
-        Route::get('/feature', 'feature')->name('feature');
+        Route::get('/{id_prodi}/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -718,9 +736,9 @@ Route::prefix('dosen/skripsi')
     ->middleware(['auth', 'checkrole:dosen'])
     ->controller(SkripsiDosenController::class)
     ->group(function () {
-        Route::get('/', 'read')->name('read');
-        Route::get('/add', 'add')->name('add');
-        Route::get('/feature', 'feature')->name('feature');
+        Route::get('/{id_prodi}', 'read')->name('read');
+        Route::get('/{id_prodi}/add', 'add')->name('add');
+        Route::get('/{id_prodi}/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -733,9 +751,9 @@ Route::prefix('dosen/ta')
     ->middleware(['auth', 'checkrole:dosen'])
     ->controller(TaDosenController::class)
     ->group(function () {
-        Route::get('/', 'read')->name('read');
-        Route::get('/add', 'add')->name('add');
-        Route::get('/feature', 'feature')->name('feature');
+        Route::get('/{id_prodi}', 'read')->name('read');
+        Route::get('/{id_prodi}/add', 'add')->name('add');
+        Route::get('/{id_prodi}/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
@@ -748,9 +766,9 @@ Route::prefix('dosen/suratizin')
     ->middleware(['auth', 'checkrole:dosen'])
     ->controller(SuratIzinDosenController::class)
     ->group(function () {
-        Route::get('/', 'read')->name('read');
-        Route::get('/add', 'add')->name('add');
-        Route::get('/feature', 'feature')->name('feature');
+        Route::get('/{id_prodi}', 'read')->name('read');
+        Route::get('/{id_prodi}/add', 'add')->name('add');
+        Route::get('/{id_prodi}/feature', 'feature')->name('feature');
         Route::post('/create', 'create')->name('create');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');

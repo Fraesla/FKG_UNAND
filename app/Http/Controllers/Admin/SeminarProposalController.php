@@ -10,43 +10,59 @@ use Auth;
 
 class SeminarProposalController extends Controller
 {
-    public function read(Request $request)
+    public function read(Request $request, $id_prodi = null)
     {
         // Ambil parameter entries dari request, default = 5
         $entries = $request->input('entries', 5);
 
         // Query pakai join + paginate
-        $seminar_proposal = DB::table('seminar_proposal')
+        $query = DB::table('seminar_proposal')
             ->join('mahasiswa', 'seminar_proposal.id_mahasiswa', '=', 'mahasiswa.id')
+            ->join('prodi', 'seminar_proposal.id_prodi', '=', 'prodi.id')
             ->select(
                 'seminar_proposal.*',
+                'prodi.nama as prodi',
                 'mahasiswa.nama as nama',
                 'mahasiswa.nobp',
             )
-            ->orderBy('seminar_proposal.id', 'DESC')
-            ->paginate($entries);
+            ->orderBy('seminar_proposal.id', 'DESC');
+            
+        // Filter berdasarkan prodi
+        if ($id_prodi) {
+            $query->where('seminar_proposal.id_prodi', $id_prodi);
+        }
 
         // Supaya pagination tetap bawa query string (search / entries)
+        $seminar_proposal = $query->paginate($entries);
         $seminar_proposal->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.seminarproposal.index', compact('seminar_proposal'));
+        return view('admin.seminarproposal.index', compact('seminar_proposal','username','id_prodi'));
     }
 
-    public function feature(Request $request)
+    public function feature(Request $request, $id_prodi = null)
     {
         $query = DB::table('seminar_proposal')
             ->join('mahasiswa', 'seminar_proposal.id_mahasiswa', '=', 'mahasiswa.id')
+            ->join('prodi', 'seminar_proposal.id_prodi', '=', 'prodi.id')
             ->select(
                 'seminar_proposal.*',
+                'prodi.nama as prodi',
                 'mahasiswa.nama as nama',
                 'mahasiswa.nobp',
             );
+
+        // Filter berdasarkan prodi
+        if ($id_prodi) {
+            $query->where('seminar_proposal.id_prodi', $id_prodi);
+        }
 
         // Search
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('seminar_proposal.id', 'like', "%{$search}%")
+                  ->orWhere('prodi.nama', 'like', "%{$search}%")
                   ->orWhere('mahasiswa.nama', 'like', "%{$search}%")
                   ->orWhere('mahasiswa.nobp', 'like', "%{$search}%")
                   ->orWhere('seminar_proposal.dosen_pembimbing_1', 'like', "%{$search}%")
@@ -65,14 +81,15 @@ class SeminarProposalController extends Controller
 
         // Biar pagination tetap bawa query string
         $seminar_proposal->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.seminarproposal.index', compact('seminar_proposal'));
+        return view('admin.seminarproposal.index', compact('seminar_proposal','username','id_prodi'));
     }
 
-    public function add(){
+    public function add($id_prodi = null){
         $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
         $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
-        return view('admin.seminarproposal.create',['mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
+        return view('admin.seminarproposal.create',['mahasiswa'=>$mahasiswa,'dosen'=>$dosen,'id_prodi'=>$id_prodi]);
     }
 
     public function create(Request $request){
@@ -113,6 +130,7 @@ class SeminarProposalController extends Controller
         // Insert ke database
         DB::table('seminar_proposal')->insert([
             'id_mahasiswa' => $request->id_mahasiswa,
+            'id_prodi' => $request->id_prodi,
             'dosen_pembimbing_1' => $request->dosen_pembimbing_1,
             'dosen_pembimbing_2' => $request->dosen_pembimbing_2,
             'penguji_1' => $request->penguji_1,
@@ -125,7 +143,7 @@ class SeminarProposalController extends Controller
             'created_at' => now(),
         ]);
 
-        return redirect('/admin/seminarproposal')->with("success","Data Berhasil Ditambah !");
+        return redirect('/admin/seminarproposal/'.$request->id_prodi)->with("success","Data Berhasil Ditambah !");
     }
 
     public function edit($id){
@@ -228,7 +246,7 @@ class SeminarProposalController extends Controller
         //     'lembar_jadwal' => $request->lembar_jadwal
         // ]);
 
-        return redirect('/admin/seminarproposal')->with("success","Data Berhasil Diupdate !");
+        return redirect('/admin/seminarproposal/'.$request->id_prodi)->with("success","Data Berhasil Diupdate !");
     }
 
     public function delete($id)
@@ -261,6 +279,6 @@ class SeminarProposalController extends Controller
             DB::table('seminar_proposal')->where('id', $id)->delete();
         }
 
-        return redirect('/admin/seminarproposal')->with("success","Data Berhasil Dihapus !");
+        return redirect('/admin/seminarproposal/'.$seminar_proposal->id_prodi)->with("success","Data Berhasil Dihapus !");
     }
 }

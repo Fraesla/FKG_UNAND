@@ -10,7 +10,7 @@ use Auth;
 
 class JadMakulController extends Controller
 {
-    public function read(Request $request){
+    public function read(Request $request, $id_prodi = null){
 
         $entries = $request->input('entries', 5);
 
@@ -21,11 +21,13 @@ class JadMakulController extends Controller
         $query = DB::table('jadwal_makul')
             ->join('kelas', 'jadwal_makul.id_kelas', '=', 'kelas.id')
             ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')
+            ->join('prodi', 'jadwal_makul.id_prodi', '=', 'prodi.id')
             ->join('dosen', 'jadwal_makul.id_dosen', '=', 'dosen.id')
             ->join('ruangan', 'jadwal_makul.id_ruangan', '=', 'ruangan.id')
             ->select(
                 'jadwal_makul.id',
                 'kelas.nama as kelas',
+                'prodi.nama as prodi',
                 'jadwal_makul.minggu',
                 'jadwal_makul.tgl',
                 'jadwal_makul.hari',
@@ -37,6 +39,11 @@ class JadMakulController extends Controller
             )
             ->orderBy('jadwal_makul.id', 'DESC');
 
+        // Filter berdasarkan prodi
+        if ($id_prodi) {
+            $query->where('jadwal_makul.id_prodi', $id_prodi);
+        }
+
         // Filter berdasarkan blok (id_kelas) kalau dipilih
         if ($request->filled('id_kelas')) {
             $query->where('jadwal_makul.id_kelas', $request->id_kelas);
@@ -45,24 +52,29 @@ class JadMakulController extends Controller
         // Pagination
         $jadmakul = $query->paginate($entries);
         $jadmakul->appends($request->all());
+        $username = auth()->user()->username;
 
         return view('admin.jadwal.makul.index', [
             'jadmakul' => $jadmakul,
-            'blok'     => $blok
+            'blok'     => $blok,
+            'username' => $username,
+            'id_prodi' => $id_prodi
         ]);
     } 
 
-    public function feature(Request $request)
+    public function feature(Request $request, $id_prodi = null)
     {
         $blok = DB::table('kelas')->orderBy('id','DESC')->get();
         $query = DB::table('jadwal_makul')
             ->join('kelas', 'jadwal_makul.id_kelas', '=', 'kelas.id')
             ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')
+            ->join('prodi', 'jadwal_makul.id_prodi', '=', 'prodi.id')
             ->join('dosen', 'jadwal_makul.id_dosen', '=', 'dosen.id')
             ->join('ruangan', 'jadwal_makul.id_ruangan', '=', 'ruangan.id')
             ->select(
                 'jadwal_makul.id',
                 'kelas.nama as kelas',
+                'prodi.nama as prodi',
                 'jadwal_makul.minggu',
                 'jadwal_makul.tgl',
                 'jadwal_makul.hari',
@@ -73,11 +85,17 @@ class JadMakulController extends Controller
                 'ruangan.nama as ruangan'
             );
 
+        // Filter berdasarkan prodi
+        if ($id_prodi) {
+            $query->where('jadwal_makul.id_prodi', $id_prodi);
+        }
+
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('jadwal_makul.id', 'like', "%{$search}%")
                   ->orWhere('kelas.nama', 'like', "%{$search}%")
+                  ->orWhere('prodi.nama', 'like', "%{$search}%")
                   ->orWhere('jadwal_makul.tgl', 'like', "%{$search}%")
                   ->orWhere('jadwal_makul.hari', 'like', "%{$search}%")
                   ->orWhere('jadwal_makul.jam_mulai', 'like', "%{$search}%")
@@ -96,17 +114,18 @@ class JadMakulController extends Controller
 
         // Supaya pagination tetap bawa query string (search / entries)
         $jadmakul->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.jadwal.makul.index', compact('jadmakul','blok'));
+        return view('admin.jadwal.makul.index', compact('jadmakul','blok','username','id_prodi'));
     }
 
-    public function add(){
+    public function add($id_prodi = null){
         $blok = DB::table('kelas')->orderBy('id','DESC')->get();
         $makul = DB::table('makul')->orderBy('id','DESC')->get();
         $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
         $ruangan = DB::table('ruangan')->orderBy('id','DESC')->get();
-        return view('admin.jadwal.makul.create',['blok'=>$blok,'makul'=>$makul,'dosen'=>$dosen,'ruangan'=>$ruangan]);
-    }
+        return view('admin.jadwal.makul.create',['blok'=>$blok,'makul'=>$makul,'dosen'=>$dosen,'ruangan'=>$ruangan,'id_prodi' => $id_prodi]);
+    } 
 
     public function create(Request $request){
          // Validasi input
@@ -144,6 +163,7 @@ class JadMakulController extends Controller
         // Simpan jadwal & ambil ID-nya
         $id_jadwal = DB::table('jadwal_makul')->insertGetId([
             'id_kelas'    => $request->id_kelas,
+            'id_prodi'      => $request->id_prodi,
             'minggu'      => $request->minggu,
             'tgl'         => $request->tgl,
             'hari'        => $request->hari,
@@ -166,7 +186,7 @@ class JadMakulController extends Controller
             'qr'              => '',
         ]);
 
-        return redirect('/admin/jadmakul')->with("success","Data Berhasil Ditambah !");
+        return redirect('/admin/jadmakul/'.$request->id_prodi)->with("success","Data Berhasil Ditambah !");
     }
 
     public function absen($id)
@@ -184,7 +204,7 @@ class JadMakulController extends Controller
             ->exists();
 
         if ($cekDuplikat) {
-            return redirect('/admin/jadmakul')
+            return redirect('/admin/jadmakul/'.$jadwal->id_prodi)
                 ->with('error', 'Absen untuk jadwal ini sudah ada!');
         } 
 
@@ -219,7 +239,7 @@ class JadMakulController extends Controller
             ->exists();
 
         if ($cekDuplikat) {
-            return redirect('/admin/jadmakul')
+            return redirect('/admin/jadmakul/'.$jadwal->id_prodi)
                 ->with('error', 'Materi untuk jadwal ini sudah ada!');
         }
 
@@ -250,7 +270,7 @@ class JadMakulController extends Controller
             ->exists();
 
         if ($cekDuplikat) {
-            return redirect('/admin/jadmakul')
+            return redirect('/admin/jadmakul/'.$jadwal->id_prodi)
                 ->with('error', 'Data Nilai untuk jadwal Mata Kuliah ini sudah ada!');
         }
 
@@ -274,10 +294,11 @@ class JadMakulController extends Controller
         $ruangan = DB::table('ruangan')->orderBy('id','DESC')->get();
         
         return view('admin.jadwal.makul.edit',['jadmakul'=>$jadmakul,'blok'=>$blok,'dosen'=>$dosen,'makul'=>$makul,'ruangan'=>$ruangan]);
-    }
+    } 
 
-    public function update(Request $request, $id) {
-         // Validasi input
+    public function update(Request $request, $id)
+    {
+        // Validasi input
         $request->validate([
             'id_kelas' => 'required|exists:kelas,id',
             'minggu' => 'required|integer|min:1|max:6',
@@ -289,42 +310,95 @@ class JadMakulController extends Controller
             'id_dosen' => 'required|exists:dosen,id',
             'id_ruangan' => 'required|exists:ruangan,id',
         ],[
-            'id_kelas.required' => 'Form Blok Silahkan dipilh Dulu...',
+            'id_kelas.required' => 'Form Blok Silahkan dipilih dulu...',
             'id_kelas.exists' => 'Blok yang dipilih tidak valid...',
             'minggu.required' => 'Minggu ke- wajib diisi.',
-            'minggu.integer' => 'Minggu ke- yang dipilih tidak valid.',
             'tgl.required' => 'Tanggal wajib diisi.',
             'hari.required' => 'Hari wajib diisi.',
             'jam_mulai.required' => 'Jam Mulai wajib diisi.',
-            'jam_mulai.date_format' => 'Format Jam Mulai tidak valid (gunakan format HH:MM).',
-            'jam_selesai.required' => 'Jam Selesai wajib diisi.',
-            'jam_selesai.date_format' => 'Format Jam Selesai tidak valid (gunakan format HH:MM).',
             'jam_selesai.after' => 'Jam Selesai harus setelah Jam Mulai.',
-            'id_makul.exists' => 'Mata Kuliah yang dipilih tidak valid..',
-            'id_dosen.exists' => 'Dosen yang dipilih tidak valid..',
-            'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
-        ]);
-        DB::table('jadwal_makul')  
-            ->where('id', $id)
-            ->update([
-            'id_kelas' => $request->id_kelas,
-            'minggu' => $request->minggu,
-            'tgl' => $request->tgl,
-            'hari' => $request->hari,
-            'jam_mulai' => $request->jam_mulai,
-            'jam_selesai' => $request->jam_selesai,
-            'id_makul' => $request->id_makul,
-            'id_dosen' => $request->id_dosen,
-            'id_ruangan' => $request->id_ruangan
         ]);
 
-        return redirect('/admin/jadmakul')->with("success","Data Berhasil Diupdate !");
+        // =============================
+        // UPDATE DATA JADWAL MAKUL
+        // =============================
+        DB::table('jadwal_makul')
+            ->where('id', $id)
+            ->update([
+                'id_kelas'     => $request->id_kelas,
+                'minggu'       => $request->minggu,
+                'tgl'          => $request->tgl,
+                'hari'         => $request->hari,
+                'jam_mulai'    => $request->jam_mulai,
+                'jam_selesai'  => $request->jam_selesai,
+                'id_makul'     => $request->id_makul,
+                'id_dosen'     => $request->id_dosen,
+                'id_ruangan'   => $request->id_ruangan
+            ]);
+
+        // =========================================
+        //  CEK APAKAH ADA RECORD ABSEN UNTUK JADWAL
+        // =========================================
+        $id_jadwal_dosen = 'B' . $id;
+
+        $cekAbsen = DB::table('absen_dosen')
+            ->where('id_jadwal_dosen', $id_jadwal_dosen)
+            ->first();
+
+        // =========================================
+        //  JIKA ADA → UPDATE
+        //  JIKA TIDAK ADA → INSERT BARU
+        // =========================================
+        if ($cekAbsen) {
+
+            DB::table('absen_dosen')
+            ->where('id_jadwal_dosen', $id_jadwal_dosen)
+            ->update([
+                'tgl'        => $request->tgl,
+                'jam_masuk'  => $request->jam_mulai,
+                'jam_pulang' => $request->jam_selesai,
+                'id_dosen'   => $request->id_dosen,
+            ]);
+
+        } else {
+
+            DB::table('absen_dosen')->insert([
+                'id_jadwal_dosen' => $id_jadwal_dosen,
+                'tgl'             => $request->tgl,
+                'jam_masuk'       => $request->jam_mulai,
+                'jam_pulang'      => $request->jam_selesai,
+                'id_dosen'        => $request->id_dosen,
+                'status'          => 'belum absen',
+                'keterangan'      => '',
+                'qr'              => '',
+            ]);
+
+        }
+
+        return redirect('/admin/jadmakul/'.$request->id_prodi)->with("success", "Data Berhasil Diupdate!");
     }
 
     public function delete($id)
     {
-        DB::table('jadwal_makul')->where('id',$id)->delete();
+        // Ambil data jadwal dulu sebelum dihapus
+        $jadwal = DB::table('jadwal_makul')->where('id', $id)->first();
 
-        return redirect('/admin/jadmakul')->with("success","Data Berhasil Dihapus !");
+        // Jika data tidak ditemukan
+        if (!$jadwal) {
+            return redirect()->back()->with("error", "Data tidak ditemukan!");
+        }
+
+        // Buat ID absensi dosen
+        $id_jadwal_dosen = 'B' . $id;
+
+        // Hapus data absen dosen
+        DB::table('absen_dosen')->where('id_jadwal_dosen', $id_jadwal_dosen)->delete();
+
+        // Hapus jadwal
+        DB::table('jadwal_makul')->where('id', $id)->delete();
+
+        // Redirect kembali ke halaman sesuai prodi
+        return redirect('/admin/jadmakul/' . $jadwal->id_prodi)
+                ->with("success","Data Jadwal & Absen Dosen Berhasil Dihapus!");
     }
 }

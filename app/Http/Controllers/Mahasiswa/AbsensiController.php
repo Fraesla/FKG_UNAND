@@ -63,8 +63,12 @@ class AbsensiController extends Controller
             ];
         });
 
+        $username = auth()->user()->username;
+        $mahasiswa = DB::table('mahasiswa')->where('nobp', $username)->first();
+
         return view('mahasiswa.absen.index', [
-            'events' => $events
+            'events' => $events,
+            'mahasiswa' => $mahasiswa
         ]);
     } 
 
@@ -179,7 +183,7 @@ class AbsensiController extends Controller
         ]);
 
         return redirect('/mahasiswa/absensi/mahasiswa')->with('success', 'Absensi berhasil disimpan!');
-    }
+    } 
 
     public function mahasiswa(Request $request)
     {

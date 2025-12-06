@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('jadwal_metopen', function (Blueprint $table) {
             $table->id();
-            $table->string('minggu');
             $table->date('tgl');
             $table->string('hari');
             $table->time('jam_mulai');
@@ -21,6 +20,8 @@ return new class extends Migration
             $table->string('id_makul');
             $table->string('id_dosen');
             $table->string('id_ruangan');
+            $table->string('id_prodi');
+            $table->text('keterangan')->nullable();
             $table->timestamps();
         });
     }

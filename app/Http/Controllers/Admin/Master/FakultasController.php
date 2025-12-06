@@ -28,8 +28,9 @@ class FakultasController extends Controller
 
         // Supaya pagination tetap bawa query string (search / entries)
         $fakultas->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.master.fakultas.index', ['fakultas' => $fakultas]);
+        return view('admin.master.fakultas.index', ['fakultas' => $fakultas, 'username' => $username]);
     }
 
     public function feature(Request $request)
@@ -51,8 +52,9 @@ class FakultasController extends Controller
 
         // Biar pagination tetap bawa query string
         $fakultas->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.master.fakultas.index', compact('fakultas'));
+        return view('admin.master.fakultas.index', compact('fakultas','username'));
     }
 
     public function export()

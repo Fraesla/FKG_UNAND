@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('jadwal_makul', function (Blueprint $table) {
             $table->id();
             $table->string('id_kelas');
+            $table->string('id_prodi');
             $table->string('minggu');
             $table->date('tgl');
             $table->string('hari');

@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
 'activePage' => 'gigi',
-'activeDrop' => 'jadmetopen',
+'activeDrop' => 'jadmetopen'.$jadmetopen->id_prodi,
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -43,7 +43,7 @@
                                 <h3 class="card-title">
                                     Pengeditan Jadwal Data Mata Kuliah (Data Metopen)
                                 </h3>
-                                <a href="/admin/jadmetopen/" class="btn btn-secondary btn-sm">
+                                <a href="/admin/jadmetopen/{{$jadmetopen->id_prodi}}" class="btn btn-secondary btn-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -61,21 +61,7 @@
                                 {{ csrf_field() }}
                                     <div class="space-y">
                                         <div class="row">
-                                            <div class="col-md-4">
-                                                <label class="form-label">Minggu Ke-</label>
-                                                <select name="minggu" class="form-select">
-                                                    <option value="0" {{ $jadmetopen->minggu == 0 ? 'selected' : '' }}> Pilih minggu
-                                                    @for($no=1; $no<=6; $no++)
-                                                        <option value="{{ $no }}" {{ $jadmetopen->minggu == $no ? 'selected' : '' }}>
-                                                            Minggu ke- {{ $no }}
-                                                        </option>
-                                                    @endfor
-                                                </select>
-                                                 @error('minggu')
-                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                     <label class="form-label">Tanggal</label>
                                                     <div class="input-icon">
                                                         <span class="input-icon-addon"><!-- Download SVG icon from http://tabler.io/icons/icon/calendar -->
@@ -89,7 +75,7 @@
                                                         <input class="form-control" placeholder="Masukkan Tanggal" id="datepicker-icon-prepend" name="tgl" value="{{$jadmetopen->tgl}}">
                                                     </div>
                                                 </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <label class="form-label">Hari</label>
                                                  <select class="form-select" name="hari">
                                                     <option value="">Pilih Hari</option>
@@ -123,7 +109,7 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label">Mata Kuliah</label>
-                                                 <select class="form-select" name="id_makul">
+                                                 <select class="form-select" name="id_makul" id="select-makul">
                                                     <option>
                                                         Pilih Mata Kuliah
                                                     </option>
@@ -173,6 +159,15 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        <div class="mb-3 text-start d-none" id="ket-kuliah-pengantar">
+                                            <label for="Keterangan" class="form-label text-light">Keterangan (Kuliah Pengantar)</label>
+                                            <textarea name="keterangan" id="Keterangan" rows="3" 
+                                                class="form-control" placeholder="Masukkan Keterangan">{{$jadmetopen->keterangan}}</textarea>
+                                            @error('Keterangan')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <input type="hidden" name="id_prodi" value="{{$jadmetopen->id_prodi}}">
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">
                                                 Simpan
@@ -197,4 +192,27 @@
     </div>
 </div>
 <!-- END PAGE BODY -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const selectMakul = document.getElementById('select-makul');
+    const ketPengantar = document.getElementById('ket-kuliah-pengantar');
+    const inputKeterangan = document.getElementById('Keterangan');
+
+    function checkMakul() {
+        const selectedText = selectMakul.options[selectMakul.selectedIndex]?.text.trim();
+        if (selectedText === 'Kuliah Pengantar') {
+            ketPengantar.classList.remove('d-none');
+        } else {
+            ketPengantar.classList.add('d-none');
+            inputKeterangan.value = '';
+        }
+    }
+
+    // ▶️ Cek saat halaman pertama kali dibuka
+    checkMakul();
+
+    // ▶️ Cek saat user mengganti pilihan
+    selectMakul.addEventListener('change', checkMakul);
+});
+</script>
 @endsection

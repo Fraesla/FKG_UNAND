@@ -22,8 +22,9 @@ class RuanganController extends Controller
 
         // Supaya pagination tetap bawa query string (search / entries)
         $ruangan->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.master.ruangan.index', ['ruangan' => $ruangan]);
+        return view('admin.master.ruangan.index', ['ruangan' => $ruangan,'username'=>$username]);
     }
 
     public function feature(Request $request)
@@ -45,8 +46,9 @@ class RuanganController extends Controller
 
         // Biar pagination tetap bawa query string
         $ruangan->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.master.ruangan.index', compact('ruangan'));
+        return view('admin.master.ruangan.index', compact('ruangan','username'));
     }
 
     public function import(Request $request)

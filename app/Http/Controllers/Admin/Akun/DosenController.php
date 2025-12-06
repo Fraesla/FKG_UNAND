@@ -18,8 +18,9 @@ class DosenController extends Controller
         $dosen = DB::table('dosen')->orderBy('id','DESC')->paginate($entries);
 
         $dosen->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.akun.dosen.index',['dosen'=>$dosen]);
+        return view('admin.akun.dosen.index',['dosen'=>$dosen,'username'=>$username]);
     }
 
     public function feature(Request $request)
@@ -30,18 +31,11 @@ class DosenController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where('id', 'like', "%{$search}%")
-                  ->orWhere('nama', 'like', "%{$search}%")
                   ->orWhere('nip', 'like', "%{$search}%")
-                  ->orWhere('nidn', 'like', "%{$search}%")
+                  ->orWhere('nama', 'like', "%{$search}%")
                   ->orWhere('gender', 'like', "%{$search}%")
-                  ->orWhere('pangol', 'like', "%{$search}%")
-                  ->orWhere('napater', 'like', "%{$search}%")
-                  ->orWhere('napaber', 'like', "%{$search}%")
-                  ->orWhere('jf', 'like', "%{$search}%")
-                  ->orWhere('js', 'like', "%{$search}%")
-                  ->orWhere('najater', 'like', "%{$search}%")
-                  ->orWhere('penter', 'like', "%{$search}%")
-                  ->orWhere('keterangan', 'like', "%{$search}%");
+                  ->orWhere('contact', 'like', "%{$search}%")
+                  ->orWhere('alamat', 'like', "%{$search}%");
         }
 
         // Show entries (default 10)
@@ -52,8 +46,9 @@ class DosenController extends Controller
 
         // Biar pagination tetap bawa query string
         $dosen->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.akun.dosen.index', compact('dosen'));
+        return view('admin.akun.dosen.index', compact('dosen','username'));
     }
 
     public function import(Request $request)
@@ -76,29 +71,14 @@ class DosenController extends Controller
         $request->validate([
             'nama' => 'required |string|max:255',
             'nip' => 'required|string|max:255',
-            'nidn' => 'required|string|max:255',
             'gender' => 'required|string|max:255',
-            'pangol' => 'required|string|max:255',
-            'napater' => 'required|string|max:255',
-            'napaber' => 'required|string|max:255',
-            'jf' => 'required|string|max:255',
-            'js' => 'required|string|max:255',
-            'najater' => 'required|string|max:255',
-            'penter' => 'required|string|max:255',
-            'keterangan' => 'nullable|string|max:255',
+            'contact' => 'nullable|string|max:255',
+            'alamat' => 'nullable|string|max:255',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // maksimal 2MB
         ],[
-            'nama.required' => 'Nama Dosen wajib diisi.',
             'nip.required' => 'NIP wajib diisi.',
-            'nidn.required' => 'NIDN wajib diisi.',
-            'gender.required' => 'Jenis Kelamin wajib diisi.',
-            'pangol.required' => 'Pangkat & Golongan wajib diisi.',
-            'napaber.required' => 'Naik Pangkat Berikut wajib diisi.',
-            'napater.required' => 'Naik Pangkat Terakhir diisi.',
-            'jf.required' => 'JF wajib diisi.',
-            'js.required' => 'JS wajib diisi.',
-            'najater.required' => 'Naik Jabatan Terakhir wajib diisi.',
-            'penter.required' => 'Pendidikan Terakhir wajib diisi.',
+            'nama.required' => 'Nama Dosen wajib diisi.',
+            'gender.required' => 'Jenis Kelamin wajib diisi.',        
         ]);
 
         // Simpan file ke storage/public/foto_dosen
@@ -109,18 +89,11 @@ class DosenController extends Controller
 
         // Simpan ke database
         DB::table('dosen')->insert([  
-            'nama' => $request->nama,
             'nip' => $request->nip,
-            'nidn' => $request->nidn,
+            'nama' => $request->nama,
             'gender' => $request->gender,
-            'pangol' => $request->pangol,
-            'napater' => $request->napater,
-            'napaber' => $request->napaber,
-            'jf' => $request->jf,
-            'js' => $request->js,
-            'najater' => $request->najater,
-            'penter' => $request->penter,
-            'keterangan' => $request->keterangan,
+            'contact' => $request->contact,
+            'alamat' => $request->alamat,
             'foto' => $path
         ],[
             'nama.required' => 'Nama Dosen wajib diisi.',
@@ -150,46 +123,24 @@ class DosenController extends Controller
 
         // Validasi input
         $request->validate([
-            'nama' => 'required|string|max:255',
+            'nama' => 'required |string|max:255',
             'nip' => 'required|string|max:255',
-            'nidn' => 'required|string|max:255',
             'gender' => 'required|string|max:255',
-            'pangol' => 'required|string|max:255',
-            'napater' => 'required|string|max:255',
-            'napaber' => 'required|string|max:255',
-            'jf' => 'required|string|max:255',
-            'js' => 'required|string|max:255',
-            'najater' => 'required|string|max:255',
-            'penter' => 'required|string|max:255',
-            'keterangan' => 'nullable|string|max:255',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'contact' => 'nullable|string|max:255',
+            'alamat' => 'nullable|string|max:255',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // maksimal 2MB
         ],[
-            'nama.required' => 'Nama Dosen wajib diisi.',
             'nip.required' => 'NIP wajib diisi.',
-            'nidn.required' => 'NIDN wajib diisi.',
-            'gender.required' => 'Jenis Kelamin wajib diisi.',
-            'pangol.required' => 'Pangkat & Golongan wajib diisi.',
-            'napaber.required' => 'Naik Pangkat Berikut wajib diisi.',
-            'napater.required' => 'Naik Pangkat Terakhir diisi.',
-            'jf.required' => 'JF wajib diisi.',
-            'js.required' => 'JS wajib diisi.',
-            'najater.required' => 'Naik Jabatan Terakhir wajib diisi.',
-            'penter.required' => 'Pendidikan Terakhir wajib diisi.',
+            'nama.required' => 'Nama Dosen wajib diisi.',
+            'gender.required' => 'Jenis Kelamin wajib diisi.',        
         ]);
 
         $dataUpdate = [
-            'nama' => $request->nama,
             'nip' => $request->nip,
-            'nidn' => $request->nidn,
+            'nama' => $request->nama,
             'gender' => $request->gender,
-            'pangol' => $request->pangol,
-            'napater' => $request->napater,
-            'napaber' => $request->napaber,
-            'jf' => $request->jf,
-            'js' => $request->js,
-            'najater' => $request->najater,
-            'penter' => $request->penter,
-            'keterangan' => $request->keterangan,
+            'contact' => $request->contact,
+            'alamat' => $request->alamat,
         ];
 
         // kalau ada upload foto baru
@@ -207,10 +158,33 @@ class DosenController extends Controller
             ->where('id', $id)
             ->update($dataUpdate);
 
+        DB::table('user')
+            ->where('username', $dosen->nip)     // cari berdasarkan NIP lama
+            ->update([
+                'username' => $request->nip       // update ke NIP baru
+            ]);
+
         return redirect('/admin/dosen')->with("success","Data Berhasil Diupdate !");
     }
     public function delete($id)
     {
+        // Ambil data dosen dulu (butuh nip)
+        $dosen = DB::table('dosen')->where('id', $id)->first();
+
+        if (!$dosen) {
+            return redirect('/admin/dosen')->with("error", "Data dosen tidak ditemukan!");
+        }
+
+        // ================================
+        // 🔥 HAPUS USER BERDASARKAN USERNAME = NIP
+        // ================================
+        DB::table('user')
+            ->where('username', $dosen->nip)
+            ->delete();
+
+        // ================================
+        // 🔥 HAPUS DATA DOSEN
+        // ================================
         DB::table('dosen')->where('id',$id)->delete();
 
         return redirect('/admin/dosen')->with("success","Data Berhasil Dihapus !");

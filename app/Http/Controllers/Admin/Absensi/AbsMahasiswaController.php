@@ -26,6 +26,7 @@ class AbsMahasiswaController extends Controller
             })
             ->leftJoin('makul as makul_blok', 'jadwal_makul.id_makul', '=', 'makul_blok.id')
             ->leftJoin('ruangan as ruangan_blok', 'jadwal_makul.id_ruangan', '=', 'ruangan_blok.id')
+            ->leftJoin('prodi as prodi_blok', 'jadwal_makul.id_prodi', '=', 'prodi_blok.id')
 
             // LEFT JOIN ke jadwal_metopen (prefix M)
             ->leftJoin('jadwal_metopen', function ($join) {
@@ -34,6 +35,7 @@ class AbsMahasiswaController extends Controller
             })
             ->leftJoin('makul as makul_metopen', 'jadwal_metopen.id_makul', '=', 'makul_metopen.id')
             ->leftJoin('ruangan as ruangan_metopen', 'jadwal_metopen.id_ruangan', '=', 'ruangan_metopen.id')
+            ->leftJoin('prodi as prodi_metopen', 'jadwal_metopen.id_prodi', '=', 'prodi_metopen.id')
 
             // LEFT JOIN ke tabel materi (dua versi, blok & metopen)
             ->leftJoin('materi as materi_blok', function ($join) {
@@ -55,6 +57,7 @@ class AbsMahasiswaController extends Controller
                 DB::raw('COALESCE(makul_blok.kode, makul_metopen.kode) as kode_makul'),
                 DB::raw('COALESCE(makul_blok.nama, makul_metopen.nama) as nama_makul'),
                 DB::raw('COALESCE(ruangan_blok.nama, ruangan_metopen.nama) as ruangan'),
+                DB::raw('COALESCE(prodi_blok.nama, prodi_metopen.nama) as prodi'),
                 DB::raw('COALESCE(jadwal_makul.hari, jadwal_metopen.hari) as hari'),
 
                 // ambil materi (judul dan file)
@@ -65,8 +68,9 @@ class AbsMahasiswaController extends Controller
             ->paginate($entries);
 
         $absmahasiswa->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.absensi.mahasiswa.index',['absmahasiswa'=>$absmahasiswa]);
+        return view('admin.absensi.mahasiswa.index',['absmahasiswa'=>$absmahasiswa,'username'=>$username]);
     }
 
     public function feature(Request $request)
@@ -83,6 +87,7 @@ class AbsMahasiswaController extends Controller
             })
             ->leftJoin('makul as makul_blok', 'jadwal_makul.id_makul', '=', 'makul_blok.id')
             ->leftJoin('ruangan as ruangan_blok', 'jadwal_makul.id_ruangan', '=', 'ruangan_blok.id')
+            ->leftJoin('prodi as prodi_blok', 'jadwal_makul.id_prodi', '=', 'prodi_blok.id')
 
             // LEFT JOIN ke jadwal_metopen (prefix M)
             ->leftJoin('jadwal_metopen', function ($join) {
@@ -91,6 +96,7 @@ class AbsMahasiswaController extends Controller
             })
             ->leftJoin('makul as makul_metopen', 'jadwal_metopen.id_makul', '=', 'makul_metopen.id')
             ->leftJoin('ruangan as ruangan_metopen', 'jadwal_metopen.id_ruangan', '=', 'ruangan_metopen.id')
+            ->leftJoin('prodi as prodi_metopen', 'jadwal_metopen.id_prodi', '=', 'prodi_metopen.id')
 
             // LEFT JOIN ke tabel materi (dua versi, blok & metopen)
             ->leftJoin('materi as materi_blok', function ($join) {
@@ -112,6 +118,7 @@ class AbsMahasiswaController extends Controller
                 DB::raw('COALESCE(makul_blok.kode, makul_metopen.kode) as kode_makul'),
                 DB::raw('COALESCE(makul_blok.nama, makul_metopen.nama) as nama_makul'),
                 DB::raw('COALESCE(ruangan_blok.nama, ruangan_metopen.nama) as ruangan'),
+                DB::raw('COALESCE(prodi_blok.nama, prodi_metopen.nama) as prodi'),
                 DB::raw('COALESCE(jadwal_makul.hari, jadwal_metopen.hari) as hari'),
 
                 // ambil materi (judul dan file)
@@ -131,6 +138,8 @@ class AbsMahasiswaController extends Controller
                   ->orWhere('m.nama', 'like', "%{$search}%")
                   ->orWhere('ruangan_blok.nama', 'like', "%{$search}%")
                   ->orWhere('ruangan_metopen.nama', 'like', "%{$search}%")
+                  ->orWhere('prodi_blok.nama', 'like', "%{$search}%")
+                  ->orWhere('prodi_metopen.nama', 'like', "%{$search}%")
                   ->orWhere('makul_blok.nama', 'like', "%{$search}%")
                   ->orWhere('makul_metopen.nama', 'like', "%{$search}%");
             });
@@ -144,8 +153,9 @@ class AbsMahasiswaController extends Controller
 
         // Supaya pagination tetap bawa query string (search / entries)
         $absmahasiswa->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.absensi.mahasiswa.index', compact('absmahasiswa'));
+        return view('admin.absensi.mahasiswa.index', compact('absmahasiswa','username'));
     } 
 
     public function add(){
@@ -199,6 +209,7 @@ class AbsMahasiswaController extends Controller
             })
             ->leftJoin('makul as makul_blok', 'jadwal_makul.id_makul', '=', 'makul_blok.id')
             ->leftJoin('ruangan as ruangan_blok', 'jadwal_makul.id_ruangan', '=', 'ruangan_blok.id')
+            ->leftJoin('prodi as prodi_blok', 'jadwal_makul.id_prodi', '=', 'prodi_blok.id')
 
             ->leftJoin('jadwal_metopen', function ($join) {
                 $join->on(DB::raw("SUBSTRING(am.id_jadwal_mahasiswa, 2)"), '=', 'jadwal_metopen.id')
@@ -206,6 +217,7 @@ class AbsMahasiswaController extends Controller
             })
             ->leftJoin('makul as makul_metopen', 'jadwal_metopen.id_makul', '=', 'makul_metopen.id')
             ->leftJoin('ruangan as ruangan_metopen', 'jadwal_metopen.id_ruangan', '=', 'ruangan_metopen.id')
+            ->leftJoin('prodi as prodi_metopen', 'jadwal_metopen.id_prodi', '=', 'prodi_metopen.id')
 
             ->leftJoin('materi as materi_blok', function ($join) {
                 $join->on('materi_blok.id_jadwal_blok', '=', DB::raw("SUBSTRING(am.id_jadwal_mahasiswa, 2)"))
@@ -224,6 +236,7 @@ class AbsMahasiswaController extends Controller
                 DB::raw('COALESCE(makul_blok.kode, makul_metopen.kode) as kode_makul'),
                 DB::raw('COALESCE(makul_blok.nama, makul_metopen.nama) as nama_makul'),
                 DB::raw('COALESCE(ruangan_blok.nama, ruangan_metopen.nama) as ruangan'),
+                DB::raw('COALESCE(prodi_blok.nama, prodi_metopen.nama) as prodi'),
                 DB::raw('COALESCE(jadwal_makul.hari, jadwal_metopen.hari) as hari'),
                 DB::raw('COALESCE(materi_blok.judul, materi_metopen.judul) as judul_materi'),
                 DB::raw('COALESCE(materi_blok.file, materi_metopen.file) as file_materi')

@@ -28,8 +28,9 @@ class YudisiumController extends Controller
 
         // Supaya pagination tetap bawa query string (search / entries)
         $yudisium->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.yudisium.index', ['yudisium' => $yudisium]);
+        return view('admin.yudisium.index', ['yudisium' => $yudisium,'username'=>$username]);
     }
 
     public function feature(Request $request)
@@ -63,8 +64,9 @@ class YudisiumController extends Controller
 
         // Supaya pagination tetap bawa query string
         $yudisium->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.yudisium.index', compact('yudisium'));
+        return view('admin.yudisium.index', compact('yudisium','username'));
     }
 
     public function add(){
