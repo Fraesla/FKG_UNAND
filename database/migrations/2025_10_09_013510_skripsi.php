@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('id_makul');
             $table->string('id_dosen');
             $table->string('id_ruangan');
+            $table->string('id_prodi');
             $table->timestamps();
         });
     }

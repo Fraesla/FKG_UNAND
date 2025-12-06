@@ -9,7 +9,8 @@ use Auth;
 
 class BlokController extends Controller
 {
-    public function read(Request $request){
+    public function read(Request $request, $id_prodi = null){
+
 
         $entries = $request->input('entries', 5);
 
@@ -26,11 +27,13 @@ class BlokController extends Controller
         $query = DB::table('jadwal_makul')
             ->join('kelas', 'jadwal_makul.id_kelas', '=', 'kelas.id')
             ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')
+            ->join('prodi', 'jadwal_makul.id_prodi', '=', 'prodi.id')
             ->join('dosen', 'jadwal_makul.id_dosen', '=', 'dosen.id')
             ->join('ruangan', 'jadwal_makul.id_ruangan', '=', 'ruangan.id')
             ->select(
                 'jadwal_makul.id',
                 'kelas.nama as kelas',
+                'prodi.nama as prodi',
                 'jadwal_makul.minggu',
                 'jadwal_makul.tgl',
                 'jadwal_makul.hari',
@@ -43,6 +46,11 @@ class BlokController extends Controller
             ->where('jadwal_makul.id_dosen', $idDosen) // 🔥 filter berdasarkan dosen login
             ->orderBy('jadwal_makul.id', 'DESC');
 
+        // Filter berdasarkan prodi
+        if ($id_prodi) {
+            $query->where('jadwal_makul.id_prodi', $id_prodi);
+        }
+        
         // Filter berdasarkan blok (id_kelas) kalau dipilih
         if ($request->filled('id_kelas')) {
             $query->where('jadwal_makul.id_kelas', $request->id_kelas);
@@ -52,13 +60,18 @@ class BlokController extends Controller
         $jadmakul = $query->paginate($entries);
         $jadmakul->appends($request->all());
 
+        $username = auth()->user()->username;
+        $dosen = DB::table('dosen')->where('nip', $username)->first();
+
         return view('dosen.blok.index', [
             'jadmakul' => $jadmakul,
-            'blok'     => $blok
+            'blok'     => $blok,
+            'dosen'    => $dosen,
+            'id_prodi' => $id_prodi
         ]);
     }
 
-    public function feature(Request $request)
+    public function feature(Request $request, $id_prodi = null)
     {
         $user = Auth::user();
         $idDosen = $user->id_dosen ?? $user->id;
@@ -66,11 +79,13 @@ class BlokController extends Controller
         $query = DB::table('jadwal_makul')
             ->join('kelas', 'jadwal_makul.id_kelas', '=', 'kelas.id')
             ->join('makul', 'jadwal_makul.id_makul', '=', 'makul.id')
+            ->join('prodi', 'jadwal_makul.id_prodi', '=', 'prodi.id')
             ->join('dosen', 'jadwal_makul.id_dosen', '=', 'dosen.id')
             ->join('ruangan', 'jadwal_makul.id_ruangan', '=', 'ruangan.id')
             ->select(
                 'jadwal_makul.id',
                 'kelas.nama as kelas',
+                'prodi.nama as prodi',
                 'jadwal_makul.minggu',
                 'jadwal_makul.tgl',
                 'jadwal_makul.hari',
@@ -87,6 +102,7 @@ class BlokController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('jadwal_makul.id', 'like', "%{$search}%")
                   ->orWhere('kelas.nama', 'like', "%{$search}%")
+                  ->orWhere('prodi.nama', 'like', "%{$search}%")
                   ->orWhere('jadwal_makul.tgl', 'like', "%{$search}%")
                   ->orWhere('jadwal_makul.hari', 'like', "%{$search}%")
                   ->orWhere('jadwal_makul.jam_mulai', 'like', "%{$search}%")
@@ -95,6 +111,11 @@ class BlokController extends Controller
                   ->orWhere('makul.nama', 'like', "%{$search}%")
                   ->orWhere('ruangan.nama', 'like', "%{$search}%");
             });
+        }
+
+        // Filter berdasarkan prodi
+        if ($id_prodi) {
+            $query->where('jadwal_makul.id_prodi', $id_prodi);
         }
 
         // Show entries (default 10)
@@ -106,15 +127,18 @@ class BlokController extends Controller
         // Supaya pagination tetap bawa query string (search / entries)
         $jadmakul->appends($request->all());
 
-        return view('dosen.blok.index', compact('jadmakul','blok'));
+        $username = auth()->user()->username;
+        $dosen = DB::table('dosen')->where('nip', $username)->first();
+
+        return view('dosen.blok.index', compact('jadmakul','blok','dosen','id_prodi'));
     }
 
-    public function add(){
+    public function add($id_prodi = null){
         $blok = DB::table('kelas')->orderBy('id','DESC')->get();
         $makul = DB::table('makul')->orderBy('id','DESC')->get();
         $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
         $ruangan = DB::table('ruangan')->orderBy('id','DESC')->get();
-        return view('dosen.blok.create',['blok'=>$blok,'makul'=>$makul,'dosen'=>$dosen,'ruangan'=>$ruangan]);
+        return view('dosen.blok.create',['blok'=>$blok,'makul'=>$makul,'dosen'=>$dosen,'ruangan'=>$ruangan,'id_prodi'=>$id_prodi]);
     }
 
     public function create(Request $request){
@@ -146,8 +170,9 @@ class BlokController extends Controller
             'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
         ]);
 
-        DB::table('jadwal_makul')->insert([  
+        $id_jadwal = DB::table('jadwal_makul')->insertGetId([  
             'id_kelas' => $request->id_kelas,
+            'id_prodi' => $request->id_prodi,
             'minggu' => $request->minggu,
             'tgl' => $request->tgl,
             'hari' => $request->hari,
@@ -158,7 +183,19 @@ class BlokController extends Controller
             'id_ruangan' => $request->id_ruangan
         ]);
 
-        return redirect('/dosen/blok')->with("success","Data Berhasil Ditambah !");
+        // Simpan data absen_dosen
+        DB::table('absen_dosen')->insert([
+            'tgl'             => $request->tgl,
+            'jam_masuk'       => $request->jam_mulai,
+            'jam_pulang'      => $request->jam_selesai,
+            'id_dosen'        => $request->id_dosen,
+            'id_jadwal_dosen' => 'B' . $id_jadwal,   // ← otomatis memakai ID dari jadwal_makul
+            'status'          => 'belum absen',
+            'keterangan'      => '',
+            'qr'              => '',
+        ]);
+
+        return redirect('/dosen/blok/'.$request->id_prodi)->with("success","Data Berhasil Ditambah !");
     }
 
     public function absen($id)
@@ -176,7 +213,7 @@ class BlokController extends Controller
             ->exists();
 
         if ($cekDuplikat) {
-            return redirect('/dosen/blok')
+            return redirect('/dosen/blok/'.$jadwal->id_prodi)
                 ->with('error', 'Absen untuk jadwal ini sudah ada!');
         }
 
@@ -211,7 +248,7 @@ class BlokController extends Controller
             ->exists();
 
         if ($cekDuplikat) {
-            return redirect('/dosen/blok')
+            return redirect('/dosen/blok/'.$jadwal->id_prodi)
                 ->with('error', 'Materi untuk jadwal ini sudah ada!');
         }
 
@@ -242,7 +279,7 @@ class BlokController extends Controller
             ->exists();
 
         if ($cekDuplikat) {
-            return redirect('/admin/jadmakul')
+            return redirect('/dosen/blok/'.$jadwal->id_prodi)
                 ->with('error', 'Data Nilai untuk jadwal Mata Kuliah ini sudah ada!');
         }
 
@@ -254,7 +291,7 @@ class BlokController extends Controller
             'nilai'    => 0,
         ]);
 
-        return redirect('/dosen/nilai')
+        return redirect('/dosen/nilai/'.$jadwal->id_prodi)
             ->with('success', 'Data Nilai dari data blok berhasil ditambahkan!');
     }
 
@@ -309,13 +346,67 @@ class BlokController extends Controller
             'id_ruangan' => $request->id_ruangan
         ]);
 
-        return redirect('/dosen/blok')->with("success","Data Berhasil Diupdate !");
+        // =========================================
+        //  CEK APAKAH ADA RECORD ABSEN UNTUK JADWAL
+        // =========================================
+        $id_jadwal_dosen = 'B' . $id;
+
+        $cekAbsen = DB::table('absen_dosen')
+            ->where('id_jadwal_dosen', $id_jadwal_dosen)
+            ->first();
+
+        // =========================================
+        //  JIKA ADA → UPDATE
+        //  JIKA TIDAK ADA → INSERT BARU
+        // =========================================
+        if ($cekAbsen) {
+
+            DB::table('absen_dosen')
+            ->where('id_jadwal_dosen', $id_jadwal_dosen)
+            ->update([
+                'tgl'        => $request->tgl,
+                'jam_masuk'  => $request->jam_mulai,
+                'jam_pulang' => $request->jam_selesai,
+                'id_dosen'   => $request->id_dosen,
+            ]);
+
+        } else {
+
+            DB::table('absen_dosen')->insert([
+                'id_jadwal_dosen' => $id_jadwal_dosen,
+                'tgl'             => $request->tgl,
+                'jam_masuk'       => $request->jam_mulai,
+                'jam_pulang'      => $request->jam_selesai,
+                'id_dosen'        => $request->id_dosen,
+                'status'          => 'belum absen',
+                'keterangan'      => '',
+                'qr'              => '',
+            ]);
+
+        }
+
+        return redirect('/dosen/blok/'.$request->id_prodi)->with("success","Data Berhasil Diupdate !");
     }
 
     public function delete($id)
     {
-        DB::table('jadwal_makul')->where('id',$id)->delete();
+        // Ambil data jadwal dulu sebelum dihapus
+        $jadwal = DB::table('jadwal_makul')->where('id', $id)->first();
 
-        return redirect('/dosen/blok')->with("success","Data Berhasil Dihapus !");
+        // Jika data tidak ditemukan
+        if (!$jadwal) {
+            return redirect()->back()->with("error", "Data tidak ditemukan!");
+        }
+
+        // Buat ID absensi dosen
+        $id_jadwal_dosen = 'B' . $id;
+
+        // Hapus data absen dosen
+        DB::table('absen_dosen')->where('id_jadwal_dosen', $id_jadwal_dosen)->delete();
+
+        // Hapus jadwal
+        DB::table('jadwal_makul')->where('id', $id)->delete();
+
+        return redirect('/dosen/blok/'.$jadwal->id_prodi)->with("success","Data Berhasil Dihapus !");
     }
 }

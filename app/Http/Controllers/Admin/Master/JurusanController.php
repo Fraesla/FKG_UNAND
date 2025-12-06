@@ -26,9 +26,10 @@ class JurusanController extends Controller
 
         // Supaya pagination tetap bawa query string (search / entries)
         $jurusan->appends($request->all());
+        $username = auth()->user()->username;
 
 
-        return view('admin.master.jurusan.index',['jurusan'=>$jurusan]);
+        return view('admin.master.jurusan.index',['jurusan'=>$jurusan, 'username' => $username]);
     }
     public function feature(Request $request)
     {
@@ -54,8 +55,9 @@ class JurusanController extends Controller
 
         // Supaya pagination tetap bawa query string (search / entries)
         $jurusan->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.master.jurusan.index', compact('jurusan'));
+        return view('admin.master.jurusan.index', compact('jurusan','username'));
     }
 
     public function export()

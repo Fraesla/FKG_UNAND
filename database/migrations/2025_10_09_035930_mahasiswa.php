@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('nobp')->unique();
             $table->string('nama')->nullable();
             $table->string('gender')->nullable();
-            $table->string('ukt')->nullable();
+            $table->string('alamat')->nullable();
+            $table->string('contact')->nullable();
             $table->string('id_tahun_ajaran')->nullable();
             $table->text('foto')->nullable();
             $table->timestamps();

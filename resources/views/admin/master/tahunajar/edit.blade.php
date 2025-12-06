@@ -68,11 +68,26 @@
                                             @enderror
                                         </div>
                                         <div>
+                                            <label class="form-label">Level UKT</label>
+                                            <select name="ukt" class="form-select @error('ukt') is-invalid @enderror">
+                                                <option> Pilih Level UKT</option>
+                                                @for($no=1; $no<=8; $no++)
+                                                    <option value="{{ $no }}" {{ $tahunajar->ukt == $no ? 'selected' : '' }}>
+                                                         {{ $no }}
+                                                    </option>
+                                                @endfor
+                                            </select>
+                                            {{-- Pesan Error --}}
+                                            @error('ukt')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div>
                                             <label class="form-label">Semester</label>
                                             <select name="semester" class="form-select @error('semester') is-invalid @enderror">
                                                 <option> Pilih Semester</option>
                                                 @for($no=1; $no<=8; $no++)
-                                                    <option value="{{ $no }}" {{ $tahunajar->semester == $no ? 'selected' : '' }}>
+                                                    <option value="Semester {{ $no }}" {{ $tahunajar->semester == 'Semester '.$no ? 'selected' : '' }}>
                                                         Semester {{ $no }}
                                                     </option>
                                                 @endfor

@@ -19,8 +19,9 @@ class TahunAjaranController extends Controller
 
         // Supaya pagination tetap bawa query string (search / entries)
         $tahunajar->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.master.tahunajar.index', ['tahunajar' => $tahunajar]);
+        return view('admin.master.tahunajar.index', ['tahunajar' => $tahunajar,'username'=>$username]);
     }
 
     public function feature(Request $request)
@@ -32,6 +33,7 @@ class TahunAjaranController extends Controller
             $search = $request->search;
             $query->where('id', 'like', "%{$search}%")
                   ->orWhere('nama', 'like', "%{$search}%")
+                  ->orWhere('ukt', 'like', "%{$search}%")
                   ->orWhere('semester', 'like', "%{$search}%");
         }
 
@@ -43,8 +45,9 @@ class TahunAjaranController extends Controller
 
         // Biar pagination tetap bawa query string
         $tahunajar->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.master.tahunajar.index', compact('tahunajar'));
+        return view('admin.master.tahunajar.index', compact('tahunajar','username'));
     }
 
     public function add(){
@@ -54,15 +57,17 @@ class TahunAjaranController extends Controller
     public function create(Request $request){
        $request->validate([
             'nama' => 'required|string|max:100',
+            'ukt' => 'required|string|max:100',
             'semester' => 'required|string|max:100',
             'status' => 'required|string|max:100',
         ],[
             'nama.required' => 'Nama Tahun Ajaran wajib diisi.',
+            'ukt.required' => 'Level UKT wajib diisi.',
             'semester.required' => 'Semester wajib diisi.',
             'status.required' => 'Status wajib diisi.',
         ]);
         DB::table('tahun_ajaran')->insert([  
-            'nama' => $request->nama,'semester'=>$request->semester,'status' => $request->status]);
+            'nama' => $request->nama,'ukt'=>$request->ukt,'semester'=>$request->semester,'status' => $request->status]);
 
         return redirect('/admin/tahunajar')->with("success","Data Berhasil Ditambah !");
     }
@@ -78,17 +83,19 @@ class TahunAjaranController extends Controller
     public function update(Request $request, $id) {
         $request->validate([
             'nama' => 'required|string|max:100',
+            'ukt' => 'required|string|max:100',
             'semester' => 'required|string|max:100',
             'status' => 'required|string|max:100',
         ],[
             'nama.required' => 'Nama Tahun Ajaran wajib diisi.',
+            'ukt.required' => 'Level UKT wajib diisi.',
             'semester.required' => 'Semester wajib diisi.',
             'status.required' => 'Status wajib diisi.',
         ]);
         DB::table('tahun_ajaran')  
             ->where('id', $id)
             ->update([
-            'nama' => $request->nama,'semester'=>$request->semester,'status' => $request->status]);
+            'nama' => $request->nama,'ukt'=>$request->ukt, 'semester'=>$request->semester,'status' => $request->status]);
 
         return redirect('/admin/tahunajar')->with("success","Data Berhasil Diupdate !");
     }

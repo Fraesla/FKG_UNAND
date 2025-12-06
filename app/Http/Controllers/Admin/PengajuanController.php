@@ -10,43 +10,59 @@ use Auth;
 
 class PengajuanController extends Controller
 {
-    public function read(Request $request)
+    public function read(Request $request, $id_prodi = null)
     {
         // Ambil parameter entries dari request, default = 5
         $entries = $request->input('entries', 5);
 
         // Query pakai join ke tabel mahasiswa
-        $pengajuan = DB::table('pengajuan')
+        $query = DB::table('pengajuan')
             ->join('mahasiswa', 'pengajuan.id_mahasiswa', '=', 'mahasiswa.id')
+            ->join('prodi', 'pengajuan.id_prodi', '=', 'prodi.id')
             ->select(
                 'pengajuan.*',
+                'prodi.nama as prodi',
                 'mahasiswa.nama',
                 'mahasiswa.nobp',
             )
-            ->orderBy('pengajuan.id', 'DESC')
-            ->paginate($entries);
+            ->orderBy('pengajuan.id', 'DESC');
+
+        // Filter berdasarkan prodi
+        if ($id_prodi) {
+            $query->where('pengajuan.id_prodi', $id_prodi);
+        }
 
         // Supaya pagination tetap bawa query string (search / entries)
+        $pengajuan = $query->paginate($entries);
         $pengajuan->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.pengajuan.index', compact('pengajuan'));
+        return view('admin.pengajuan.index', compact('pengajuan','username','id_prodi'));
     }
 
-    public function feature(Request $request)
+    public function feature(Request $request, $id_prodi = null)
     {
         $query = DB::table('pengajuan')
             ->join('mahasiswa', 'pengajuan.id_mahasiswa', '=', 'mahasiswa.id')
+            ->join('prodi', 'pengajuan.id_prodi', '=', 'prodi.id')
             ->select(
                 'pengajuan.*',
+                'prodi.nama as prodi',
                 'mahasiswa.nama',
                 'mahasiswa.nobp',
             );
+
+        // Filter berdasarkan prodi
+        if ($id_prodi) {
+            $query->where('pengajuan.id_prodi', $id_prodi);
+        }
 
         // Search
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('pengajuan.id', 'like', "%{$search}%")
+                  ->orWhere('prodi.nama', 'like', "%{$search}%")
                   ->orWhere('mahasiswa.nama', 'like', "%{$search}%")
                   ->orWhere('mahasiswa.nobp', 'like', "%{$search}%")
                   ->orWhere('pengajuan.dosen_pembimbing_1', 'like', "%{$search}%")
@@ -63,14 +79,15 @@ class PengajuanController extends Controller
 
         // Supaya pagination tetap bawa query string
         $pengajuan->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.pengajuan.index', compact('pengajuan'));
+        return view('admin.pengajuan.index', compact('pengajuan','username','id_prodi'));
     }
 
-    public function add(){
+    public function add($id_prodi = null){
         $mahasiswa = DB::table('mahasiswa')->orderBy('id','DESC')->get();
         $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
-        return view('admin.pengajuan.create',['mahasiswa'=>$mahasiswa,'dosen'=>$dosen]);
+        return view('admin.pengajuan.create',['mahasiswa'=>$mahasiswa,'dosen'=>$dosen,'id_prodi'=>$id_prodi]);
     }
 
     public function create(Request $request)
@@ -107,6 +124,7 @@ class PengajuanController extends Controller
         // ✅ Simpan ke database
         DB::table('pengajuan')->insert([
             'id_mahasiswa'       => $request->id_mahasiswa,
+            'id_prodi'       => $request->id_prodi,
             'dosen_pembimbing_1' => $request->dosen_pembimbing_1,
             'dosen_pembimbing_2' => $request->dosen_pembimbing_2,
             'judul'              => $request->judul,
@@ -116,7 +134,7 @@ class PengajuanController extends Controller
             'updated_at'         => now(),
         ]);
 
-        return redirect('/admin/pengajuan')->with("success", "Data Berhasil Ditambah!");
+        return redirect('/admin/pengajuan/'.$request->id_prodi)->with("success", "Data Berhasil Ditambah!");
     }
 
     public function edit($id){
@@ -181,7 +199,7 @@ class PengajuanController extends Controller
         // update DB
         DB::table('pengajuan')->where('id', $id)->update($updateData);
 
-        return redirect('/admin/pengajuan')->with("success", "Data Berhasil Diupdate !");
+        return redirect('/admin/pengajuan/'.$request->id_prodi)->with("success", "Data Berhasil Diupdate !");
     } 
     public function delete($id)
     {
@@ -203,6 +221,6 @@ class PengajuanController extends Controller
             DB::table('pengajuan')->where('id', $id)->delete();
         }
 
-        return redirect('/admin/pengajuan')->with("success", "Data dan file berhasil dihapus!");
+        return redirect('/admin/pengajuan/'.$pengajuan->id_prodi)->with("success", "Data dan file berhasil dihapus!");
     }
 }

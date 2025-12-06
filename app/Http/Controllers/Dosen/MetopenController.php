@@ -9,22 +9,21 @@ use Auth;
 
 class MetopenController extends Controller
 {
-    public function read(Request $request){
+    public function read(Request $request, $id_prodi = null){
 
         $entries = $request->input('entries', 5);
         $user = Auth::user();
         $idDosen = $user->id_dosen ?? $user->id;
-        // Data blok (kelas) untuk select option
-        $blok = DB::table('kelas')->orderBy('id','DESC')->get();
 
         // Query jadwal_metopen
         $query = DB::table('jadwal_metopen')
             ->join('makul', 'jadwal_metopen.id_makul', '=', 'makul.id')
             ->join('ruangan', 'jadwal_metopen.id_ruangan', '=', 'ruangan.id')
             ->join('dosen', 'jadwal_metopen.id_dosen', '=', 'dosen.id')
+            ->join('prodi', 'jadwal_metopen.id_prodi', '=', 'prodi.id')
             ->select(
                 'jadwal_metopen.id',
-                'jadwal_metopen.minggu',
+                'prodi.nama as prodi',
                 'jadwal_metopen.tgl',
                 'jadwal_metopen.hari',
                 'jadwal_metopen.jam_mulai',
@@ -36,6 +35,11 @@ class MetopenController extends Controller
             ->where('jadwal_metopen.id_dosen', $idDosen)
             ->orderBy('jadwal_metopen.id', 'DESC');
 
+        // Filter berdasarkan prodi
+        if ($id_prodi) {
+            $query->where('jadwal_metopen.id_prodi', $id_prodi);
+        }
+
         // Filter berdasarkan blok (id_kelas) kalau dipilih
         if ($request->filled('id_kelas')) {
             $query->where('jadwal_metopen.id_kelas', $request->id_kelas);
@@ -45,24 +49,28 @@ class MetopenController extends Controller
         $jadmetopen = $query->paginate($entries);
         $jadmetopen->appends($request->all());
 
+        $username = auth()->user()->username;
+        $dosen = DB::table('dosen')->where('nip', $username)->first();
+
         return view('dosen.metopen.index', [
             'jadmetopen' => $jadmetopen,
-            'blok'     => $blok
+            'dosen'    => $dosen,
+            'id_prodi'    => $id_prodi
         ]);
     } 
 
-    public function feature(Request $request)
+    public function feature(Request $request, $id_prodi = null)
     {
         $user = Auth::user();
         $idDosen = $user->id_dosen ?? $user->id;
-        $blok = DB::table('kelas')->orderBy('id','DESC')->get();
         $query = DB::table('jadwal_metopen')
             ->join('makul', 'jadwal_metopen.id_makul', '=', 'makul.id')
             ->join('ruangan', 'jadwal_metopen.id_ruangan', '=', 'ruangan.id')
             ->join('dosen', 'jadwal_metopen.id_dosen', '=', 'dosen.id')
+            ->join('prodi', 'jadwal_metopen.id_prodi', '=', 'prodi.id')
             ->select(
                 'jadwal_metopen.id',
-                'jadwal_metopen.minggu',
+                'prodi.nama as prodi',
                 'jadwal_metopen.tgl',
                 'jadwal_metopen.hari',
                 'jadwal_metopen.jam_mulai',
@@ -73,21 +81,26 @@ class MetopenController extends Controller
             )
             ->where('jadwal_metopen.id_dosen', $idDosen);
 
+        // Filter berdasarkan prodi
+        if ($id_prodi) {
+            $query->where('jadwal_metopen.id_prodi', $id_prodi);
+        }
+
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('jadwal_metopen.id', 'like', "%{$search}%")
-                  ->orWhere('kelas.nama', 'like', "%{$search}%")
-                  ->orWhere('jadwal_metopen.minggu', 'like', "%{$search}%")
                   ->orWhere('jadwal_metopen.tgl', 'like', "%{$search}%")
                   ->orWhere('jadwal_metopen.hari', 'like', "%{$search}%")
                   ->orWhere('jadwal_metopen.jam_mulai', 'like', "%{$search}%")
                   ->orWhere('jadwal_metopen.jam_selesai', 'like', "%{$search}%")
+                  ->orWhere('prodi.nama', 'like', "%{$search}%")
                   ->orWhere('makul.nama', 'like', "%{$search}%")
                   ->orWhere('dosen.nama', 'like', "%{$search}%")
                   ->orWhere('ruangan.nama', 'like', "%{$search}%");
             });
         }
+
 
         // Show entries (default 10)
         $entries = $request->get('entries', 10);
@@ -98,15 +111,18 @@ class MetopenController extends Controller
         // Supaya pagination tetap bawa query string (search / entries)
         $jadmetopen->appends($request->all());
 
-        return view('dosen.metopen.index', compact('jadmetopen','blok'));
+        $username = auth()->user()->username;
+        $dosen = DB::table('dosen')->where('nip', $username)->first();
+
+        return view('dosen.metopen.index', compact('jadmetopen','dosen','id_prodi'));
     }
 
-    public function add(){
+    public function add($id_prodi = null){
         $blok = DB::table('kelas')->orderBy('id','DESC')->get();
         $makul = DB::table('makul')->orderBy('id','DESC')->get();
         $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
         $ruangan = DB::table('ruangan')->orderBy('id','DESC')->get();
-        return view('dosen.metopen.create',['blok'=>$blok,'dosen'=>$dosen,'makul'=>$makul,'ruangan'=>$ruangan]);
+        return view('dosen.metopen.create',['blok'=>$blok,'dosen'=>$dosen,'makul'=>$makul,'ruangan'=>$ruangan,'id_prodi'=>$id_prodi]);
     }
 
     public function create(Request $request){
@@ -114,16 +130,14 @@ class MetopenController extends Controller
         $id_dosen = $user->id_dosen ?? $user->id;
         // Validasi input
         $request->validate([
-            'minggu' => 'required|integer|min:1|max:6',
             'tgl' => 'required|date',
             'hari' => 'required|string|max:255',
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
             'id_makul' => 'required|exists:makul,id',
             'id_ruangan' => 'required|exists:ruangan,id',
+            'keterangan' => 'nullable|string',
         ],[
-            'minggu.required' => 'Minggu ke- wajib diisi.',
-            'minggu.integer' => 'Minggu ke- yang dipilih tidak valid.',
             'tgl.required' => 'Tanggal wajib diisi.',
             'hari.required' => 'Hari wajib diisi.',
             'jam_mulai.required' => 'Jam Mulai wajib diisi.',
@@ -135,18 +149,31 @@ class MetopenController extends Controller
             'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
         ]);
 
-        DB::table('jadwal_metopen')->insert([  
-            'minggu' => $request->minggu,
+        $id_jadwal = DB::table('jadwal_metopen')->insertGetId([   
+            'id_prodi' => $request->id_prodi,
             'tgl' => $request->tgl,
             'hari' => $request->hari,
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
             'id_makul' => $request->id_makul,
             'id_dosen' => $id_dosen,
-            'id_ruangan' => $request->id_ruangan
+            'id_ruangan' => $request->id_ruangan,
+            'keterangan' => $request->keterangan,
         ]);
 
-        return redirect('/dosen/metopen')->with("success","Data Berhasil Ditambah !");
+        // Simpan data absen baru
+        DB::table('absen_dosen')->insert([
+            'tgl'         => $request->tgl,
+            'jam_masuk'   => $request->jam_mulai,
+            'jam_pulang'  => $request->jam_selesai,
+            'id_dosen'    => $request->id_dosen,
+            'id_jadwal_dosen' => 'M'.$id_jadwal,
+            'status'      => 'belum absen',
+            'keterangan'  => '',
+            'qr'          => '',
+        ]);
+
+        return redirect('/dosen/metopen/'.$request->id_prodi)->with("success","Data Berhasil Ditambah !");
     }
 
     public function absen($id)
@@ -164,7 +191,7 @@ class MetopenController extends Controller
             ->exists();
 
         if ($cekDuplikat) {
-            return redirect('/dosen/metopen')
+            return redirect('/dosen/metopen/'.$jadwal->id_prodi)
                 ->with('error', 'Absen untuk jadwal ini sudah ada!');
         }
 
@@ -199,7 +226,7 @@ class MetopenController extends Controller
             ->exists();
 
         if ($cekDuplikat) {
-            return redirect('/dosen/metopen')
+            return redirect('/dosen/metopen/'.$jadwal->id_prodi)
                 ->with('error', 'Materi untuk jadwal ini sudah ada!');
         }
 
@@ -230,7 +257,7 @@ class MetopenController extends Controller
             ->exists();
 
         if ($cekDuplikat) {
-            return redirect('/admin/jadmetopen')
+            return redirect('/admin/jadmetopen/'.$jadwal->id_prodi)
                 ->with('error', 'Data Nilai untuk jadwal Mata Kuliah ini sudah ada!');
         }
 
@@ -259,17 +286,14 @@ class MetopenController extends Controller
     public function update(Request $request, $id) {
         // Validasi input
         $request->validate([
-            'minggu' => 'required|integer|min:1|max:6',
             'tgl' => 'required|date',
             'hari' => 'required|string|max:255',
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
             'id_makul' => 'required|exists:makul,id',
             'id_ruangan' => 'required|exists:ruangan,id',
+            'keterangan' => 'nullable|string',
         ],[
-            'minggu.required' => 'Minggu ke- wajib diisi.',
-            'minggu.integer' => 'Minggu ke- yang dipilih tidak valid.',
-            'minggu.min' => 'Minggu ke- yang dipilih tidak valid.',
             'tgl.required' => 'Tanggal wajib diisi.',
             'hari.required' => 'Hari wajib diisi.',
             'jam_mulai.required' => 'Jam Mulai wajib diisi.',
@@ -284,22 +308,76 @@ class MetopenController extends Controller
         DB::table('jadwal_metopen')  
             ->where('id', $id)
             ->update([
-            'minggu' => $request->minggu,
             'tgl' => $request->tgl,
             'hari' => $request->hari,
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
             'id_makul' => $request->id_makul,
-            'id_ruangan' => $request->id_ruangan
+            'id_ruangan' => $request->id_ruangan,
+            'id_ruangan' => $keterangan
         ]);
 
-        return redirect('/dosen/metopen')->with("success","Data Berhasil Diupdate !");
+        // =========================================
+        //  CEK APAKAH ADA RECORD ABSEN UNTUK JADWAL
+        // =========================================
+        $id_jadwal_dosen = 'M' . $id;
+
+        $cekAbsen = DB::table('absen_dosen')
+            ->where('id_jadwal_dosen', $id_jadwal_dosen)
+            ->first();
+
+        // =========================================
+        //  JIKA ADA → UPDATE
+        //  JIKA TIDAK ADA → INSERT BARU
+        // =========================================
+        if ($cekAbsen) {
+
+            DB::table('absen_dosen')
+            ->where('id_jadwal_dosen', $id_jadwal_dosen)
+            ->update([
+                'tgl'        => $request->tgl,
+                'jam_masuk'  => $request->jam_mulai,
+                'jam_pulang' => $request->jam_selesai,
+                'id_dosen'   => $request->id_dosen,
+            ]);
+
+        } else {
+
+            DB::table('absen_dosen')->insert([
+                'id_jadwal_dosen' => $id_jadwal_dosen,
+                'tgl'             => $request->tgl,
+                'jam_masuk'       => $request->jam_mulai,
+                'jam_pulang'      => $request->jam_selesai,
+                'id_dosen'        => $request->id_dosen,
+                'status'          => 'belum absen',
+                'keterangan'      => '',
+                'qr'              => '',
+            ]);
+
+        }
+
+        return redirect('/dosen/metopen/'.$request->id_prodi)->with("success","Data Berhasil Diupdate !");
     }
 
     public function delete($id)
     {
-        DB::table('jadwal_metopen')->where('id',$id)->delete();
+        // Ambil data jadwal dulu sebelum dihapus
+        $jadwal = DB::table('jadwal_metopen')->where('id', $id)->first();
 
-        return redirect('/dosen/metopen')->with("success","Data Berhasil Dihapus !");
+        // Jika data tidak ditemukan
+        if (!$jadwal) {
+            return redirect()->back()->with("error", "Data tidak ditemukan!");
+        }
+
+        // Buat ID absensi dosen
+        $id_jadwal_dosen = 'M' . $id;
+
+        // Hapus data absen dosen
+        DB::table('absen_dosen')->where('id_jadwal_dosen', $id_jadwal_dosen)->delete();
+
+        // Hapus jadwal
+        DB::table('jadwal_metopen')->where('id', $id)->delete();
+
+        return redirect('/dosen/metopen/'.$jadwal->id_prodi)->with("success","Data Berhasil Dihapus !");
     }
 }

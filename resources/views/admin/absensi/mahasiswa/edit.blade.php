@@ -52,6 +52,7 @@
                         </div>
 
                         <div class="mb-3">
+                            <p>📘 <strong>Prodi:</strong> {{ $absmahasiswa->prodi ?? '-' }}</p>
                             <p>📘 <strong>Kode Kuliah:</strong> {{ $absmahasiswa->kode_makul ?? '-' }}</p>
                             <p>📘 <strong>Mata Kuliah:</strong> {{ $absmahasiswa->nama_makul ?? '-' }}</p>
                             <p>📅 <strong>Tanggal:</strong> {{ $absmahasiswa->tgl }}</p>

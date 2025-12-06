@@ -17,13 +17,8 @@ return new class extends Migration
             $table->string('nip')->unique();
             $table->string('nidn')->unique();
             $table->string('gender')->nullable();
-            $table->string('pangol')->nullable();
-            $table->string('napater')->nullable();
-            $table->string('napaber')->nullable();
-            $table->string('jf')->nullable();
-            $table->string('js')->nullable();
-            $table->string('najater')->nullable();
-            $table->string('penter')->nullable();
+            $table->string('contact')->nullable();
+            $table->text('alamat')->nullable();
             $table->string('keterangan')->nullable();
             $table->text('foto')->nullable();
             $table->timestamps();

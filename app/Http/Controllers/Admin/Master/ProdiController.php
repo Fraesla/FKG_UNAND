@@ -23,8 +23,9 @@ class ProdiController extends Controller
         ->paginate($entries);
 
         $prodi->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.master.prodi.index',['prodi'=>$prodi]);
+        return view('admin.master.prodi.index',['prodi'=>$prodi,'username'=>$username]);
 
     }
 
@@ -51,8 +52,9 @@ class ProdiController extends Controller
 
         // Supaya pagination tetap bawa query string (search / entries)
         $prodi->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.master.prodi.index', compact('prodi'));
+        return view('admin.master.prodi.index', compact('prodi','username'));
     }
 
     public function export()

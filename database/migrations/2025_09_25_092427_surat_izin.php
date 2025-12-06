@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('judul_penelitian');
             $table->string('dosen_pembimbing_1');
             $table->string('dosen_pembimbing_2');
-            $table->text('isi_surat');
+            $table->text('isi_surat')->nullable();
+            $table->text('id_prodi');
             $table->timestamps();
         });
     }

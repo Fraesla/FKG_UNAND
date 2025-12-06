@@ -1,5 +1,5 @@
 @extends('dosen.layouts.app', [
-'activePage' => 'metopen',
+'activePage' => 'jadmetopen'.$id_prodi,
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -42,7 +42,7 @@
                                 <h3 class="card-title">
                                     Penambahan Data Metopen
                                 </h3>
-                                <a href="/dosen/metopen/" class="btn btn-secondary btn-sm">
+                                <a href="/dosen/metopen/{{$id_prodi}}" class="btn btn-secondary btn-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -73,21 +73,9 @@
                                             </select>
                                         </div> -->
                                         <div class="row">
-                                            <div class="col-md-4">
-                                                <label class="form-label">Minggu ke-</label>
-                                                <select class="form-select" name="minggu">
-                                                    <option value="0">Pilih Minggu ke-
-                                                    @for($no=1; $no<=6; $no++)
-                                                        <option value="{{ $no }}">Minggu Ke-{{ $no }}</option>
-                                                    @endfor
-                                                </select>
-                                                @error('minggu')
-                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
-                                                @enderror
-                                            </div>
 
                                             <!-- Kolom Tanggal -->
-                                                <div class="col-md-4">
+                                                <div class="col-md-6">
                                                     <label class="form-label">Tanggal</label>
                                                     <div class="input-icon">
                                                         <span class="input-icon-addon">
@@ -104,8 +92,11 @@
                                                         </span>
                                                         <input class="form-control" placeholder="Masukkan Tanggal" id="datepicker-icon-prepend" name="tgl">
                                                     </div>
+                                                    @error('tgl')
+                                                        <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                    @enderror
                                                 </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <label class="form-label">Hari</label>
                                                 <select class="form-select" name="hari">
                                                     <option value="">Pilih Hari</option>
@@ -123,23 +114,23 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label class="form-label">Jam Mulai</label>
-                                                <input type="time" name="jam_mulai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off">
+                                                <input type="text" name="jam_mulai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off">
                                                 @error('jam_mulai')
                                                     <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                                 @enderror
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label">Jam Selesai</label>
-                                                <input type="time" name="jam_selesai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off">
+                                                <input type="text" name="jam_selesai" class="form-control" data-mask="00:00" data-mask-visible="true" placeholder="00:00" autocomplete="off">
                                                 @error('jam_selesai')
                                                     <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                                 @enderror
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <label class="form-label">Mata Kuliah</label>
-                                                 <select class="form-select" name="id_makul">
+                                                 <select class="form-select" name="id_makul" id="select-makul">
                                                     <option>Pilih Mata Kuliah</option>
                                                     @foreach($makul as $data)
                                                     <option value="{{$data->id}}">
@@ -152,7 +143,23 @@
                                                     <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                                 @enderror
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Dosen</label>
+                                                 <select class="form-select" name="id_dosen">
+                                                    <option>
+                                                        Pilih Dosen
+                                                    </option>
+                                                    @foreach($dosen as $data)
+                                                    <option value="{{$data->id}}">
+                                                        {{$data->nama}}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('id_dosen')
+                                                    <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-4">
                                                 <label class="form-label">Ruangan</label>
                                                  <select class="form-select" name="id_ruangan">
                                                     <option>
@@ -169,6 +176,15 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        <div class="mb-3 text-start d-none" id="ket-kuliah-pengantar">
+                                            <label for="Keterangan" class="form-label text-light">Keterangan (Kuliah Pengantar)</label>
+                                            <textarea name="keterangan" id="Keterangan" rows="3" 
+                                                class="form-control" placeholder="Masukkan Keterangan"></textarea>
+                                            @error('Keterangan')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <input type="hidden" name="id_prodi" value="{{$id_prodi}}">
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">
                                                 Simpan
@@ -193,4 +209,20 @@
     </div>
 </div>
 <!-- END PAGE BODY -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const selectMakul = document.getElementById('select-makul');
+    const ketPengantar = document.getElementById('ket-kuliah-pengantar');
+
+    selectMakul.addEventListener('change', function () {
+        const selectedText = selectMakul.options[selectMakul.selectedIndex].text.trim();
+
+        if (selectedText === 'Kuliah Pengantar') {
+            ketPengantar.classList.remove('d-none');
+        } else {
+            ketPengantar.classList.add('d-none');
+        }
+    });
+});
+</script>
 @endsection

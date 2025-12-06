@@ -27,8 +27,9 @@ class SAPSController extends Controller
 
         // Supaya pagination tetap bawa query string (search / entries)
         $saps->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.saps.index', compact('saps'));
+        return view('admin.saps.index', compact('saps','username'));
     }
 
     public function feature(Request $request)
@@ -65,8 +66,9 @@ class SAPSController extends Controller
 
         // Biar pagination tetap bawa query string
         $saps->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.saps.index', compact('saps'));
+        return view('admin.saps.index', compact('saps','username'));
     }
 
     public function add(){

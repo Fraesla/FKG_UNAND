@@ -34,6 +34,29 @@
     <style>
       @import url("https://rsms.me/inter/inter.css");
     </style>
+    <style>
+    .submenu-prodi {
+          display: none;
+          padding-left: 20px;
+      }
+
+      .submenu-prodi.show {
+          display: block;
+      }
+
+      .prodi-toggle {
+          font-weight: 600;
+      }
+
+      .dropdown-caret {
+          font-size: 12px;
+          transition: 0.2s;
+      }
+
+      .dropdown-caret.rotate {
+          transform: rotate(180deg);
+      }
+  </style>
     <!-- END CUSTOM FONT -->
   </head>
   <body>
@@ -987,39 +1010,114 @@
                 </div>
               </li> -->
 
-              <li class="nav-item dropdown @if(in_array($activeDrop, ['jadmakul', 'jadmetopen', 'skripsi', 'ta', 'suratizin', 'pengajuan', 'seminarproposal', 'seminarhasil'])) show @endif">
-                <a
-                  class="nav-link dropdown-toggle @if(in_array($activeDrop, ['jadmakul', 'jadmetopen', 'skripsi', 'ta', 'suratizin', 'pengajuan', 'seminarproposal', 'seminarhasil'])) show @endif"
-                  href="#navbar-extra"
-                  data-bs-toggle="dropdown"
-                  data-bs-auto-close="false"
-                  role="button"
-                  aria-expanded="@if(in_array($activeDrop, ['jadmakul', 'jadmetopen', 'skripsi', 'ta', 'suratizin', 'pengajuan', 'seminarproposal', 'seminarhasil'])) show @endif"
-                >
-                  <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/star -->
-                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dental"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5.5c-1.074 -.586 -2.583 -1.5 -4 -1.5c-2.1 0 -4 1.247 -4 5c0 4.899 1.056 8.41 2.671 10.537c.573 .756 1.97 .521 2.567 -.236c.398 -.505 .819 -1.439 1.262 -2.801c.292 -.771 .892 -1.504 1.5 -1.5c.602 0 1.21 .737 1.5 1.5c.443 1.362 .864 2.295 1.262 2.8c.597 .759 2 .993 2.567 .237c1.615 -2.127 2.671 -5.637 2.671 -10.537c0 -3.74 -1.908 -5 -4 -5c-1.423 0 -2.92 .911 -4 1.5z" /><path d="M12 5.5l3 1.5" /></svg>
-                  </span>
-                  <span class="nav-link-title"> Kedokteran Gigi</span>
-                </a>
-                <div class="dropdown-menu show-menu @if(in_array($activeDrop, ['jadmakul', 'jadmetopen', 'skripsi', 'ta', 'suratizin', 'pengajuan', 'seminarproposal', 'seminarhasil'])) show @endif">
-                  <div class="dropdown-menu-columns">
-                    <div class="dropdown-menu-column">
-                      <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
-                        Bimbingan Akademik
-                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                      </a> -->
-                      <a class="dropdown-item @if ($activeDrop == 'jadmakul') active @endif" href="/admin/jadmakul"> Blok </a>
-                      <a class="dropdown-item @if ($activeDrop == 'jadmetopen') active @endif" href="/admin/jadmetopen"> Metopen</a>
-                      <a class="dropdown-item @if ($activeDrop == 'skripsi') active @endif" href="/admin/skripsi"> Skripsi</a>
-                      <a class="dropdown-item @if ($activeDrop == 'ta') active @endif" href="/admin/ta">Bimbingan Tugas Akhir </a>
-                      <a class="dropdown-item @if ($activeDrop == 'suratizin') active @endif" href="/admin/suratizin">Surat Izin Penelitian </a>
-                      <a class="dropdown-item @if ($activeDrop == 'pengajuan') active @endif" href="/admin/pengajuan">Pengajuan & Penguji </a>
-                      <a class="dropdown-item @if ($activeDrop == 'seminarproposal') active @endif" href="/admin/seminarproposal">Permohonan Seminar Proposal</a>
-                      <a class="dropdown-item @if ($activeDrop == 'seminarhasil') active @endif" href="/admin/seminarhasil">Permohonan Seminar Hasil </a>
+             <li class="nav-item dropdown @if($activeDrop == 'prodi') show @endif">
+
+                    <a class="nav-link dropdown-toggle @if($activeDrop == 'prodi') show @endif"
+                       href="#" data-bs-toggle="dropdown" data-bs-auto-close="false">
+                        <span class="nav-link-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2">
+                                <path d="M12 5.5c-1.074 -.586 -2.583 -1.5 -4 -1.5c-2.1 0 -4 1.247 -4 5c0 4.899 
+                                        1.056 8.41 2.671 10.537c.573 .756 1.97 .521 2.567 -.236
+                                        c.398 -.505 .819 -1.439 1.262 -2.801c.292 -.771 .892 -1.504 
+                                        1.5 -1.5c.602 0 1.21 .737 1.5 1.5c.443 1.362 .864 2.295 
+                                        1.262 2.8c.597 .759 2 .993 2.567 .237c1.615 -2.127 
+                                        2.671 -5.637 2.671 -10.537c0 -3.74 -1.908 -5 -4 -5
+                                        c-1.423 0 -2.92 .911 -4 1.5z" />
+                            </svg>
+                        </span>
+
+                        <span class="nav-link-title">Data Prodi</span>
+                    </a>
+
+                    <div class="dropdown-menu show-menu @if($activeDrop == 'prodi') show @endif">
+                        <div class="dropdown-menu-columns">
+                            <div class="dropdown-menu-column">
+
+                                @foreach($prodiList as $prodi)
+
+                                <!-- 🔽 DROPDOWN PER PRODI -->
+                                <a href="#" class="dropdown-item d-flex justify-content-between align-items-center prodi-toggle"
+                                   data-target="sub-{{ $prodi->id }}">
+                                    <span>{{ $prodi->nama }}</span>
+                                    <span class="dropdown-caret">▼</span>
+                                </a>
+
+                                <!-- LIST SUBMENU PRODI -->
+                                <div id="sub-{{ $prodi->id }}" class="submenu-prodi">
+                                    <a class="dropdown-item @if ($activeDrop == 'jadmakul'.$prodi->id) active @endif" href="{{ route('admin.jadwal.makul.read', $prodi->id) }}">
+                                      <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-category-2">
+                                          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                          <path d="M14 4h6v6h-6z" />
+                                          <path d="M4 14h6v6h-6z" />
+                                          <path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                                          <path d="M7 7m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                                        </svg>
+                                      </span>
+                                      <span class="nav-link-title"> Data Blok</span>
+                                    </a>
+                                    <a class="dropdown-item @if ($activeDrop == 'jadmetopen'.$prodi->id) active @endif" href="/admin/jadmetopen/{{ $prodi->id }}">
+                                      <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-browser-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 1a1 1 0 0 1 1 -1h14a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-14a1 1 0 0 1 -1 -1z" /><path d="M4 8h16" /><path d="M8 4v4" /><path d="M9.5 14.5l1.5 1.5l3 -3" /></svg>
+                                      </span>
+                                      <span class="nav-link-title"> Data Metopen</span>
+                                    </a>
+                                    <a class="dropdown-item @if ($activeDrop == 'skripsi'.$prodi->id) active @endif" href="/admin/skripsi/{{ $prodi->id }}">
+                                      <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-box-model-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 8h8v8h-8z" /><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /></svg>
+                                      </span>
+                                      <span class="nav-link-title"> Data Skripsi</span>
+                                    </a>
+                                    <a class="dropdown-item @if ($activeDrop == 'ta'.$prodi->id) active @endif" href="/admin/ta/{{ $prodi->id }}">
+                                       <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-arch"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l18 0" /><path d="M4 21v-15a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v15" /><path d="M9 21v-8a3 3 0 0 1 6 0v8" /></svg></span>
+                                      <span class="nav-link-title"> Data Bimbingan TA</span>
+                                    </a>
+                                    <a class="dropdown-item @if ($activeDrop == 'suratizin'.$prodi->id) active @endif" href="/admin/suratizin/{{ $prodi->id }}">
+                                      <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-border-all"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M4 12l16 0" /><path d="M12 4l0 16" /></svg>
+                                      </span>
+                                      <span class="nav-link-title"> Data Surat Izin Penelitian</span>
+                                    </a>
+                                    <!-- SUBMENU Baru -->
+                                    <div class="submenu-group">
+                                        <a href="#" class="dropdown-item d-flex justify-content-between align-items-center prodi-toggle"
+                                           data-target="sub-pengajuan-{{ $prodi->id }}">
+                                           <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-list"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 12l.01 0" /><path d="M13 12l2 0" /><path d="M9 16l.01 0" /><path d="M13 16l2 0" /></svg>
+                                            </span>
+                                            <span>Data Pengajuan Judul & Penguji Seminar</span>
+                                            <span class="dropdown-caret">▼</span>
+                                        </a>
+
+                                        <div id="sub-pengajuan-{{ $prodi->id }}" class="submenu-prodi">
+                                            <a class="dropdown-item @if ($activeDrop == 'seminarproposal'.$prodi->id) active @endif" 
+                                               href="/admin/seminarproposal/{{ $prodi->id }}">
+                                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-checkup-list"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 14h.01" /><path d="M9 17h.01" /><path d="M12 16l1 1l3 -3" /></svg>
+                                                  </span>
+                                                  <span class="nav-link-title"> Daftar Seminar Proposal</span>
+                                               </a>
+
+                                            <a class="dropdown-item @if ($activeDrop == 'seminarhasil'.$prodi->id) active @endif" 
+                                               href="/admin/seminarhasil/{{ $prodi->id }}">
+                                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-report-analytics"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 17v-5" /><path d="M12 17v-1" /><path d="M15 17v-3" /></svg>
+                                                  </span>
+                                                  <span class="nav-link-title"> Daftar Seminar Hasil</span>
+                                               </a>
+                                        </div>
+                                    </div>
+                                </div> 
+
+                                @endforeach
+
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                </div>
+
+                </li>
 
                 <!-- <li class="nav-item @if ($activePage == 'ta') active @endif">
                 <a class="nav-link" href="#">
@@ -1152,7 +1250,7 @@
                     </div>
                   </div>
                 </div>
-              <li class="nav-item dropdown @if(in_array($activeDrop, ['absmahasiswa', 'absdosen'])) show @endif">
+              <!-- <li class="nav-item dropdown @if(in_array($activeDrop, ['absmahasiswa', 'absdosen'])) show @endif">
                 <a
                   class="nav-link dropdown-toggle @if(in_array($activeDrop, ['absmahasiswa', 'absdosen'])) show @endif"
                   href="#navbar-extra"
@@ -1162,7 +1260,7 @@
                   aria-expanded="@if(in_array($activeDrop, ['absmahasiswa', 'absdosen'])) show @endif"
                 >
                   <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/star -->
+                    >
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-description"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 17h6" /><path d="M9 13h6" /></svg>
                   </span>
                   <span class="nav-link-title"> Data Absensi</span>
@@ -1170,15 +1268,11 @@
                 <div class="dropdown-menu show-menu @if(in_array($activeDrop, ['absmahasiswa', 'absdosen'])) show @endif">
                   <div class="dropdown-menu-columns">
                     <div class="dropdown-menu-column">
-                      <!-- <a class="dropdown-item" href="/mahasiswa/akademik">
-                        Bimbingan Akademik
-                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                      </a> -->
                       <a class="dropdown-item @if ($activeDrop == 'absmahasiswa') active @endif" href="/admin/absmahasiswa"> Mahasiswa </a>
                       <a class="dropdown-item @if ($activeDrop == 'absdosen') active @endif" href="/admin/absdosen"> Dosen</a>
                     </div>
                   </div>
-                </div>
+                </div> -->
               <li class="nav-item">
                 <form id="logout-form" action="{{ route('logout') }}" method="POST">
                 <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();
@@ -3204,18 +3298,21 @@
     });
     </script>
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const activeItem = document.querySelector('.dropdown-item.active');
-      if (activeItem) {
-        const parentMenu = activeItem.closest('.dropdown');
-        if (parentMenu) {
-          parentMenu.classList.add('show');
-          const dropdownToggle = parentMenu.querySelector('.dropdown-toggle');
-          if (dropdownToggle) dropdownToggle.setAttribute('aria-expanded', 'true');
-          const dropdownMenu = parentMenu.querySelector('.dropdown-menu');
-          if (dropdownMenu) dropdownMenu.classList.add('show');
-        }
-      }
+        document.querySelectorAll('.prodi-toggle').forEach(btn => {
+
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            let target = document.getElementById(this.dataset.target);
+
+            // toggle submenu
+            target.classList.toggle('show');
+
+            // rotate caret
+            let caret = this.querySelector('.dropdown-caret');
+            caret.classList.toggle('rotate');
+        });
+
     });
     </script>
     <!-- END PAGE SCRIPTS -->

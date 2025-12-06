@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
 'activePage' => 'gigi',
-'activeDrop' => 'seminarproposal',
+'activeDrop' => 'seminarproposal'.$id_prodi,
 ])
 @section('content')
 
@@ -9,7 +9,7 @@
       <div class="row g-2 align-items-center">
          <div class="col">
             <div class="page-pretitle">Aplikasi FKG</div>
-            <h2 class="page-title">Data Seminar Proposal</h2>
+            <h2 class="page-title">Data Daftar Seminar Proposal</h2>
             @if ($errors->any())
                     <div id="alert-error" class="alert alert-danger alert-dismissible fade show position-relative" role="alert">
                         <strong>⚠️ Terjadi Kesalahan pada Pengisian Formulir:</strong>
@@ -35,8 +35,8 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="card-title">Penambahan Data Seminar Proposal</h3>
-                        <a href="/admin/seminarproposal/" class="btn btn-secondary btn-sm">
+                        <h3 class="card-title">Penambahan Daftar Data Seminar Proposal</h3>
+                        <a href="/admin/seminarproposal/{{$id_prodi}}" class="btn btn-secondary btn-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -123,6 +123,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <input type="hidden" name="id_prodi" value="{{$id_prodi}}">
 
                             <!-- Upload file tunggal tapi multi -->
                             <div class="mb-3">

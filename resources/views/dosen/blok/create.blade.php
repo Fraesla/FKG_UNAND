@@ -1,5 +1,5 @@
 @extends('dosen.layouts.app', [
-'activePage' => 'blok',
+'activePage' => 'blok'.$id_prodi,
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -42,7 +42,7 @@
                                 <h3 class="card-title">
                                     Penambahan Data Blok
                                 </h3>
-                                <a href="/dosen/blok/" class="btn btn-secondary btn-sm">
+                                <a href="/dosen/blok/{{$id_prodi}}" class="btn btn-secondary btn-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -184,6 +184,7 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        <input type="hidden" name="id_prodi" value="{{$id_prodi}}">
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">
                                                 Simpan

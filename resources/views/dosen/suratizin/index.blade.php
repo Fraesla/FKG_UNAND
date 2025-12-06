@@ -1,20 +1,127 @@
 @extends('dosen.layouts.app', [
-'activePage' => 'suratizin',
+'activePage' => 'suratizin'.$id_prodi,
 ])
 @section('content')
+<style>
+      .profile-card {
+          background: #111827;
+          border-radius: 14px;
+          padding: 10px 14px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+          transition: 0.2s ease;
+          border: 1px solid #1f2937;
+          position: relative;
+          z-index: 99999;
+      }
+
+      .profile-card:hover {
+          transform: translateY(-2px);
+      }
+
+      .profile-img {
+          width: 46px;
+          height: 46px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid #4b5563;
+      }
+
+      .profile-name {
+          font-size: 15px;
+          font-weight: 600;
+          color: #fff;
+      }
+
+      .profile-sub {
+          font-size: 12px;
+          color: #9ca3af;
+      }
+
+      /* Dropdown custom */
+      .menu-dropdown {
+          position: absolute;
+          top: 60px;
+          right: 10px;
+          width: 180px;
+
+          background: #1f2937;
+          border: 1px solid #374151;
+          border-radius: 8px;
+          padding: 6px 0;
+
+          display: none; /* HIDDEN BY DEFAULT */
+          opacity: 0;
+          transform: translateY(-5px);
+          transition: 0.2s ease;
+          z-index: 999999;
+      }
+
+      .menu-dropdown.show {
+          display: block;
+          opacity: 1;
+          transform: translateY(0);
+      }
+
+      .dropdown-item-btn {
+        display: block;
+        width: 100%;
+        padding: 8px 14px;
+        color: #e5e7eb;
+        text-align: left;
+        font-size: 14px;
+        text-decoration: none;
+    }
+
+    .dropdown-item-btn:hover {
+        background: #374151;
+        color: white;
+    }
+
+</style>
 <!-- BEGIN PAGE HEADER -->
 <div class="page-header d-print-none" aria-label="Page header">
-   <div class="container-xl">
-      <div class="row g-2 align-items-center">
-         <div class="col">
-            <!-- Page pre-title -->
-               <div class="page-pretitle">Aplikasi FKG</div>
-                  <h2 class="page-title">Data Permohonan Surat Izin Penelitian</h2>
-                  @include('components.alert')
-              </div>
-              <!-- Page title actions -->
-      </div>
-   </div>
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+
+            <!-- KOLOM KIRI (judul) -->
+            <div class="col-md-8">
+                <div class="page-pretitle">Aplikasi FKG</div>
+                <h2 class="page-title">Data Permohonan Surat Izin Penelitian</h2>
+                @include('components.alert')
+            </div>
+
+            <!-- KOLOM KANAN (profile card) -->
+            <div class="col-md-4 d-flex justify-content-end">
+
+                <div class="profile-card">
+
+                    <img src="{{ $dosen->foto ? asset('storage/'.$dosen->foto) : asset('assets/images/default-fkg.jpg') }}" width="50" height="50" class="rounded-circle object-cover profile-img">
+
+                    <div>
+                        <div class="profile-name">Nama Dosen : {{ $dosen->nama }}</div>
+                        <div class="profile-sub">NIP : {{ $dosen->nip }}</div>
+                    </div>
+
+                    <!-- BUTTON -->
+                    <button id="toggleMenu" class="btn btn-sm" style="background:#1f2937;border:1px solid #374151;color:white;">
+                        ☰
+                    </button>
+
+                    <!-- CUSTOM MENU -->
+                    <div id="menuDropdown" class="menu-dropdown">
+                        <a href="/dosen/profile" class="dropdown-item-btn">Edit Profile</a>
+                        <a href="/dosen/changepass" class="dropdown-item-btn">Ubah Password</a>
+                    </div>
+
+                </div>
+
+            </div> <!-- end col kanan -->
+
+        </div> <!-- end row -->
+    </div>
 </div>
 <!-- END PAGE HEADER -->
 <!-- BEGIN PAGE BODY -->
@@ -54,7 +161,7 @@
                             </a>
                         </div> -->
                 </div>
-                <form action="/dosen/suratizin/feature" method="GET">
+                <form action="/dosen/suratizin/{{$id_prodi}}/feature" method="GET">
                     <div class="card-body border-bottom py-3">
                         <div class="d-flex align-items-center">
                             <!-- Show Entries -->
@@ -79,7 +186,7 @@
                                        placeholder="Cari Surat Izin Penelitan..." 
                                        value="{{ request('search') }}">
 
-                                <a href="/dosen/suratizin/add" class="btn btn-success btn-mm ms-2">
+                                <a href="/dosen/suratizin/{{$id_prodi}}/add" class="btn btn-success btn-mm ms-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -111,6 +218,7 @@
                                     </svg>
                                 </th>
                                 <th>Jenis</th>
+                                <th>Prodi</th>
                                 <th>Nama Mahasiswa</th>
                                 <th>NO.BP</th>
                                 <th>Judul Penelitan</th>
@@ -132,6 +240,7 @@
                                     <span class="text-secondary"> {{$no++}}</span>
                                 </td>
                                 <td class="text-secondary">{{$data->jenis}}</td>
+                                <td class="text-secondary">{{$data->prodi}}</td>
                                 <td class="text-secondary">{{$data->nama}}</td>
                                 <td class="text-secondary">{{$data->nobp}}</td>
                                 <td class="text-secondary">{{$data->judul_penelitian}}</td>
@@ -189,7 +298,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="12" class="text-center">Data tidak ditemukan</td>
+                                <td colspan="10" class="text-center">Data tidak ditemukan</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -285,6 +394,25 @@ function deleteData(id) {
         }
     })
 }
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // CUSTOM MENU HANDLER
+    const toggleBtn = document.getElementById("toggleMenu");
+    const dropdown = document.getElementById("menuDropdown");
+
+    toggleBtn.addEventListener("click", () => {
+        dropdown.classList.toggle("show");
+    });
+
+    // Close dropdown if click outside
+    document.addEventListener("click", (e) => {
+        if (!toggleBtn.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.remove("show");
+        }
+    });
+});
 </script>
 <!-- END PAGE BODY -->
 @endsection

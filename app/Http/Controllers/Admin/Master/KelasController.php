@@ -23,8 +23,9 @@ class KelasController extends Controller
         ->paginate($entries);
 
         $kelas->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.master.kelas.index',['kelas'=>$kelas]);
+        return view('admin.master.kelas.index',['kelas'=>$kelas,'username' => $username]);
     }
 
     public function feature(Request $request)
@@ -50,8 +51,9 @@ class KelasController extends Controller
 
         // Supaya pagination tetap bawa query string (search / entries)
         $kelas->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.master.kelas.index', compact('kelas'));
+        return view('admin.master.kelas.index', compact('kelas','username'));
     }
 
     public function export()

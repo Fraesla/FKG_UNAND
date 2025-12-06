@@ -1,6 +1,6 @@
 @extends('admin.layouts.app', [
 'activePage' => 'gigi',
-'activeDrop' => 'skripsi',
+'activeDrop' => 'skripsi'.$skripsi->id_prodi,
 ])
 @section('content')
 <!-- BEGIN PAGE HEADER -->
@@ -43,7 +43,7 @@
                                 <h3 class="card-title">
                                     Pengeditan Skripsi
                                 </h3>
-                                <a href="/admin/skripsi/" class="btn btn-secondary btn-sm">
+                                <a href="/admin/skripsi/{{$skripsi->id_prodi}}" class="btn btn-secondary btn-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
                                          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
@@ -83,7 +83,7 @@
                                                     <option value="Selasa" {{ $skripsi->hari == 'Selasa' ? 'selected' : '' }}>Selasa</option>
                                                     <option value="Rabu"   {{ $skripsi->hari == 'Rabu' ? 'selected' : '' }}>Rabu</option>
                                                     <option value="Kamis"  {{ $skripsi->hari == 'Kamis' ? 'selected' : '' }}>Kamis</option>
-                                                    <option value="Jum\'at" {{ $skripsi->hari == "Jum'at" ? 'selected' : '' }}>Jum'at</option>
+                                                    <option value="Jum'at" {{ $skripsi->hari == "Jum'at" ? 'selected' : '' }}>Jum'at</option>
                                                 </select>
                                                  @error('hari')
                                                     <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
@@ -159,6 +159,7 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        <input type="hidden" name="id_prodi" value="{{$skripsi->id_prodi}}">
                                         <div>
                                             <button type="submit" class="btn btn-primary btn-4 w-100">
                                                 Simpan

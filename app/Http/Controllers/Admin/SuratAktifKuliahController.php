@@ -21,8 +21,9 @@ class SuratAktifKuliahController extends Controller
 
         // Supaya pagination tetap bawa query string (search / entries)
         $surataktifkuliah->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.surataktifkuliah.index', ['surataktifkuliah' => $surataktifkuliah]);
+        return view('admin.surataktifkuliah.index', ['surataktifkuliah' => $surataktifkuliah,'username'=> $username]);
     }
 
     public function feature(Request $request)
@@ -59,8 +60,9 @@ class SuratAktifKuliahController extends Controller
 
         // Biar pagination tetap bawa query string
         $surataktifkuliah->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.surataktifkuliah.index', compact('surataktifkuliah'));
+        return view('admin.surataktifkuliah.index', compact('surataktifkuliah','username'));
     }
 
     public function add(){

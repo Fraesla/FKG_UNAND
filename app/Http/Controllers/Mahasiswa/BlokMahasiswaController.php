@@ -21,7 +21,7 @@ class BlokMahasiswaController extends Controller
             ->join('tahun_ajaran', 'blok_mahasiswa.id_tahun_ajaran', '=', 'tahun_ajaran.id')
             ->select(
                 'blok_mahasiswa.*',
-                'mahasiswa.nim',
+                'mahasiswa.nobp',
                 'mahasiswa.nama as mahasiswa',
                 'kelas.nama as blok',
                 'tahun_ajaran.nama as tahun_ajar',
@@ -33,7 +33,10 @@ class BlokMahasiswaController extends Controller
         // Supaya pagination tetap bawa query string (search / entries)
         $blok->appends($request->all());
 
-        return view('mahasiswa.blokmahasiswa.index', compact('blok'));
+        $username = auth()->user()->username;
+        $mahasiswa = DB::table('mahasiswa')->where('nobp', $username)->first();
+
+        return view('mahasiswa.blokmahasiswa.index', compact('blok','mahasiswa'));
     }
 
     public function feature(Request $request)

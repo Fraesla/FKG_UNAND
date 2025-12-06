@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('penguji_1');
             $table->string('penguji_2');
             $table->string('penguji_3');
+            $table->string('id_prodi');
             $table->text('surat_proposal');
             $table->text('file_draft');
             $table->text('bukti_izin');

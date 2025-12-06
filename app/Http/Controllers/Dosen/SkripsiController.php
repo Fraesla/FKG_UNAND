@@ -9,31 +9,36 @@ use Auth;
 
 class SkripsiController extends Controller
 {
-    public function read(Request $request){
+    public function read(Request $request, $id_prodi = null){
 
         $entries = $request->input('entries', 5);
         $user = Auth::user();
         $idDosen = $user->id_dosen ?? $user->id;
-        // Data blok (kelas) untuk select option
-        $blok = DB::table('kelas')->orderBy('id','DESC')->get();
 
         // Query skripsi
         $query = DB::table('skripsi')
             ->join('makul', 'skripsi.id_makul', '=', 'makul.id')
             ->join('ruangan', 'skripsi.id_ruangan', '=', 'ruangan.id')
             ->join('dosen', 'skripsi.id_dosen', '=', 'dosen.id')
+            ->join('prodi', 'skripsi.id_prodi', '=', 'prodi.id')
             ->select(
                 'skripsi.id',
                 'skripsi.minggu',
                 'skripsi.hari',
                 'skripsi.jam_mulai',
                 'skripsi.jam_selesai',
+                'prodi.nama as prodi',
                 'makul.nama as makul',
                 'dosen.nama as dosen',
                 'ruangan.nama as ruangan'
             )
             ->where('skripsi.id_dosen', $idDosen)
             ->orderBy('skripsi.id', 'DESC');
+
+        // Filter berdasarkan prodi
+        if ($id_prodi) {
+            $query->where('skripsi.id_prodi', $id_prodi);
+        }
 
         // Filter berdasarkan blok (id_kelas) kalau dipilih
         if ($request->filled('id_kelas')) {
@@ -44,41 +49,51 @@ class SkripsiController extends Controller
         $skripsi = $query->paginate($entries);
         $skripsi->appends($request->all());
 
+        $username = auth()->user()->username;
+        $dosen = DB::table('dosen')->where('nip', $username)->first();
+
         return view('dosen.skripsi.index', [
             'skripsi' => $skripsi,
-            'blok'     => $blok
+            'dosen' => $dosen,
+            'id_prodi' => $id_prodi
         ]);
     } 
 
-    public function feature(Request $request)
+    public function feature(Request $request, $id_prodi = null)
     {
         $user = Auth::user();
         $idDosen = $user->id_dosen ?? $user->id;
-        $blok = DB::table('kelas')->orderBy('id','DESC')->get();
         $query = DB::table('skripsi')
             ->join('makul', 'skripsi.id_makul', '=', 'makul.id')
             ->join('ruangan', 'skripsi.id_ruangan', '=', 'ruangan.id')
             ->join('dosen', 'skripsi.id_dosen', '=', 'dosen.id')
+            ->join('prodi', 'skripsi.id_prodi', '=', 'prodi.id')
             ->select(
                 'skripsi.id',
                 'skripsi.minggu',
                 'skripsi.hari',
                 'skripsi.jam_mulai',
                 'skripsi.jam_selesai',
+                'prodi.nama as prodi',
                 'makul.nama as makul',
                 'dosen.nama as dosen',
                 'ruangan.nama as ruangan'
             )
             ->where('skripsi.id_dosen', $idDosen);
 
+        // Filter berdasarkan prodi
+        if ($id_prodi) {
+            $query->where('skripsi.id_prodi', $id_prodi);
+        }
+
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('skripsi.id', 'like', "%{$search}%")
-                  ->orWhere('kelas.nama', 'like', "%{$search}%")
                   ->orWhere('skripsi.hari', 'like', "%{$search}%")
                   ->orWhere('skripsi.jam_mulai', 'like', "%{$search}%")
                   ->orWhere('skripsi.jam_selesai', 'like', "%{$search}%")
+                  ->orWhere('prodi.nama', 'like', "%{$search}%")
                   ->orWhere('makul.nama', 'like', "%{$search}%")
                   ->orWhere('dosen.nama', 'like', "%{$search}%")
                   ->orWhere('ruangan.nama', 'like', "%{$search}%");
@@ -94,15 +109,18 @@ class SkripsiController extends Controller
         // Supaya pagination tetap bawa query string (search / entries)
         $skripsi->appends($request->all());
 
-        return view('dosen.skripsi.index', compact('skripsi','blok'));
+        $username = auth()->user()->username;
+        $dosen = DB::table('dosen')->where('nip', $username)->first();
+
+        return view('dosen.skripsi.index', compact('skripsi','dosen','id_prodi'));
     }
 
-    public function add(){
+    public function add($id_prodi = null){
         $blok = DB::table('kelas')->orderBy('id','DESC')->get();
         $makul = DB::table('makul')->orderBy('id','DESC')->get();
         $dosen = DB::table('dosen')->orderBy('id','DESC')->get();
         $ruangan = DB::table('ruangan')->orderBy('id','DESC')->get();
-        return view('dosen.skripsi.create',['blok'=>$blok,'dosen'=>$dosen,'makul'=>$makul,'ruangan'=>$ruangan]);
+        return view('dosen.skripsi.create',['blok'=>$blok,'dosen'=>$dosen,'makul'=>$makul,'ruangan'=>$ruangan,'id_prodi'=>$id_prodi]);
     }
 
     public function create(Request $request){
@@ -131,6 +149,7 @@ class SkripsiController extends Controller
             'id_ruangan.exists' => 'Ruangan yang dipilih tidak valid..',
         ]);
         DB::table('skripsi')->insert([  
+            'id_prodi' => $request->id_prodi,
             'minggu' => $request->minggu,
             'hari' => $request->hari,
             'jam_mulai' => $request->jam_mulai,
@@ -140,7 +159,7 @@ class SkripsiController extends Controller
             'id_ruangan' => $request->id_ruangan
         ]);
 
-        return redirect('/dosen/skripsi')->with("success","Data Berhasil Ditambah !");
+        return redirect('/dosen/skripsi/'.$request->id_prodi)->with("success","Data Berhasil Ditambah !");
     }
 
     public function edit($id){
@@ -186,13 +205,21 @@ class SkripsiController extends Controller
             'id_ruangan' => $request->id_ruangan
         ]);
 
-        return redirect('/dosen/skripsi')->with("success","Data Berhasil Diupdate !");
+        return redirect('/dosen/skripsi/'.$request->id_prodi)->with("success","Data Berhasil Diupdate !");
     }
 
     public function delete($id)
     {
-        DB::table('skripsi')->where('id',$id)->delete();
+        // Ambil data berdasarkan ID
+        $skripsi = DB::table('skripsi')->where('id', $id)->first();
 
-        return redirect('/dosen/skripsi')->with("success","Data Berhasil Dihapus !");
+        if (!$skripsi) {
+            return redirect()->back()->with('error', 'Data skripsi tidak ditemukan!');
+        }
+
+        // Hapus jadwal
+        DB::table('skripsi')->where('id', $id)->delete();
+
+        return redirect('/dosen/skripsi/'.$skripsi->id_prodi)->with("success","Data Berhasil Dihapus !");
     }
 }

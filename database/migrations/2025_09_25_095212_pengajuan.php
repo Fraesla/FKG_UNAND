@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('surat_pengajuan');
             $table->string('judul');
             $table->text('krs');
+            $table->string('id_prodi');
             $table->timestamps();
         });
     }

@@ -32,8 +32,12 @@ class NilaiController extends Controller
 
         $nilai->appends($request->all());
 
+        $username = auth()->user()->username;
+        $dosen = DB::table('dosen')->where('nip', $username)->first();
+
         return view('dosen.nilai.index', [
-            'nilai' => $nilai
+            'nilai' => $nilai,
+            'dosen' => $dosen
         ]);
     }
 
@@ -71,7 +75,10 @@ class NilaiController extends Controller
         // 🚀 Supaya pagination tetap bawa query string (search / entries)
         $nilai->appends($request->all());
 
-        return view('dosen.nilai.index', compact('nilai'));
+        $username = auth()->user()->username;
+        $dosen = DB::table('dosen')->where('nip', $username)->first();
+
+        return view('dosen.nilai.index', compact('nilai','dosen'));
     }
 
     public function export()

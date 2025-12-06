@@ -17,14 +17,16 @@ class MahasiswaController extends Controller
         $entries = $request->input('entries', 5);
 
         $mahasiswa = DB::table('mahasiswa as m')
-            ->join('tahun_ajaran as ta', 'm.id_tahun_ajaran', '=', 'ta.id')
+            ->leftJoin('tahun_ajaran as ta', 'm.id_tahun_ajaran', '=', 'ta.id')
             ->select(
                 'm.id',
                 'm.nobp',
                 'm.nama',
                 'm.gender',
-                'm.ukt',
+                'm.contact',
+                'm.alamat',
                 'ta.nama as tahun_ajaran',
+                'ta.ukt as ukt',
                 'ta.semester as semester',
                 'ta.status as status',
                 'm.foto as foto'
@@ -33,8 +35,9 @@ class MahasiswaController extends Controller
             ->paginate($entries);
 
          $mahasiswa->appends($request->all());
+         $username = auth()->user()->username;
 
-        return view('admin.akun.mahasiswa.index',['mahasiswa'=>$mahasiswa]);
+        return view('admin.akun.mahasiswa.index',['mahasiswa'=>$mahasiswa,'username'=>$username]);
     }
 
     public function feature(Request $request)
@@ -46,8 +49,10 @@ class MahasiswaController extends Controller
                 'm.nobp',
                 'm.nama',
                 'm.gender',
-                'm.ukt',
+                'm.contact',
+                'm.alamat',
                 'ta.nama as tahun_ajaran',
+                'ta.ukt as ukt',
                 'ta.semester as semester',
                 'ta.status as status',
                 'm.foto as foto'
@@ -60,8 +65,10 @@ class MahasiswaController extends Controller
                   ->orWhere('m.nobp', 'like', "%{$search}%")
                   ->orWhere('m.nama', 'like', "%{$search}%")
                   ->orWhere('m.gender', 'like', "%{$search}%")
-                  ->orWhere('m.ukt', 'like', "%{$search}%")
+                  ->orWhere('m.contact', 'like', "%{$search}%")
+                  ->orWhere('m.alamat', 'like', "%{$search}%")
                   ->orWhere('ta.nama', 'like', "%{$search}%")
+                  ->orWhere('ta.ukt', 'like', "%{$search}%")
                   ->orWhere('ta.semester', 'like', "%{$search}%")
                   ->orWhere('ta.status', 'like', "%{$search}%");
             });
@@ -75,8 +82,9 @@ class MahasiswaController extends Controller
 
         // Supaya pagination tetap bawa query string (search / entries)
         $mahasiswa->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.akun.mahasiswa.index', compact('mahasiswa'));
+        return view('admin.akun.mahasiswa.index', compact('mahasiswa','username'));
     }
 
     public function import(Request $request)
@@ -101,15 +109,14 @@ class MahasiswaController extends Controller
             'nobp' => 'required|string|max:255',
             'nama' => 'required|string|max:255',
             'gender' => 'required|string|max:255',
-            'ukt' => 'required|string|max:255',
-            'id_tahun_ajaran' => 'required|exists:tahun_ajaran,id',
+            'contact' => 'nullable|string|max:255',
+            'alamat' => 'nullable|string|max:255',
+            'id_tahun_ajaran' => 'nullable|exists:tahun_ajaran,id',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // maksimal 2MB
         ],[
             'nobp.required' => 'NO.BP wajib diisi.',
             'nama.required' => 'Nama Lengkap Mahaiswa wajib diisi.',
             'gender.required' => 'Jenis Kelamin wajib diisi.',
-            'ukt.required' => 'Level UKT wajib diisi.',
-            'id_tahun_ajaran.exists' => 'Tahun Ajaran yang dipilih tidak valid..',
         ]);
 
         // Simpan file ke storage/public/foto_mahasiswa
@@ -123,7 +130,8 @@ class MahasiswaController extends Controller
             'nobp' => $request->nobp,
             'nama' => $request->nama,
             'gender' => $request->gender,
-            'ukt' => $request->ukt,
+            'contact' => $request->contact,
+            'alamat' => $request->alamat,
             'id_tahun_ajaran' => $request->id_tahun_ajaran,
             'foto' => $path, // bisa null jika tidak diunggah
         ]);
@@ -154,22 +162,21 @@ class MahasiswaController extends Controller
             'nobp' => 'required|string|max:255',
             'nama' => 'required|string|max:255',
             'gender' => 'required|string|max:255',
-            'ukt' => 'required|string|max:255',
-            'id_tahun_ajaran' => 'required|exists:tahun_ajaran,id',
+            'contact' => 'nullable|string|max:255',
+            'alamat' => 'nullable|string|max:255',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // maksimal 2MB
         ],[
             'nobp.required' => 'NO.BP wajib diisi.',
             'nama.required' => 'Nama Lengkap Mahaiswa wajib diisi.',
             'gender.required' => 'Jenis Kelamin wajib diisi.',
-            'ukt.required' => 'Level UKT wajib diisi.',
-            'id_tahun_ajaran.exists' => 'Tahun Ajaran yang dipilih tidak valid..',
         ]);
 
         $dataUpdate = [
             'nobp' => $request->nobp,
             'nama' => $request->nama,
             'gender' => $request->gender,
-            'ukt' => $request->ukt,
+            'contact' => $request->contact,
+            'alamat' => $request->alamat,
             'id_tahun_ajaran' => $request->id_tahun_ajaran,
         ];
 
@@ -188,12 +195,35 @@ class MahasiswaController extends Controller
             ->where('id', $id)
             ->update($dataUpdate);
 
+        DB::table('user')
+            ->where('username', $mahasiswa->nobp)     // cari berdasarkan No.BP lama
+            ->update([
+                'username' => $request->nobp       // update ke No.BP baru
+            ]);
+
         return redirect('/admin/mahasiswa')->with("success","Data Berhasil Diupdate !");
     }
     public function delete($id)
     {
-        DB::table('mahasiswa')->where('id',$id)->delete();
+        // Ambil data mahasiswa dulu (butuh nobp)
+        $mahasiswa = DB::table('mahasiswa')->where('id', $id)->first();
 
-        return redirect('/admin/mahasiswa')->with("success","Data Berhasil Dihapus !");
+        if (!$mahasiswa) {
+            return redirect('/admin/mahasiswa')->with("error", "Data mahasiswa tidak ditemukan!");
+        }
+
+        // ================================
+        // 🔥 HAPUS USER BERDASARKAN USERNAME = No.BP
+        // ================================
+        DB::table('user')
+            ->where('username', $mahasiswa->nobp)
+            ->delete();
+
+        // ================================
+        // 🔥 HAPUS DATA MAHASISWA
+        // ================================
+        DB::table('mahasiswa')->where('id', $id)->delete();
+
+        return redirect('/admin/mahasiswa')->with("success", "Data mahasiswa & akun user berhasil dihapus!");
     }
 }

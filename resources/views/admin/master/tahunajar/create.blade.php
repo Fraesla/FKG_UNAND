@@ -68,18 +68,32 @@
                                             @enderror
                                         </div>
                                         <div>
+                                            <label class="form-label">Level UKT</label>
+                                            <select name="ukt" class="form-select @error('ukt') is-invalid @enderror">
+                                                <option> Pilih Level UKT</option>
+                                                @for($no=1; $no<=8; $no++)
+                                                    <option value="{{ $no }}">
+                                                         {{ $no }}
+                                                    </option>
+                                                @endfor
+                                            </select>
+                                            {{-- Pesan Error --}}
+                                            @error('ukt')
+                                                <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div>
                                             <label class="form-label">Semester</label>
-                                            <div>
-                                                <label class="form-check form-check-inline">
-                                                  <input class="form-check-input" type="radio" name="semester" value="Ganjil"> 
-                                                  <span class="form-check-label">Ganjil</span>
-                                                </label>
-                                                <label class="form-check form-check-inline">
-                                                  <input class="form-check-input" type="radio" name="semester" value="Genap">
-                                                  <span class="form-check-label">Genap</span>
-                                                </label>
-                                            </div>
-                                             @error('semester')
+                                            <select name="semester" class="form-select @error('semester') is-invalid @enderror">
+                                                <option> Pilih Semester</option>
+                                                @for($no=1; $no<=8; $no++)
+                                                    <option value="Semester {{ $no }}">
+                                                        Semester {{ $no }}
+                                                    </option>
+                                                @endfor
+                                            </select>
+                                            {{-- Pesan Error --}}
+                                            @error('semester')
                                                 <div class="text-danger small mt-1">⚠️ {{ $message }}</div>
                                             @enderror
                                         </div>

@@ -23,8 +23,9 @@ class MakulController extends Controller
 
         // Supaya pagination tetap bawa query string (search / entries)
         $makul->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.master.makul.index',['makul'=>$makul]);
+        return view('admin.master.makul.index',['makul'=>$makul,'username'=>$username]);
     }
 
     public function feature(Request $request)
@@ -47,8 +48,9 @@ class MakulController extends Controller
 
         // Biar pagination tetap bawa query string
         $makul->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.master.makul.index', compact('makul'));
+        return view('admin.master.makul.index', compact('makul','username'));
     }
 
     public function import(Request $request)

@@ -61,6 +61,7 @@ class MateriController extends Controller
 
         // Pagination tetap bawa query string
         $materi->appends($request->all());
+        $username = auth()->user()->username;
 
         // Ambil data jadwal untuk dropdown/filter
         $jadwal = DB::table('jadwal_makul')
@@ -86,6 +87,7 @@ class MateriController extends Controller
         return view('admin.master.materi.index', [
             'materi' => $materi,
             'jadwal' => $jadwal,
+            'username' => $username
         ]);
     }
 
@@ -108,8 +110,9 @@ class MateriController extends Controller
 
         // Biar pagination tetap bawa query string
         $materi->appends($request->all());
+        $username = auth()->user()->username;
 
-        return view('admin.master.materi.index', compact('materi'));
+        return view('admin.master.materi.index', compact('materi','username'));
     }
 
     public function import(Request $request)
